@@ -1,4 +1,5 @@
 from .middleware import MiddlewareManager
+from .extension import ExtensionsManager
 from vk.utils import ContextInstanceMixin
 from vk import VK
 
@@ -6,11 +7,10 @@ from vk.types.events.community.events_list import Event
 from vk.utils.get_event import get_event_object
 
 from .handler import Handler
-from vk.longpoll import BotLongPoll
 
 from ..callbackapi import callback_api
 from .rule import RuleFactory
-from vk.constants import default_rules
+from vk.constants import default_rules, default_extensions
 
 import typing
 import logging
@@ -23,10 +23,10 @@ class Dispatcher(ContextInstanceMixin):
         self.vk: VK = vk
         self.group_id: int = group_id
         self._hanlders: typing.List[Handler] = []
+
         self._middleware_manager: MiddlewareManager = MiddlewareManager(self)
         self._rule_factory: RuleFactory = RuleFactory(default_rules())
-
-        self._longpoll: BotLongPoll = BotLongPoll(self.group_id, self.vk)
+        self._extensions_manager: ExtensionsManager = ExtensionsManager(self, default_extensions())
 
     def _register_handler(self, handler: Handler):
         """
@@ -147,7 +147,7 @@ class Dispatcher(ContextInstanceMixin):
             for handler in self._hanlders:  # check handlers
                 if handler.event_type.value == ev.type:  # if hanlder type is equal event pydantic model.
                     try:
-                        result = await handler.execute_handler(ev.object, data) # if execute hanlder func
+                        result = await handler.execute_handler(ev.object, data)  # if execute hanlder func
                         # return non-False value, other handlers doesn`t be executed.
                         if result:
                             break
@@ -156,7 +156,7 @@ class Dispatcher(ContextInstanceMixin):
                             f"Error in handler ({handler.handler.__name__}):"
                         )
 
-        await self._middleware_manager.trigger_post_process_middlewares() # trigger post_process_event funcs in middlewares.
+        await self._middleware_manager.trigger_post_process_middlewares()  # trigger post_process_event funcs in middlewares.
 
     async def _process_events(self, events: typing.List[dict]):
         """
@@ -168,16 +168,7 @@ class Dispatcher(ContextInstanceMixin):
             self.vk.loop.create_task(self._process_event(event))
 
     async def run_polling(self):
-        """
-        Run polling.
-        :return:
-        """
-        VK.set_current(self.vk)
-        await self._longpoll._prepare_longpoll()
-        while True:
-            events = await self._longpoll.listen()
-            if events:
-                await self._process_events(events)
+        await self._extensions_manager.run_extension("polling", group_id=self.group_id, vk=self.vk)
 
     def run_callback_api(self, host: str, port: int, confirmation_code: str, path: str):
         """

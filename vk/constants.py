@@ -52,3 +52,13 @@ def default_rules():
         "chat_action": ChatAction,
     }
     return DEFAULT_RULES
+
+
+def default_extensions():
+    from vk.bot_framework.extensions.polling import Polling
+
+    DEFAULT_EXTENSIONS = {
+        "polling": Polling
+    }
+
+    return DEFAULT_EXTENSIONS

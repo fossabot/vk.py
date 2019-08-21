@@ -143,9 +143,9 @@ class Dispatcher(ContextInstanceMixin):
         # returns service value '_skip_handler' and data variable (check upper).
 
         if not _skip_handler:  # if middlewares don`t skip this handler, dispatcher be check rules and execute handlers.
-            ev = await get_event_object(event) # get event pydantic model.
-            for handler in self._hanlders: # check handlers
-                if handler.event_type.value == ev.type: # if hanlder type is equal event pydantic model.
+            ev = await get_event_object(event)  # get event pydantic model.
+            for handler in self._hanlders:  # check handlers
+                if handler.event_type.value == ev.type:  # if hanlder type is equal event pydantic model.
                     try:
                         result = await handler.execute_handler(ev.object, data) # if execute hanlder func
                         # return non-False value, other handlers doesn`t be executed.

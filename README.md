@@ -4,7 +4,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cac2f27aab0a41f993660a525c054bb5)](https://app.codacy.com/app/prostomarkeloff/vk.py?utm_source=github.com&utm_medium=referral&utm_content=prostomarkeloff/vk.py&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.org/prostomarkeloff/vk.py.svg?branch=master)](https://travis-ci.org/prostomarkeloff/vk.py)
 
-> Extremely-fast Python 3.6+ toolkit for create applications work`s with VKAPI.
+> Lightning fast Python 3.6+ toolkit for creating applications that work with VK API.
 
 
 
@@ -25,7 +25,7 @@ pip install vk.py
 
 ## Usage
 
-Simple example
+A simple example
 ```python
 from vk import VK
 from vk.utils.task_manager import TaskManager
@@ -45,31 +45,30 @@ if __name__ == "__main__":
 
 ```
 
-More examples [click](./examples)
+You can find more examples [here](./examples)
 
 ## Features
 
 - Rich high-level API.
 - Fully asynchronous. Based on asyncio and aiohttp.
 - Bot framework out of-the-box.
-- Fully typed. Thanks to Pydantic.
-- The fastest.
+- Fully typed, thanks to Pydantic.
 - Compatible with PyPy.
 
 
 ## Performance
-The fastest Python library for access to VKAPI.
+The fastest Python library for accessing VK API.
 
 - Accept and handle event from LongPoll API in bot framework (with sending a message to the user): lower than 0.1s 
 - Check 100 handlers and execute 100 filters in bot framework (without sending a message to the user): lower than 0.001s
 
 ## Alternatives
 
-- Kutana. Bot engine for create bots in Telegram and VK.
-- VKBottle. Bot framework for develop bots in VK.
-- VK_API. Simple library for access to VKAPI.
+- Kutana. Bot engine for creating Telegram and VK bots
+- VKBottle. Bot framework for VK bot development.
+- VK_API. A simple library for accessing VK API.
 
-And many others library`s...
+And many other libraries...
 
 ## Author
 

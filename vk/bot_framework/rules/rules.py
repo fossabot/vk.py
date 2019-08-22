@@ -84,3 +84,16 @@ class ChatAction(NamedRule):
             result = action is self.action
             logger.debug(f"Result of ChatAction rule: {result}")
             return result
+
+
+class DataCheck(NamedRule):
+    key = "data_check"
+
+    def __init__(self, data: typing.List[typing.Any]):
+        self.data = data  # for example: ["my_key", "my_value"]
+
+    async def check(self, *args):
+        data: dict = args[1]
+        result = data.get(self.data[0]) == self.data[1]
+        logger.debug(f"Result of DataCheck rule: {result}")
+        return result

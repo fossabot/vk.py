@@ -62,7 +62,7 @@ class Payload(NamedRule):
         payload = message.payload
         if payload:
             payload = JSON_LIBRARY.loads(payload)
-            if payload["command"] == self.payload:
+            if payload.get("command") == self.payload:
                 return True
 
 

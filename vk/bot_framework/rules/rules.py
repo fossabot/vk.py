@@ -19,7 +19,7 @@ class Command(BaseRule):
         self.prefix = "/"
         self.command: str = command
 
-    async def check(self, message: types.Message):
+    async def check(self, message: types.Message, data: dict):
         text = message.text.lower()
         result = f"{self.prefix}{self.command}" == text
         logger.debug(f"Result of Command rule: {result}")
@@ -27,13 +27,12 @@ class Command(BaseRule):
 
 
 class Text(NamedRule):
-
     key = "text"
 
     def __init__(self, text: str):
         self.text: str = text
 
-    async def check(self, message: types.Message):
+    async def check(self, message: types.Message, data: dict):
         text = message.text.lower()
         result = text == self.text
         logger.debug(f"Result of Text rule: {result}")
@@ -41,14 +40,13 @@ class Text(NamedRule):
 
 
 class Commands(NamedRule):
-
     key = "commands"
 
     def __init__(self, commands: typing.List[str]):
         self.commands = commands
         self.prefix = "/"
 
-    async def check(self, message: types.Message):
+    async def check(self, message: types.Message, data: dict):
         text = message.text.lower()
         _accepted = False
         for command in self.commands:
@@ -59,13 +57,12 @@ class Commands(NamedRule):
 
 
 class Payload(NamedRule):
-
     key = "payload"
 
     def __init__(self, payload: str):
         self.payload = payload
 
-    async def check(self, message: types.Message):
+    async def check(self, message: types.Message, data: dict):
         payload = message.payload
         if payload:
             payload = JSON_LIBRARY.loads(payload)
@@ -75,13 +72,12 @@ class Payload(NamedRule):
 
 
 class ChatAction(NamedRule):
-
     key = "chat_action"
 
     def __init__(self, action: Action):
         self.action = action
 
-    async def check(self, message: types.Message):
+    async def check(self, message: types.Message, data: dict):
         action = message.action.type
         if action:
             action = Action(action)

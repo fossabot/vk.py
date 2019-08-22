@@ -44,7 +44,7 @@ class IsAdmin(BaseRule):
     def __init__(self, is_admin: bool):
         self.is_admin: bool = is_admin
 
-    async def check(self, message: types.Message):
+    async def check(self, message: types.Message, data: dict):
         status = USERS[message.from_id]
         if not self.is_admin and status != "admin":
             return True

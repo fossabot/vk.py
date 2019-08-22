@@ -35,7 +35,7 @@ class Handler:
         if self.rules:
             _execute = False
             for rule in self.rules:
-                result = await rule(args[0])
+                result = await rule(*args)
                 if not result:
                     _execute = False
                     break

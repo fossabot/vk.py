@@ -31,7 +31,7 @@ class Commands(NamedRule):
         self.commands = commands
         self.prefix = "!"
 
-    async def check(self, message: types.Message):
+    async def check(self, message: types.Message, data: dict):
         text = message.text.lower()
         _accepted = False
         for command in self.commands:

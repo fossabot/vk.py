@@ -45,7 +45,7 @@ if __name__ == "__main__":
 
 ```
 
-More examples [click](./examples)
+You can find more examples [here](./examples)
 
 ## Features
 
@@ -65,10 +65,10 @@ The fastest Python library for accessing VK API.
 ## Alternatives
 
 - Kutana. Bot engine for creating Telegram and VK bots
-- VKBottle. Bot framework for VK bots development.
-- VK_API. Simple library for accessing VK API.
+- VKBottle. Bot framework for VK bot development.
+- VK_API. A simple library for accessing VK API.
 
-And many other libraries..
+And many other libraries...
 
 ## Author
 

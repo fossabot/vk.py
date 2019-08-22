@@ -8,7 +8,6 @@ from vk.utils.get_event import get_event_object
 
 from .handler import Handler
 
-from ..callbackapi import callback_api
 from .rule import RuleFactory
 from vk.constants import default_rules, default_extensions
 

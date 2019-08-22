@@ -89,11 +89,12 @@ class ChatAction(NamedRule):
 class DataCheck(NamedRule):
     key = "data_check"
 
-    def __init__(self, data: typing.List[typing.Any]):
-        self.data = data  # for example: ["my_key", "my_value"]
+    def __init__(self, data: typing.Dict[str, typing.Any]):
+        self.data = data  # for example: {"my_key": "my_value"}
 
     async def check(self, *args):
         data: dict = args[1]
-        result = data.get(self.data[0]) == self.data[1]
+        key = list(self.data.keys())[0]
+        result = data.get(key) == self.data[key]
         logger.debug(f"Result of DataCheck rule: {result}")
         return result

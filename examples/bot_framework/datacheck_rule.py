@@ -29,7 +29,7 @@ class MyMiddleware(BaseMiddleware):
         print("Called after handlers!")
 
 
-@dp.message_handler(text="hello!", data_check=["my_message", "hello, handler!"])
+@dp.message_handler(text="hello!", data_check={"my_message": "hello, handler!"})
 async def handle(message: types.Message, data: dict):
     print(data["my_message"])  # hello, handler!
     await message.reply("Hello!")

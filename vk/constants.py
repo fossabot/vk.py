@@ -55,8 +55,8 @@ def default_rules():
 
 
 def default_extensions():
-    from vk.bot_framework.extensions import Polling, CallbackAPI
+    from vk.bot_framework.extensions import Polling
 
-    DEFAULT_EXTENSIONS = {"polling": Polling, "callback_api": CallbackAPI}
+    DEFAULT_EXTENSIONS = {"polling": Polling}
 
     return DEFAULT_EXTENSIONS

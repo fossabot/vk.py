@@ -180,15 +180,3 @@ class Dispatcher(ContextInstanceMixin):
             "polling", group_id=self.group_id, vk=self.vk
         )
 
-    def run_callback_api(self, host: str, port: int, confirmation_code: str, path: str):
-        """
-
-        :param host: Host of server. Example: "0.0.0.0"
-        :param port: port of server. Example: 8080
-        :param confirmation_code: callback api confirmation code. Example: "sdas45643"
-        :param path: url where VK send requests. Example: "/my_bot"
-        :return:
-        """
-        app = callback_api.get_app(self, confirmation_code)
-        callback_api.run_app(app, host, port, path)
-        logger.info("Callback API runned!")

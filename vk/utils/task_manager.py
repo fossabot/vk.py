@@ -7,13 +7,13 @@ try:
     import uvloop
 except ImportError:
     uvloop = None
-
+from . import ContextInstanceMixin
 from .auto_reload import _auto_reload
 
 logger = logging.getLogger()
 
 
-class TaskManager:
+class TaskManager(ContextInstanceMixin):
     """
     Task manager represent to user high-level API of asyncio interface (Less part :))
     """
@@ -23,13 +23,14 @@ class TaskManager:
         self.loop = loop
 
         self.loop.set_exception_handler(self.exception_handler)
+        self.set_current(self)
 
     def run(
-            self,
-            on_shutdown: typing.Callable = None,
-            on_startup: typing.Callable = None,
-            asyncio_debug_mode: bool = False,
-            auto_reload: bool = False,
+        self,
+        on_shutdown: typing.Callable = None,
+        on_startup: typing.Callable = None,
+        asyncio_debug_mode: bool = False,
+        auto_reload: bool = False,
     ):
         """
         Method which run event loop
@@ -106,4 +107,3 @@ class TaskManager:
 
         msg = context.get("exception", context["message"])
         logger.error(f"Caught exception: {msg}")
-        logger.info("Shutting down...")

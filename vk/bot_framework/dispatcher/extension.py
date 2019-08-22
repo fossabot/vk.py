@@ -52,7 +52,7 @@ class ExtensionsManager:
 
         self.extensions[extension.key] = extension
 
-    async def run_extension(self, name: str, **kwargs):
+    async def run_extension(self, name: str, **kwargs) -> None:
         """
 
         :param name: name of extension

@@ -6,9 +6,10 @@ import pydantic
 class BaseModel(pydantic.BaseModel, ContextInstanceMixin):
     class Config:
         allow_mutation = False
+        use_enum_values = True
 
     def __str__(self):
-        return str(self.dict())
+        return str(self.dict(skip_defaults=True))
 
     def __repr__(self):
         return "%s(%r)" % (self.__class__, self.dict())

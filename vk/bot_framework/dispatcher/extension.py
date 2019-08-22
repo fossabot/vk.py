@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 class AbstractExtension(ABC):
-
     @abstractmethod
     async def get_events(self) -> typing.List:
         """

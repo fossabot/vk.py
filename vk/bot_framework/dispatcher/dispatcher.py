@@ -27,7 +27,9 @@ class Dispatcher(ContextInstanceMixin):
 
         self._middleware_manager: MiddlewareManager = MiddlewareManager(self)
         self._rule_factory: RuleFactory = RuleFactory(default_rules())
-        self._extensions_manager: ExtensionsManager = ExtensionsManager(self, default_extensions())
+        self._extensions_manager: ExtensionsManager = ExtensionsManager(
+            self, default_extensions()
+        )
 
     def _register_handler(self, handler: Handler):
         """
@@ -75,7 +77,7 @@ class Dispatcher(ContextInstanceMixin):
         return decorator
 
     def register_event_handler(
-            self, coro: typing.Callable, event_type: Event, rules: typing.List
+        self, coro: typing.Callable, event_type: Event, rules: typing.List
     ):
         """
         Register event handler.
@@ -142,12 +144,18 @@ class Dispatcher(ContextInstanceMixin):
         )  # trigger pre_process_event funcs in middlewares.
         # returns service value '_skip_handler' and data variable (check upper).
 
-        if not _skip_handler:  # if middlewares don`t skip this handler, dispatcher be check rules and execute handlers.
+        if (
+            not _skip_handler
+        ):  # if middlewares don`t skip this handler, dispatcher be check rules and execute handlers.
             ev = await get_event_object(event)  # get event pydantic model.
             for handler in self._hanlders:  # check handlers
-                if handler.event_type.value == ev.type:  # if hanlder type is equal event pydantic model.
+                if (
+                    handler.event_type.value == ev.type
+                ):  # if hanlder type is equal event pydantic model.
                     try:
-                        result = await handler.execute_handler(ev.object, data)  # if execute hanlder func
+                        result = await handler.execute_handler(
+                            ev.object, data
+                        )  # if execute hanlder func
                         # return non-False value, other handlers doesn`t be executed.
                         if result:
                             break
@@ -168,7 +176,9 @@ class Dispatcher(ContextInstanceMixin):
             self.vk.loop.create_task(self._process_event(event))
 
     async def run_polling(self):
-        await self._extensions_manager.run_extension("polling", group_id=self.group_id, vk=self.vk)
+        await self._extensions_manager.run_extension(
+            "polling", group_id=self.group_id, vk=self.vk
+        )
 
     def run_callback_api(self, host: str, port: int, confirmation_code: str, path: str):
         """

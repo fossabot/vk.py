@@ -18,6 +18,7 @@ from .pretty_cards import PrettyCards
 from .audio_msg import AudioMsg
 
 import typing
+from typing import Optional
 
 
 # https://vk.com/dev/objects/attachments_w
@@ -46,21 +47,21 @@ class Attachments(str, Enum):
 
 class Attachment(BaseModel):
     type: str = None
-    photo: Photo = None
-    posted_photo: PostedPhoto = None
-    video: Video = None
-    audio: Audio = None
-    document: Document = None
-    graffiti: Graffiti = None
-    link: Link = None
-    note: Note = None
-    app: App = None
-    poll: Poll = None
-    page: Page = None
-    album: Album = None
-    photos_list: typing.List[Photo] = []
-    market: Market = None
-    market_album: MarketAlbum = None
-    sticker: Sticker = None
-    pretty_cards: PrettyCards = None
-    audio_message: AudioMsg = None
+    photo: Optional[Photo]
+    posted_photo: Optional[PostedPhoto]
+    video: Optional[Video]
+    audio: Optional[Audio]
+    document: Optional[Document]
+    graffiti: Optional[Graffiti]
+    link: Optional[Link]
+    note: Optional[Note]
+    app: Optional[App]
+    poll: Optional[Poll]
+    page: Optional[Page]
+    album: Optional[Album]
+    photos_list: Optional[typing.List[Photo]]
+    market: Optional[Market]
+    market_album: Optional[MarketAlbum]
+    sticker: Optional[Sticker]
+    pretty_cards: Optional[PrettyCards]
+    audio_message: Optional[AudioMsg]

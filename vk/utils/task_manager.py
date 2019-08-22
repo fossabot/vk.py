@@ -7,6 +7,7 @@ try:
     import uvloop
 except ImportError:
     uvloop = None
+
 from . import ContextInstanceMixin
 from .auto_reload import _auto_reload
 
@@ -22,7 +23,6 @@ class TaskManager(ContextInstanceMixin):
         self.tasks: list = []
         self.loop = loop
 
-        self.loop.set_exception_handler(self.exception_handler)
         self.set_current(self)
 
     def run(
@@ -49,12 +49,12 @@ class TaskManager(ContextInstanceMixin):
                 self.loop.run_until_complete(on_startup())
             if uvloop:
                 uvloop.install()
-            logger.info("Loop started!")
             if asyncio_debug_mode:
                 self.loop.set_debug(enabled=True)
             if auto_reload:
                 self.loop.create_task(_auto_reload())
-            self.loop.run_until_complete(asyncio.gather(*tasks))
+            logger.info("Loop started!")
+            self.loop.run_forever()
 
         finally:
             if on_shutdown is not None:
@@ -63,6 +63,8 @@ class TaskManager(ContextInstanceMixin):
     def close(self):
         """
         Close event loop manually
+
+        >> task_manager.close()
         :return:
         """
         self.loop.close()
@@ -79,7 +81,7 @@ class TaskManager(ContextInstanceMixin):
             self.tasks.append(task)
             logger.info(f"Task {task.__name__} successfully added!")
         else:
-            raise RuntimeError("Unexpected task. Tasks may be only coroutine")
+            raise RuntimeError("Unexpected task. Tasks may be only coroutine functions")
 
     def run_task(self, task: typing.Callable):
         """
@@ -101,9 +103,3 @@ class TaskManager(ContextInstanceMixin):
 
         self.loop.create_task(task())
 
-    def exception_handler(self, loop: asyncio.AbstractEventLoop, context):
-        # first, handle with default handler
-        loop.default_exception_handler(context)
-
-        msg = context.get("exception", context["message"])
-        logger.error(f"Caught exception: {msg}")

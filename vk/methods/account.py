@@ -6,26 +6,21 @@ from typing import Union
 
 
 class Account(BaseMethod):
-    async def ban(self, owner_id: int):
-        """
+
+    async def ban(self,  owner_id: int = None,):
+        '''
 
         :param owner_id:
 
 
-        """
+        '''
         method = self.get_method_name(self.ban)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.Ban(**r)
 
-    async def change_password(
-        self,
-        restore_sid: str,
-        change_password_hash: str,
-        old_password: str,
-        new_password: str,
-    ):
-        """
+    async def change_password(self,  restore_sid: str = None, change_password_hash: str = None, old_password: str = None, new_password: str = None,):
+        '''
         Changes a user password after access is successfully restored with the [vk.com/dev/auth.restore|auth.restore] method.
         :param restore_sid: Session id received after the [vk.com/dev/auth.restore|auth.restore] method is executed. (If the password is changed right after the access was restored)
         :param change_password_hash: Hash received after a successful OAuth authorization with a code got by SMS. (If the password is changed right after the access was restored)
@@ -33,108 +28,99 @@ class Account(BaseMethod):
         :param new_password: New password that will be set as a current
 
 
-        """
+        '''
         method = self.get_method_name(self.change_password)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.ChangePassword(**r)
 
-    async def get_active_offers(self, offset: int, count: int):
-        """
+    async def get_active_offers(self,  offset: int = None, count: int = None,):
+        '''
         Returns a list of active ads (offers) which executed by the user will bring him/her respective number of votes to his balance in the application.
         :param offset:
         :param count: Number of results to return.
 
 
-        """
+        '''
         method = self.get_method_name(self.get_active_offers)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetActiveOffers(**r)
 
-    async def get_app_permissions(self, user_id: int):
-        """
+    async def get_app_permissions(self,  user_id: int = None,):
+        '''
         Gets settings of the user in this application.
         :param user_id: User ID whose settings information shall be got. By default: current user.
 
 
-        """
+        '''
         method = self.get_method_name(self.get_app_permissions)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetAppPermissions(**r)
 
-    async def get_banned(self, offset: int, count: int):
-        """
+    async def get_banned(self,  offset: int = None, count: int = None,):
+        '''
         Returns a user's blacklist.
         :param offset: Offset needed to return a specific subset of results.
         :param count: Number of results to return.
 
 
-        """
+        '''
         method = self.get_method_name(self.get_banned)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetBanned(**r)
 
-    async def get_counters(self, filter: list):
-        """
+    async def get_counters(self,  filter: list = None,):
+        '''
         Returns non-null values of user counters.
         :param filter: Counters to be returned.
 
 
-        """
+        '''
         method = self.get_method_name(self.get_counters)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetCounters(**r)
 
-    async def get_info(self, fields: list):
-        """
+    async def get_info(self,  fields: list = None,):
+        '''
         Returns current account info.
         :param fields: Fields to return. Possible values: *'country' — user country,, *'https_required' — is "HTTPS only" option enabled,, *'own_posts_default' — is "Show my posts only" option is enabled,, *'no_wall_replies' — are wall replies disabled or not,, *'intro' — is intro passed by user or not,, *'lang' — user language. By default: all.
 
 
-        """
+        '''
         method = self.get_method_name(self.get_info)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetInfo(**r)
 
-    async def get_profile_info(self,):
-        """
+    async def get_profile_info(self, ):
+        '''
         Returns the current account info.
 
 
-        """
+        '''
         method = self.get_method_name(self.get_profile_info)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetProfileInfo(**r)
 
-    async def get_push_settings(self, device_id: str):
-        """
+    async def get_push_settings(self,  device_id: str = None,):
+        '''
         Gets settings of push notifications.
         :param device_id: Unique device ID.
 
 
-        """
+        '''
         method = self.get_method_name(self.get_push_settings)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetPushSettings(**r)
 
-    async def register_device(
-        self,
-        token: str,
-        device_model: str,
-        device_year: int,
-        device_id: str,
-        system_version: str,
-        settings: str,
-        sandbox: bool,
-    ):
-        """
+    async def register_device(self,  token: str = None, device_model: str = None, device_year: int = None, device_id: str = None, system_version: str = None, settings: str = None, sandbox: bool = None,):
+        '''
         Subscribes an iOS/Android/Windows Phone-based device to receive push notifications
         :param token: Device token used to send notifications. (for mpns, the token shall be URL for sending of notifications)
         :param device_model: String name of device model.
@@ -145,30 +131,14 @@ class Account(BaseMethod):
         :param sandbox:
 
 
-        """
+        '''
         method = self.get_method_name(self.register_device)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.RegisterDevice(**r)
 
-    async def save_profile_info(
-        self,
-        first_name: str,
-        last_name: str,
-        maiden_name: str,
-        screen_name: str,
-        cancel_request_id: int,
-        sex: int,
-        relation: int,
-        relation_partner_id: int,
-        bdate: str,
-        bdate_visibility: int,
-        home_town: str,
-        country_id: int,
-        city_id: int,
-        status: str,
-    ):
-        """
+    async def save_profile_info(self,  first_name: str = None, last_name: str = None, maiden_name: str = None, screen_name: str = None, cancel_request_id: int = None, sex: int = None, relation: int = None, relation_partner_id: int = None, bdate: str = None, bdate_visibility: int = None, home_town: str = None, country_id: int = None, city_id: int = None, status: str = None,):
+        '''
         Edits current profile info.
         :param first_name: User first name.
         :param last_name: User last name.
@@ -186,65 +156,63 @@ class Account(BaseMethod):
         :param status: Status text.
 
 
-        """
+        '''
         method = self.get_method_name(self.save_profile_info)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.SaveProfileInfo(**r)
 
-    async def set_info(self, name: str, value: str):
-        """
+    async def set_info(self,  name: str = None, value: str = None,):
+        '''
         Allows to edit the current account info.
         :param name: Setting name.
         :param value: Setting value.
 
 
-        """
+        '''
         method = self.get_method_name(self.set_info)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.SetInfo(**r)
 
-    async def set_name_in_menu(self, user_id: int, name: str):
-        """
+    async def set_name_in_menu(self,  user_id: int = None, name: str = None,):
+        '''
         Sets an application screen name (up to 17 characters), that is shown to the user in the left menu.
         :param user_id: User ID.
         :param name: Application screen name.
 
 
-        """
+        '''
         method = self.get_method_name(self.set_name_in_menu)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.SetNameInMenu(**r)
 
-    async def set_offline(self,):
-        """
+    async def set_offline(self, ):
+        '''
         Marks a current user as offline.
 
 
-        """
+        '''
         method = self.get_method_name(self.set_offline)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.SetOffline(**r)
 
-    async def set_online(self, voip: bool):
-        """
+    async def set_online(self,  voip: bool = None,):
+        '''
         Marks the current user as online for 15 minutes.
         :param voip: '1' if videocalls are available for current device.
 
 
-        """
+        '''
         method = self.get_method_name(self.set_online)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.SetOnline(**r)
 
-    async def set_push_settings(
-        self, device_id: str, settings: str, key: str, value: list
-    ):
-        """
+    async def set_push_settings(self,  device_id: str = None, settings: str = None, key: str = None, value: list = None,):
+        '''
         Change push settings.
         :param device_id: Unique device ID.
         :param settings: Push settings in a [vk.com/dev/push_settings|special format].
@@ -252,16 +220,14 @@ class Account(BaseMethod):
         :param value: New value for the key in a [vk.com/dev/push_settings|special format].
 
 
-        """
+        '''
         method = self.get_method_name(self.set_push_settings)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.SetPushSettings(**r)
 
-    async def set_silence_mode(
-        self, device_id: str, time: int, peer_id: int, sound: int
-    ):
-        """
+    async def set_silence_mode(self,  device_id: str = None, time: int = None, peer_id: int = None, sound: int = None,):
+        '''
         Mutes push notifications for the set period of time.
         :param device_id: Unique device ID.
         :param time: Time in seconds for what notifications should be disabled. '-1' to disable forever.
@@ -269,32 +235,32 @@ class Account(BaseMethod):
         :param sound: '1' — to enable sound in this dialog, '0' — to disable sound. Only if 'peer_id' contains user or community ID.
 
 
-        """
+        '''
         method = self.get_method_name(self.set_silence_mode)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.SetSilenceMode(**r)
 
-    async def unban(self, owner_id: int):
-        """
+    async def unban(self,  owner_id: int = None,):
+        '''
 
         :param owner_id:
 
 
-        """
+        '''
         method = self.get_method_name(self.unban)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.Unban(**r)
 
-    async def unregister_device(self, device_id: str, sandbox: bool):
-        """
+    async def unregister_device(self,  device_id: str = None, sandbox: bool = None,):
+        '''
         Unsubscribes a device from push notifications.
         :param device_id: Unique device ID.
         :param sandbox:
 
 
-        """
+        '''
         method = self.get_method_name(self.unregister_device)
         params = self.create_params(locals())
         r = await self.api_request(method, params)

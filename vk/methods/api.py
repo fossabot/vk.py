@@ -1,4 +1,20 @@
-from vk.methods import Messages, Account, Apps, AppWidgets, Auth, Board, Database, Docs, Fave, Friends, Gifts, Groups, Leads, Likes, Market
+from vk.methods import (
+    Messages,
+    Account,
+    Apps,
+    AppWidgets,
+    Auth,
+    Board,
+    Database,
+    Docs,
+    Fave,
+    Friends,
+    Gifts,
+    Groups,
+    Leads,
+    Likes,
+    Market,
+)
 from vk.utils import ContextInstanceMixin
 
 

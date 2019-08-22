@@ -6,20 +6,28 @@ from typing import Union
 
 
 class Apps(BaseMethod):
-
-    async def delete_app_requests(self, ):
-        '''
+    async def delete_app_requests(self,):
+        """
         Deletes all request notifications from the current app.
 
 
-        '''
+        """
         method = self.get_method_name(self.delete_app_requests)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.DeleteAppRequests(**r)
 
-    async def get(self,  app_id: int = None, app_ids: list = None, platform: str = None, extended: bool = None, return_friends: bool = None, fields: list = None, name_case: str = None,):
-        '''
+    async def get(
+        self,
+        app_id: int = None,
+        app_ids: list = None,
+        platform: str = None,
+        extended: bool = None,
+        return_friends: bool = None,
+        fields: list = None,
+        name_case: str = None,
+    ):
+        """
         Returns applications data.
         :param app_id: Application ID
         :param app_ids: List of application ID
@@ -30,14 +38,27 @@ class Apps(BaseMethod):
         :param name_case: Case for declension of user name and surname: 'nom' — nominative (default),, 'gen' — genitive,, 'dat' — dative,, 'acc' — accusative,, 'ins' — instrumental,, 'abl' — prepositional. (only if 'return_friends' = '1')
 
 
-        '''
+        """
         method = self.get_method_name(self.get)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.Get(**r)
 
-    async def get_catalog(self,  sort: str = None, offset: int = None, count: int = None, platform: str = None, extended: bool = None, return_friends: bool = None, fields: list = None, name_case: str = None, q: str = None, genre_id: int = None, filter: str = None,):
-        '''
+    async def get_catalog(
+        self,
+        sort: str = None,
+        offset: int = None,
+        count: int = None,
+        platform: str = None,
+        extended: bool = None,
+        return_friends: bool = None,
+        fields: list = None,
+        name_case: str = None,
+        q: str = None,
+        genre_id: int = None,
+        filter: str = None,
+    ):
+        """
         Returns a list of applications (apps) available to users in the App Catalog.
         :param sort: Sort order: 'popular_today' — popular for one day (default), 'visitors' — by visitors number , 'create_date' — by creation date, 'growth_rate' — by growth rate, 'popular_week' — popular for one week
         :param offset: Offset required to return a specific subset of apps.
@@ -52,14 +73,21 @@ class Apps(BaseMethod):
         :param filter: 'installed' — to return list of installed apps (only for mobile platform).
 
 
-        '''
+        """
         method = self.get_method_name(self.get_catalog)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetCatalog(**r)
 
-    async def get_friends_list(self,  extended: bool = None, count: int = None, offset: int = None, type: str = None, fields: list = None,):
-        '''
+    async def get_friends_list(
+        self,
+        extended: bool = None,
+        count: int = None,
+        offset: int = None,
+        type: str = None,
+        fields: list = None,
+    ):
+        """
         Creates friends list for requests and invites in current app.
         :param extended:
         :param count: List size.
@@ -68,52 +96,62 @@ class Apps(BaseMethod):
         :param fields: Additional profile fields, see [vk.com/dev/fields|description].
 
 
-        '''
+        """
         method = self.get_method_name(self.get_friends_list)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetFriendsList(**r)
 
-    async def get_leaderboard(self,  type: str = None, global_: bool = None, extended: bool = None,):
-        '''
+    async def get_leaderboard(
+        self, type: str = None, global_: bool = None, extended: bool = None
+    ):
+        """
         Returns players rating in the game.
         :param type: Leaderboard type. Possible values: *'level' — by level,, *'points' — by mission points,, *'score' — by score ().
         :param global: Rating type. Possible values: *'1' — global rating among all players,, *'0' — rating among user friends.
         :param extended: 1 — to return additional info about users
 
 
-        '''
+        """
         method = self.get_method_name(self.get_leaderboard)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetLeaderboard(**r)
 
-    async def get_scopes(self,  type: str = None,):
-        '''
+    async def get_scopes(self, type: str = None):
+        """
         Returns scopes for auth
         :param type:
 
 
-        '''
+        """
         method = self.get_method_name(self.get_scopes)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetScopes(**r)
 
-    async def get_score(self,  user_id: int = None,):
-        '''
+    async def get_score(self, user_id: int = None):
+        """
         Returns user score in app
         :param user_id:
 
 
-        '''
+        """
         method = self.get_method_name(self.get_score)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetScore(**r)
 
-    async def send_request(self,  user_id: int = None, text: str = None, type: str = None, name: str = None, key: str = None, separate: bool = None,):
-        '''
+    async def send_request(
+        self,
+        user_id: int = None,
+        text: str = None,
+        type: str = None,
+        name: str = None,
+        key: str = None,
+        separate: bool = None,
+    ):
+        """
         Sends a request to another user in an app that uses VK authorization.
         :param user_id: id of the user to send a request
         :param text: request text
@@ -123,7 +161,7 @@ class Apps(BaseMethod):
         :param separate:
 
 
-        '''
+        """
         method = self.get_method_name(self.send_request)
         params = self.create_params(locals())
         r = await self.api_request(method, params)

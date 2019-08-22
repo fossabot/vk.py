@@ -6,9 +6,15 @@ from typing import Union
 
 
 class Board(BaseMethod):
-
-    async def add_topic(self,  group_id: int = None, title: str = None, text: str = None, from_group: bool = None, attachments: list = None,):
-        '''
+    async def add_topic(
+        self,
+        group_id: int = None,
+        title: str = None,
+        text: str = None,
+        from_group: bool = None,
+        attachments: list = None,
+    ):
+        """
         Creates a new topic on a community's discussion board.
         :param group_id: ID of the community that owns the discussion board.
         :param title: Topic title.
@@ -17,27 +23,36 @@ class Board(BaseMethod):
         :param attachments: List of media objects attached to the topic, in the following format: "<owner_id>_<media_id>,<owner_id>_<media_id>", '' — Type of media object: 'photo' — photo, 'video' — video, 'audio' — audio, 'doc' — document, '<owner_id>' — ID of the media owner. '<media_id>' — Media ID. Example: "photo100172_166443618,photo66748_265827614", , "NOTE: If you try to attach more than one reference, an error will be thrown.",
 
 
-        '''
+        """
         method = self.get_method_name(self.add_topic)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.AddTopic(**r)
 
-    async def close_topic(self,  group_id: int = None, topic_id: int = None,):
-        '''
+    async def close_topic(self, group_id: int = None, topic_id: int = None):
+        """
         Closes a topic on a community's discussion board so that comments cannot be posted.
         :param group_id: ID of the community that owns the discussion board.
         :param topic_id: Topic ID.
 
 
-        '''
+        """
         method = self.get_method_name(self.close_topic)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.CloseTopic(**r)
 
-    async def create_comment(self,  group_id: int = None, topic_id: int = None, message: str = None, attachments: list = None, from_group: bool = None, sticker_id: int = None, guid: str = None,):
-        '''
+    async def create_comment(
+        self,
+        group_id: int = None,
+        topic_id: int = None,
+        message: str = None,
+        attachments: list = None,
+        from_group: bool = None,
+        sticker_id: int = None,
+        guid: str = None,
+    ):
+        """
         Adds a comment on a topic on a community's discussion board.
         :param group_id: ID of the community that owns the discussion board.
         :param topic_id: ID of the topic to be commented on.
@@ -48,41 +63,50 @@ class Board(BaseMethod):
         :param guid: Unique identifier to avoid repeated comments.
 
 
-        '''
+        """
         method = self.get_method_name(self.create_comment)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.CreateComment(**r)
 
-    async def delete_comment(self,  group_id: int = None, topic_id: int = None, comment_id: int = None,):
-        '''
+    async def delete_comment(
+        self, group_id: int = None, topic_id: int = None, comment_id: int = None
+    ):
+        """
         Deletes a comment on a topic on a community's discussion board.
         :param group_id: ID of the community that owns the discussion board.
         :param topic_id: Topic ID.
         :param comment_id: Comment ID.
 
 
-        '''
+        """
         method = self.get_method_name(self.delete_comment)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.DeleteComment(**r)
 
-    async def delete_topic(self,  group_id: int = None, topic_id: int = None,):
-        '''
+    async def delete_topic(self, group_id: int = None, topic_id: int = None):
+        """
         Deletes a topic from a community's discussion board.
         :param group_id: ID of the community that owns the discussion board.
         :param topic_id: Topic ID.
 
 
-        '''
+        """
         method = self.get_method_name(self.delete_topic)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.DeleteTopic(**r)
 
-    async def edit_comment(self,  group_id: int = None, topic_id: int = None, comment_id: int = None, message: str = None, attachments: list = None,):
-        '''
+    async def edit_comment(
+        self,
+        group_id: int = None,
+        topic_id: int = None,
+        comment_id: int = None,
+        message: str = None,
+        attachments: list = None,
+    ):
+        """
         Edits a comment on a topic on a community's discussion board.
         :param group_id: ID of the community that owns the discussion board.
         :param topic_id: Topic ID.
@@ -91,41 +115,53 @@ class Board(BaseMethod):
         :param attachments: (Required if 'message' is not set.) List of media objects attached to the comment, in the following format: "<owner_id>_<media_id>,<owner_id>_<media_id>", '' — Type of media object: 'photo' — photo, 'video' — video, 'audio' — audio, 'doc' — document, '<owner_id>' — ID of the media owner. '<media_id>' — Media ID. Example: "photo100172_166443618,photo66748_265827614"
 
 
-        '''
+        """
         method = self.get_method_name(self.edit_comment)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.EditComment(**r)
 
-    async def edit_topic(self,  group_id: int = None, topic_id: int = None, title: str = None,):
-        '''
+    async def edit_topic(
+        self, group_id: int = None, topic_id: int = None, title: str = None
+    ):
+        """
         Edits the title of a topic on a community's discussion board.
         :param group_id: ID of the community that owns the discussion board.
         :param topic_id: Topic ID.
         :param title: New title of the topic.
 
 
-        '''
+        """
         method = self.get_method_name(self.edit_topic)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.EditTopic(**r)
 
-    async def fix_topic(self,  group_id: int = None, topic_id: int = None,):
-        '''
+    async def fix_topic(self, group_id: int = None, topic_id: int = None):
+        """
         Pins a topic (fixes its place) to the top of a community's discussion board.
         :param group_id: ID of the community that owns the discussion board.
         :param topic_id: Topic ID.
 
 
-        '''
+        """
         method = self.get_method_name(self.fix_topic)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.FixTopic(**r)
 
-    async def get_comments(self,  group_id: int = None, topic_id: int = None, need_likes: bool = None, start_comment_id: int = None, offset: int = None, count: int = None, extended: bool = None, sort: str = None,):
-        '''
+    async def get_comments(
+        self,
+        group_id: int = None,
+        topic_id: int = None,
+        need_likes: bool = None,
+        start_comment_id: int = None,
+        offset: int = None,
+        count: int = None,
+        extended: bool = None,
+        sort: str = None,
+    ):
+        """
         Returns a list of comments on a topic on a community's discussion board.
         :param group_id: ID of the community that owns the discussion board.
         :param topic_id: Topic ID.
@@ -137,14 +173,24 @@ class Board(BaseMethod):
         :param sort: Sort order: 'asc' — by creation date in chronological order, 'desc' — by creation date in reverse chronological order,
 
 
-        '''
+        """
         method = self.get_method_name(self.get_comments)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetComments(**r)
 
-    async def get_topics(self,  group_id: int = None, topic_ids: list = None, order: int = None, offset: int = None, count: int = None, extended: bool = None, preview: int = None, preview_length: int = None,):
-        '''
+    async def get_topics(
+        self,
+        group_id: int = None,
+        topic_ids: list = None,
+        order: int = None,
+        offset: int = None,
+        count: int = None,
+        extended: bool = None,
+        preview: int = None,
+        preview_length: int = None,
+    ):
+        """
         Returns a list of topics on a community's discussion board.
         :param group_id: ID of the community that owns the discussion board.
         :param topic_ids: IDs of topics to be returned (100 maximum). By default, all topics are returned. If this parameter is set, the 'order', 'offset', and 'count' parameters are ignored.
@@ -156,47 +202,49 @@ class Board(BaseMethod):
         :param preview_length: Number of characters after which to truncate the previewed comment. To preview the full comment, specify '0'.
 
 
-        '''
+        """
         method = self.get_method_name(self.get_topics)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetTopics(**r)
 
-    async def open_topic(self,  group_id: int = None, topic_id: int = None,):
-        '''
+    async def open_topic(self, group_id: int = None, topic_id: int = None):
+        """
         Re-opens a previously closed topic on a community's discussion board.
         :param group_id: ID of the community that owns the discussion board.
         :param topic_id: Topic ID.
 
 
-        '''
+        """
         method = self.get_method_name(self.open_topic)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.OpenTopic(**r)
 
-    async def restore_comment(self,  group_id: int = None, topic_id: int = None, comment_id: int = None,):
-        '''
+    async def restore_comment(
+        self, group_id: int = None, topic_id: int = None, comment_id: int = None
+    ):
+        """
         Restores a comment deleted from a topic on a community's discussion board.
         :param group_id: ID of the community that owns the discussion board.
         :param topic_id: Topic ID.
         :param comment_id: Comment ID.
 
 
-        '''
+        """
         method = self.get_method_name(self.restore_comment)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.RestoreComment(**r)
 
-    async def unfix_topic(self,  group_id: int = None, topic_id: int = None,):
-        '''
+    async def unfix_topic(self, group_id: int = None, topic_id: int = None):
+        """
         Unpins a pinned topic from the top of a community's discussion board.
         :param group_id: ID of the community that owns the discussion board.
         :param topic_id: Topic ID.
 
 
-        '''
+        """
         method = self.get_method_name(self.unfix_topic)
         params = self.create_params(locals())
         r = await self.api_request(method, params)

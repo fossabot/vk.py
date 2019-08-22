@@ -1,4 +1,3 @@
-
 from .base import BaseMethod
 from vk.types.responses import leads as m
 
@@ -7,8 +6,16 @@ from typing import Union
 
 
 class Leads(BaseMethod):
-    async def check_user(self,  lead_id: int = None, test_result: int = None, test_mode: bool = None, auto_start: bool = None, age: int = None, country: str = None,):
-        '''
+    async def check_user(
+        self,
+        lead_id: int = None,
+        test_result: int = None,
+        test_mode: bool = None,
+        auto_start: bool = None,
+        age: int = None,
+        country: str = None,
+    ):
+        """
         Checks if the user can start the lead.
         :param lead_id: Lead ID.
         :param test_result: Value to be return in 'result' field when test mode is used.
@@ -18,28 +25,36 @@ class Leads(BaseMethod):
         :param country: User country code.
 
 
-        '''
+        """
         method = self.get_method_name(self.check_user)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.CheckUser(**r)
 
-    async def complete(self,  vk_sid: str = None, secret: str = None, comment: str = None,):
-        '''
+    async def complete(
+        self, vk_sid: str = None, secret: str = None, comment: str = None
+    ):
+        """
         Completes the lead started by user.
         :param vk_sid: Session obtained as GET parameter when session started.
         :param secret: Secret key from the lead testing interface.
         :param comment: Comment text.
 
 
-        '''
+        """
         method = self.get_method_name(self.complete)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.Complete(**r)
 
-    async def get_stats(self,  lead_id: int = None, secret: str = None, date_start: str = None, date_end: str = None,):
-        '''
+    async def get_stats(
+        self,
+        lead_id: int = None,
+        secret: str = None,
+        date_start: str = None,
+        date_end: str = None,
+    ):
+        """
         Returns lead stats data.
         :param lead_id: Lead ID.
         :param secret: Secret key obtained from the lead testing interface.
@@ -47,14 +62,22 @@ class Leads(BaseMethod):
         :param date_end: Day to finish stats (YYYY_MM_DD, e.g.2011-09-17).
 
 
-        '''
+        """
         method = self.get_method_name(self.get_stats)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetStats(**r)
 
-    async def get_users(self,  offer_id: int = None, secret: str = None, offset: int = None, count: int = None, status: int = None, reverse: bool = None,):
-        '''
+    async def get_users(
+        self,
+        offer_id: int = None,
+        secret: str = None,
+        offset: int = None,
+        count: int = None,
+        status: int = None,
+        reverse: bool = None,
+    ):
+        """
         Returns a list of last user actions for the offer.
         :param offer_id: Offer ID.
         :param secret: Secret key obtained in the lead testing interface.
@@ -64,26 +87,34 @@ class Leads(BaseMethod):
         :param reverse: Sort order. Possible values: *'1' — chronological,, *'0' — reverse chronological.
 
 
-        '''
+        """
         method = self.get_method_name(self.get_users)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.GetUsers(**r)
 
-    async def metric_hit(self,  data: str = None,):
-        '''
+    async def metric_hit(self, data: str = None):
+        """
         Counts the metric event.
         :param data: Metric data obtained in the lead interface.
 
 
-        '''
+        """
         method = self.get_method_name(self.metric_hit)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
         return m.MetricHit(**r)
 
-    async def start(self,  lead_id: int = None, secret: str = None, uid: int = None, aid: int = None, test_mode: bool = None, force: bool = None,):
-        '''
+    async def start(
+        self,
+        lead_id: int = None,
+        secret: str = None,
+        uid: int = None,
+        aid: int = None,
+        test_mode: bool = None,
+        force: bool = None,
+    ):
+        """
         Creates new session for the user passing the offer.
         :param lead_id: Lead ID.
         :param secret: Secret key from the lead testing interface.
@@ -93,7 +124,7 @@ class Leads(BaseMethod):
         :param force:
 
 
-        '''
+        """
         method = self.get_method_name(self.start)
         params = self.create_params(locals())
         r = await self.api_request(method, params)

@@ -5,6 +5,9 @@ from vk.constants import JSON_LIBRARY
 from vk import types
 
 import typing
+import logging
+
+logger = logging.getLogger(__name__)
 
 """
 Built-in rules.
@@ -18,7 +21,9 @@ class Command(BaseRule):
 
     async def check(self, message: types.Message):
         text = message.text.lower()
-        return f"{self.prefix}{self.command}" == text
+        result = f"{self.prefix}{self.command}" == text
+        logger.debug(f"Result of Command rule: {result}")
+        return result
 
 
 class Text(NamedRule):
@@ -30,7 +35,9 @@ class Text(NamedRule):
 
     async def check(self, message: types.Message):
         text = message.text.lower()
-        return text == self.text
+        result = text == self.text
+        logger.debug(f"Result of Text rule: {result}")
+        return result
 
 
 class Commands(NamedRule):
@@ -47,7 +54,7 @@ class Commands(NamedRule):
         for command in self.commands:
             if text == f"{self.prefix}{command}":
                 _accepted = True
-
+        logger.debug(f"Result of Commands rule: {_accepted}")
         return _accepted
 
 
@@ -62,8 +69,9 @@ class Payload(NamedRule):
         payload = message.payload
         if payload:
             payload = JSON_LIBRARY.loads(payload)
-            if payload == self.payload:
-                return True
+            result = payload == self.payload
+            logger.debug(f"Result of Payload rule: {result}")
+            return result
 
 
 class ChatAction(NamedRule):
@@ -77,5 +85,6 @@ class ChatAction(NamedRule):
         action = message.action.type
         if action:
             action = Action(action)
-            if action is self.action:
-                return True
+            result = action is self.action
+            logger.debug(f"Result of ChatAction rule: {result}")
+            return result

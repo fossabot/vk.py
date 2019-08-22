@@ -14,6 +14,7 @@ from vk.constants import default_rules, default_extensions
 
 import typing
 import logging
+import asyncio
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +134,6 @@ class Dispatcher(ContextInstanceMixin):
         :param event:
         :return:
         """
-
         data = {}  # dict for transfer data from middlewares to handler.
         # examples/bot_framework/simple_middleware.py
 

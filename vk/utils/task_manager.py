@@ -40,11 +40,10 @@ class TaskManager:
         """
         if len(self.tasks) < 1:
             raise RuntimeError("Count of tasks - 0. Add tasks.")
-        tasks = [task() for task in self.tasks]
+        tasks = [self.loop.create_task(task()) for task in self.tasks]
         try:
             if on_startup is not None:
                 self.loop.run_until_complete(on_startup())
-            tasks = asyncio.gather(*tasks)
             if uvloop:
                 uvloop.install()
             logger.info("Loop started!")
@@ -52,7 +51,7 @@ class TaskManager:
                 self.loop.set_debug(enabled=True)
             if auto_reload:
                 self.loop.create_task(_auto_reload())
-            self.loop.run_until_complete(tasks)
+            self.loop.run_forever()
         finally:
             if on_shutdown is not None:
                 self.loop.run_until_complete(on_shutdown())

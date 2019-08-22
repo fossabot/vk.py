@@ -3,6 +3,7 @@ from typing import Optional
 
 import typing
 import logging
+import asyncio
 
 logger = logging.getLogger(__name__)
 
@@ -64,4 +65,4 @@ class ExtensionsManager:
             raise RuntimeError("Undefined extension")
 
         extension = extension(**kwargs)
-        await extension.run(self.dp)
+        self.dp.vk.loop.create_task(extension.run(self.dp))

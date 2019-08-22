@@ -55,6 +55,7 @@ class Message(BaseModel):
             attachment=attachment,
             reply_to=self.id,
             keyboard=keyboard,
+            random_id=0,
         )
 
     async def answer(self, message: str, attachment: str = None, keyboard: dict = None):

@@ -63,6 +63,7 @@ class Message(BaseModel):
             peer_id=self.peer_id,
             attachment=attachment,
             keyboard=keyboard,
+            random_id=0
         )
 
 

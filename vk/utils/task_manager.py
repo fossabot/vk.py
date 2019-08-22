@@ -22,12 +22,14 @@ class TaskManager:
         self.tasks: list = []
         self.loop = loop
 
+        self.loop.set_exception_handler(self.exception_handler)
+
     def run(
-        self,
-        on_shutdown: typing.Callable = None,
-        on_startup: typing.Callable = None,
-        asyncio_debug_mode: bool = False,
-        auto_reload: bool = False,
+            self,
+            on_shutdown: typing.Callable = None,
+            on_startup: typing.Callable = None,
+            asyncio_debug_mode: bool = False,
+            auto_reload: bool = False,
     ):
         """
         Method which run event loop
@@ -51,7 +53,8 @@ class TaskManager:
                 self.loop.set_debug(enabled=True)
             if auto_reload:
                 self.loop.create_task(_auto_reload())
-            self.loop.run_forever()
+            self.loop.run_until_complete(asyncio.gather(*tasks))
+
         finally:
             if on_shutdown is not None:
                 self.loop.run_until_complete(on_shutdown())
@@ -96,3 +99,11 @@ class TaskManager:
         """
 
         self.loop.create_task(task())
+
+    def exception_handler(self, loop: asyncio.AbstractEventLoop, context):
+        # first, handle with default handler
+        loop.default_exception_handler(context)
+
+        msg = context.get("exception", context["message"])
+        logger.error(f"Caught exception: {msg}")
+        logger.info("Shutting down...")

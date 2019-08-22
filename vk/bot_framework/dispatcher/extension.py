@@ -64,4 +64,4 @@ class ExtensionsManager:
             raise RuntimeError("Undefined extension")
 
         extension = extension(**kwargs)
-        self.dp.vk.loop.create_task(extension.run(self.dp))
+        await extension.run(self.dp)

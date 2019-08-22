@@ -94,7 +94,12 @@ class DataCheck(NamedRule):
 
     async def check(self, *args):
         data: dict = args[1]
-        key = list(self.data.keys())[0]
-        result = data.get(key) == self.data[key]
-        logger.debug(f"Result of DataCheck rule: {result}")
-        return result
+        _passed = True
+        for key, value in self.data.items():
+            value_data = data.get(key)
+            print(value_data)
+            if value_data != value:
+                _passed = False
+                break
+        logger.debug(f"Result of DataCheck rule: {_passed}")
+        return _passed

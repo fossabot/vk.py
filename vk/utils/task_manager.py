@@ -26,14 +26,17 @@ class TaskManager(ContextInstanceMixin):
         self.set_current(self)
 
     def run(
-        self,
-        on_shutdown: typing.Callable = None,
-        on_startup: typing.Callable = None,
-        asyncio_debug_mode: bool = False,
-        auto_reload: bool = False,
+            self,
+            *,
+            on_shutdown: typing.Callable = None,
+            on_startup: typing.Callable = None,
+            asyncio_debug_mode: bool = False,
+            auto_reload: bool = False,
     ):
         """
         Method which run event loop
+
+        >> task_manager.run()
 
         :param auto_reload: auto reload code when changes
         :param on_shutdown: coroutine which runned after complete tasks
@@ -43,16 +46,20 @@ class TaskManager(ContextInstanceMixin):
         """
         if len(self.tasks) < 1:
             raise RuntimeError("Count of tasks - 0. Add tasks.")
-        tasks = [self.loop.create_task(task()) for task in self.tasks]
         try:
             if on_startup is not None:
                 self.loop.run_until_complete(on_startup())
-            if uvloop:
-                uvloop.install()
+
             if asyncio_debug_mode:
                 self.loop.set_debug(enabled=True)
             if auto_reload:
                 self.loop.create_task(_auto_reload())
+
+            if uvloop:
+                uvloop.install()
+
+            [self.loop.create_task(task()) for task in self.tasks]
+
             logger.info("Loop started!")
             self.loop.run_forever()
 
@@ -102,4 +109,3 @@ class TaskManager(ContextInstanceMixin):
         """
 
         self.loop.create_task(task())
-

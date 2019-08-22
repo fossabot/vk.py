@@ -178,4 +178,3 @@ class Dispatcher(ContextInstanceMixin):
         await self._extensions_manager.run_extension(
             "polling", group_id=self.group_id, vk=self.vk
         )
-

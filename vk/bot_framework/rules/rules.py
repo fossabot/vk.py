@@ -34,7 +34,7 @@ class Text(NamedRule):
 
     async def check(self, message: types.Message, data: dict):
         text = message.text.lower()
-        result = text == self.text
+        result = text == self.text.lower()
         logger.debug(f"Result of Text rule: {result}")
         return result
 

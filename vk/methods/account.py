@@ -2,6 +2,7 @@ from .base import BaseMethod
 from vk.types.responses import account as m
 
 import typing
+from typing import Union
 
 
 class Account(BaseMethod):

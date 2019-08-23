@@ -51,6 +51,8 @@ if __name__ == "__main__":
 
 You can find more examples [here](./examples)
 
+Example of use bot framework, with docker integration [click](https://github.com/prostomarkeloff/vkpy-exam-bot)
+
 ## Features
 
 - Rich high-level API.

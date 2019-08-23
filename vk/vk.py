@@ -137,3 +137,4 @@ class VK(ContextInstanceMixin):
         """
         if isinstance(self.client, ClientSession) and not self.client.closed:
             await self.client.close()
+

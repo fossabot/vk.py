@@ -64,4 +64,4 @@ class ExtensionsManager:
             raise RuntimeError("Undefined extension")
 
         extension = extension(**kwargs)
-        await extension.run(self.dp)
+        asyncio.create_task(extension.run(self.dp))

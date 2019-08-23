@@ -97,7 +97,6 @@ class DataCheck(NamedRule):
         _passed = True
         for key, value in self.data.items():
             value_data = data.get(key)
-            print(value_data)
             if value_data != value:
                 _passed = False
                 break

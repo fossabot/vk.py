@@ -108,7 +108,7 @@ class Apps(BaseMethod):
         """
         Returns players rating in the game.
         :param type: Leaderboard type. Possible values: *'level' — by level,, *'points' — by mission points,, *'score' — by score ().
-        :param global: Rating type. Possible values: *'1' — global rating among all players,, *'0' — rating among user friends.
+        :param global_: Rating type. Possible values: *'1' — global rating among all players,, *'0' — rating among user friends.
         :param extended: 1 — to return additional info about users
 
 

@@ -47,7 +47,7 @@ class Commands(NamedRule):
         self.prefix = "/"
 
     async def check(self, message: types.Message, data: dict):
-        text = message.text.lower().split[0]
+        text = message.text.lower().split()[0]
         _accepted = False
         for command in self.commands:
             if text == f"{self.prefix}{command}":

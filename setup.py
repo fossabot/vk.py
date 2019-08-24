@@ -26,6 +26,6 @@ setuptools.setup(
     install_requires=[
         "aiohttp",
         "pydantic",
-        "watchgod"
+        "watchgod",
     ]
 )

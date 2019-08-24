@@ -108,8 +108,6 @@ class VK(ContextInstanceMixin):
         :param params:
         :return:
         """
-        if isinstance(params, dict):
-            params = {k: v for k, v in params.items() if v is not None}
         return await self._api_request(method_name=method_name, params=params)
 
     async def execute_api_request(self, code: str):

@@ -33,10 +33,10 @@ API_LINK: str = "https://api.vk.com/method/"  # link to access API
 
 try:
     import orjson
-except:
+except ImportError:
     try:
         import ujson as orjson
-    except:
+    except ImportError:
         import json as orjson
 
 JSON_LIBRARY = orjson

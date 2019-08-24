@@ -102,3 +102,5 @@ class DataCheck(NamedRule):
                 break
         logger.debug(f"Result of DataCheck rule: {_passed}")
         return _passed
+
+

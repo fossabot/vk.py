@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="vk.py",
-    version="0.1.0",
+    version="0.5.0",
     author="prostomarkeloff",
     description="VK.py its a pretty and fully asynchronous API wrapper for VK API based on asyncio and aiohttp.",
     long_description=long_description,

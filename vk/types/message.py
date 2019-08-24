@@ -72,7 +72,10 @@ class Message(BaseModel):
         Return message args splitted by whitespace without first (0) element.
         :return: typing.List[str]
         """
-        return self.text.split()[1::]
+        try:
+            return self.text.split()[1::]
+        except:
+            return []
 
 
 Message.update_forward_refs()

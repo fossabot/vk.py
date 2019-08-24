@@ -43,7 +43,7 @@ JSON_LIBRARY = orjson
 
 
 def default_rules():
-    from vk.bot_framework.rules.rules import Commands, Text, Payload, ChatAction, DataCheck
+    from vk.bot_framework.rules.rules import Commands, Text, Payload, ChatAction, DataCheck, MessageCountArgs, MessageArgsValidate
 
     DEFAULT_RULES = {
         "commands": Commands,
@@ -51,6 +51,8 @@ def default_rules():
         "payload": Payload,
         "chat_action": ChatAction,
         "data_check": DataCheck,
+        "count_args": MessageCountArgs,
+        "have_args": MessageArgsValidate,
     }
     return DEFAULT_RULES
 

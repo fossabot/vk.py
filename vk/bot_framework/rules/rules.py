@@ -104,3 +104,46 @@ class DataCheck(NamedRule):
         return _passed
 
 
+class MessageCountArgs(NamedRule):
+    """
+    Get args and return result of equeal len(args) and passed args.
+    """
+
+    key = "count_args"
+
+    def __init__(self, count_args: int):
+        self.count_args = count_args
+
+    async def check(self, message: types.Message,  data: dict):
+        args = message.get_args()
+        result = len(args) == self.count_args
+        logger.debug(f"Result of MessageCountArgs rule: {result}")
+        return result
+
+
+class MessageArgsValidate(NamedRule):
+    """
+    Get and validate args by passed validators.
+    """
+
+    key = "have_args"
+
+    def __init__(self, args_validators: typing.List[typing.Callable]):
+        self.args_validators = args_validators
+
+    async def check(self, message: types.Message, data: dict):
+        args = message.get_args()
+        if len(args) != len(self.args_validators):
+            return False
+        _passed = True
+        for arg in args:
+            for validator in self.args_validators:
+                result = validator(arg)
+                if not result:
+                    _passed = False
+                    logger.debug(f"Result of MessageArgsValidate rule: {_passed}")
+                    return _passed
+        if _passed:
+            logger.debug(f"Result of MessageArgsValidate rule: {_passed}")
+            return _passed
+

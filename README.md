@@ -17,11 +17,13 @@
 
 ## Install
 
+Newest version.
+
 ```sh
-pip install https://github.com/prostomarkeloff/vk.py/archive/master.zip --upgrade
+pip install https://github.com/prostomarkeloff/vk.py/archive/dev.zip --upgrade
 ```
 
-or (old version)
+Stable version.
 
 ```sh
 pip install vk.py

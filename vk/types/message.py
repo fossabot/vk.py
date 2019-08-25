@@ -67,5 +67,15 @@ class Message(BaseModel):
             random_id=0,
         )
 
+    def get_args(self):
+        """
+        Return message args splitted by whitespace without first (0) element.
+        :return: typing.List[str]
+        """
+        try:
+            return self.text.split()[1::]
+        except:
+            return []
+
 
 Message.update_forward_refs()

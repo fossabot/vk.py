@@ -114,7 +114,7 @@ class MessageCountArgs(NamedRule):
     def __init__(self, count_args: int):
         self.count_args = count_args
 
-    async def check(self, message: types.Message,  data: dict):
+    async def check(self, message: types.Message, data: dict):
         args = message.get_args()
         result = len(args) == self.count_args
         logger.debug(f"Result of MessageCountArgs rule: {result}")
@@ -147,3 +147,41 @@ class MessageArgsValidate(NamedRule):
             logger.debug(f"Result of MessageArgsValidate rule: {_passed}")
             return _passed
 
+
+class InChat(NamedRule):
+    key = "in_chat"
+
+    def __init__(self, in_chat: bool):
+        self.in_chat: bool = in_chat
+
+    async def check(self, message: types.Message, data: dict):
+        result = self.in_chat is bool(message.peer_id >= 2e9)
+        logger.debug(f"Result of InChat rule: {result}")
+
+        return result
+
+
+class InPersonalMessages(NamedRule):
+    key = "in_pm"
+
+    def __init__(self, in_pm: bool):
+        self.in_pm: bool = in_pm
+
+    async def check(self, message: types.Message, data: dict):
+        result = self.in_pm is bool(message.peer_id < 2e9)
+        logger.debug(f"Result of InPersonalMessages rule: {result}")
+
+        return result
+
+
+class FromBot(NamedRule):
+    key = "from_bot"
+
+    def __init__(self, from_bot: bool):
+        self.from_bot: bool = from_bot
+
+    async def check(self, message: types.Message, data: dict):
+        result = self.from_bot is bool(message.from_id < 0)
+        logger.debug(f"Result of FromBot rule: {result}")
+
+        return result

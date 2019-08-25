@@ -26,12 +26,12 @@ class TaskManager(ContextInstanceMixin):
         self.set_current(self)
 
     def run(
-            self,
-            *,
-            on_shutdown: typing.Callable = None,
-            on_startup: typing.Callable = None,
-            asyncio_debug_mode: bool = False,
-            auto_reload: bool = False,
+        self,
+        *,
+        on_shutdown: typing.Callable = None,
+        on_startup: typing.Callable = None,
+        asyncio_debug_mode: bool = False,
+        auto_reload: bool = False,
     ):
         """
         Method which run event loop

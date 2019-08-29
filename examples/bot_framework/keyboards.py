@@ -17,7 +17,8 @@ api = vk.get_api()
 dp = Dispatcher(vk, gid)
 
 keyboard = Keyboard(one_time=False)
-keyboard.add_text_button("Hello, my friend!", payload="hello")
+keyboard.add_text_button("Hello, my friend!", payload={"command": "hello"})
+keyboard.add_text_button("Another text", color=ButtonColor.SECONDARY)
 
 
 @dp.message_handler(payload="hello")

@@ -1,0 +1,70 @@
+import logging
+import asyncio
+import typing
+
+from vk.exceptions.api_errors import APIException
+
+logger = logging.getLogger(__name__)
+
+
+class APIErrorHandler:
+    def __init__(self, error_code: int, handler: typing.Callable):
+        self.handler: typing.Callable = handler
+        self.error_code: int = error_code
+
+    async def execute(self, error: typing.Dict):
+        """
+        Execute error handler
+        :param error:
+        :return:
+        """
+        try:
+            await self.handler(error)
+        except Exception:  # noqa
+            logging.exception("Exception occured in error handler...: ")
+
+
+class APIErrorDispatcher:
+    def __init__(self, vk):
+        """
+
+        :param vk:
+        """
+        self.vk = vk
+        self._handlers: typing.List[APIErrorHandler] = []
+
+        self._handlers.append(APIErrorHandler(6, self._to_many_requests_handler))
+
+    async def _to_many_requests_handler(self, json: typing.Dict) -> typing.Dict:
+        logger.debug("To many requests exception handle..")
+        await asyncio.sleep(0.34)
+        params = {}
+        method_name = None
+        for param in json["error"]["request_params"]:
+            key = param["key"]
+            value = param["value"]
+            if key == "method":
+                method_name = value
+                continue
+
+            params.update({key: value})
+
+        return await self.vk.api_request(method_name=method_name, params=params)
+
+    def error_handler(self, error_code: int):
+        def decorator(coro: typing.Callable):
+            handler = APIErrorHandler(error_code, coro)
+            self._handlers.append(handler)
+        return decorator
+
+    async def error_handle(self, json: typing.Dict) -> typing.Union[typing.Dict, typing.NoReturn]:
+        logger.debug("Some exception from API handle..")
+        error = json["error"]
+
+        code: int = error["error_code"]
+        for handler in self._handlers:
+            if handler.error_code == code:
+                return await handler.execute(error)
+
+        msg: typing.AnyStr = error["error_msg"]
+        raise APIException(f"[{code}] {msg}")

@@ -2,7 +2,7 @@ from vk.types.events.community import event as eventobj
 from vk.types.events.community.events_list import Event
 
 
-async def get_event_object(event):
+async def get_event_object(event) -> eventobj:
     _event_type = Event(event["type"])
 
     if _event_type is Event.MESSAGE_NEW:
@@ -115,5 +115,8 @@ async def get_event_object(event):
 
     elif _event_type is Event.GROUP_CHANGE_PHOTO:
         ev = eventobj.GroupChangePhoto(**event)
+
+    else:
+        raise RuntimeError("Unexpected behavior")
 
     return ev

@@ -1,7 +1,8 @@
+import logging
+import asyncio
+
 from vk.utils import mixins
 from vk import VK
-
-import logging
 from vk.constants import JSON_LIBRARY
 
 logger = logging.getLogger(__name__)
@@ -75,8 +76,9 @@ class BotLongPoll(mixins.ContextInstanceMixin):
             self.ts = updates["ts"]
             if updates["updates"]:
                 return updates["updates"]
-        except Exception as e:
-            logger.exception("Polling have trouble...")
+        except Exception:  # noqa
+            logger.exception("Polling have trouble... Sleeping 1 minute..")
+            await asyncio.sleep(60)
 
     async def run(self) -> dict:
         """

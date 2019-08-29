@@ -1,10 +1,11 @@
-from enum import Enum
-from ..exceptions import KeyboardException
-
 import logging
+import typing
+from enum import Enum
+
+
+from ..exceptions import KeyboardException
 from vk.constants import JSON_LIBRARY
 
-import typing
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +69,7 @@ class Keyboard:
         if payload is None:
             payload = ""
 
-        payload = JSON_LIBRARY.dumps(payload).decode("utf-8")
+        payload = JSON_LIBRARY.dumps(payload)
 
         if not isinstance(color, ButtonColor):
             logger.warning("Invalid button color. Used 'PRIMARY'")
@@ -103,7 +104,7 @@ class Keyboard:
         if payload is None:
             payload = ""
 
-        payload = JSON_LIBRARY.dumps(payload).decode("utf-8")
+        payload = JSON_LIBRARY.dumps(payload)
 
         action = {"action": {"type": ButtonType.LOCATION.value, "payload": payload}}
 
@@ -120,7 +121,7 @@ class Keyboard:
         if payload is None:
             payload = ""
 
-        payload = JSON_LIBRARY.dumps(payload).decode("utf-8")
+        payload = JSON_LIBRARY.dumps(payload)
 
         action = {
             "action": {"type": ButtonType.VKPAY.value, "payload": payload, "hash": hash}
@@ -139,7 +140,7 @@ class Keyboard:
         if payload is None:
             payload = ""
 
-        payload = JSON_LIBRARY.dumps(payload).decode("utf-8")
+        payload = JSON_LIBRARY.dumps(payload)
 
         action = {
             "action": {
@@ -157,7 +158,7 @@ class Keyboard:
 
         :return:
         """
-        return JSON_LIBRARY.dumps(self.keyboard).decode("utf-8")
+        return JSON_LIBRARY.dumps(self.keyboard)
 
     @classmethod
     def get_empty_keyboard(cls) -> typing.AnyStr:

@@ -1,42 +1,31 @@
 import asyncio
 import typing
-
 import logging
 
-try:
-    import uvloop
-except ImportError:
-    uvloop = None
-
-from . import ContextInstanceMixin
 from .auto_reload import _auto_reload
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
-class TaskManager(ContextInstanceMixin):
+class TaskManager:
     """
     Task manager represent to user high-level API of asyncio interface (Less part :))
     """
 
     def __init__(self, loop: asyncio.AbstractEventLoop):
-        self.tasks: list = []
-        self.loop = loop
-
-        self.set_current(self)
+        self.tasks: typing.List[typing.Callable] = []
+        self.loop: asyncio.AbstractEventLoop = loop
 
     def run(
-        self,
-        *,
-        on_shutdown: typing.Callable = None,
-        on_startup: typing.Callable = None,
-        asyncio_debug_mode: bool = False,
-        auto_reload: bool = False,
+            self,
+            *,
+            on_shutdown: typing.Callable = None,
+            on_startup: typing.Callable = None,
+            asyncio_debug_mode: bool = False,
+            auto_reload: bool = False,
     ):
         """
         Method which run event loop
-
-        >> task_manager.run()
 
         :param auto_reload: auto reload code when changes
         :param on_shutdown: coroutine which runned after complete tasks
@@ -54,9 +43,6 @@ class TaskManager(ContextInstanceMixin):
                 self.loop.set_debug(enabled=True)
             if auto_reload:
                 self.loop.create_task(_auto_reload())
-
-            if uvloop:
-                uvloop.install()
 
             [self.loop.create_task(task()) for task in self.tasks]
 
@@ -94,14 +80,14 @@ class TaskManager(ContextInstanceMixin):
         """
         Create task in loop
 
-        >> async def other_coro():
-            while True:
-                print("hello, my friend!")
-                await asyncio.sleep(5)
+        >>> async def other_coro():
+        >>>    while True:
+        >>>        print("hello, my friend!")
+        >>>        await asyncio.sleep(5)
 
-        >> async def my_pretty_coro():
-            task_manager.run_task(other_coro)
-            return True
+        >>> async def my_pretty_coro():
+        >>>    task_manager.run_task(other_coro)
+        >>>    return True
 
 
         :param task:

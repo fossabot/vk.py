@@ -1,58 +1,42 @@
 """
- MIT License
- 
- Copyright (c) 2019 prostomarkeloff
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
-
-"""
-
-"""
 A part of library which represent a main object of VK API.
 """
 
-from vk.constants import API_VERSION, API_LINK
-
-from asyncio import AbstractEventLoop
-from aiohttp import ClientSession
-
-from vk.exceptions import APIErrorHandler
-from vk.utils import ContextInstanceMixin
-
-from vk.methods import API
-
 import asyncio
-from vk.constants import JSON_LIBRARY
+from asyncio import AbstractEventLoop
 
 import typing
 import logging
+
+from aiohttp import ClientSession
+
+from vk.constants import API_VERSION, API_LINK
+from vk.exceptions import APIErrorDispatcher
+from vk.utils import ContextInstanceMixin
+from vk.methods import API
+from vk.constants import JSON_LIBRARY
+
+
+try:
+    import uvloop  # noqa
+except ImportError:
+    uvloop = None
+if uvloop:
+    uvloop.install()
 
 logger = logging.getLogger(__name__)
 
 
 class VK(ContextInstanceMixin):
+    """
+    The main object of VKAPI, have basically methods to access in API.
+    """
     def __init__(
-        self,
-        access_token: str,
-        *,
-        loop: AbstractEventLoop = None,
-        client: ClientSession = None,
+            self,
+            access_token: str,
+            *,
+            loop: AbstractEventLoop = None,
+            client: ClientSession = None,
     ):
 
         """
@@ -70,17 +54,16 @@ class VK(ContextInstanceMixin):
         )
         self.api_version = API_VERSION
 
-        self.api_error_handler = APIErrorHandler(self)
+        self.error_dispatcher = APIErrorDispatcher(self)
 
         VK.set_current(self)
 
     async def _api_request(
-        self, method_name: typing.AnyStr, params: dict = None, _raw_mode: bool = False
-    ):
+            self, method_name: typing.AnyStr, params: dict = None, _raw_mode: bool = False
+    ) -> dict:
         """
 
-        :param method_name: method of name when need to call
-        :param params: parameters with method
+        :param method_name: method of name when need to call :param params: parameters with method
         :param _raw_mode: signal of return 'raw' response, or not (basically, returns response["response"])
         :return:
         """
@@ -93,7 +76,7 @@ class VK(ContextInstanceMixin):
                 json: typing.Dict = await response.json(loads=JSON_LIBRARY.loads)
                 logger.debug(f"Method {method_name} called. Response from API: {json}")
                 if "error" in json:
-                    return await self.api_error_handler.error_handle(json)
+                    return await self.error_dispatcher.error_handle(json)
 
                 if _raw_mode:
                     return json
@@ -110,7 +93,7 @@ class VK(ContextInstanceMixin):
         """
         return await self._api_request(method_name=method_name, params=params)
 
-    async def execute_api_request(self, code: str):
+    async def execute_api_request(self, code: str) -> dict:
         """
         https://vk.com/dev/execute
 
@@ -119,7 +102,7 @@ class VK(ContextInstanceMixin):
         """
         return await self.api_request("execute", params={"code": code})
 
-    def get_api(self):
+    def get_api(self) -> API:
         """
         Get API class
         :return:

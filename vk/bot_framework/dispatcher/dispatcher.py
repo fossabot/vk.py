@@ -13,7 +13,6 @@ from vk.constants import default_rules, default_extensions
 
 import typing
 import logging
-import asyncio
 
 logger = logging.getLogger(__name__)
 
@@ -158,7 +157,7 @@ class Dispatcher(ContextInstanceMixin):
                         # return non-False value, other handlers doesn`t be executed.
                         if result:
                             break
-                    except Exception:
+                    except Exception: # noqa
                         logger.exception(
                             f"Error in handler ({handler.handler.__name__}):"
                         )

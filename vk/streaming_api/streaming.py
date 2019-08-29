@@ -1,11 +1,11 @@
+import typing
+
 from ..vk import VK
-from ..types.base import BaseModel
 from ..constants import JSON_LIBRARY
 
 from vk.types.attachments import Attachment
 from vk.types.attachments.geo import Geo
-
-import typing
+from ..types.base import BaseModel
 
 
 class StreamingRule(BaseModel):

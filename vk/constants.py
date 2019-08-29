@@ -1,48 +1,22 @@
 """
- MIT License
- 
- Copyright (c) 2019 prostomarkeloff
- 
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
- 
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
- 
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
-
-"""
-
-"""
-File which contains all constants of project.
+A file which contains all project constants.
 """
 
 API_VERSION: str = "5.101"  # current api version https://vk.com/dev/versions
-
 API_LINK: str = "https://api.vk.com/method/"  # link to access API
 
 try:
-    import orjson
+    import ujson as json  # noqa
 except ImportError:
-    try:
-        import ujson as orjson
-    except ImportError:
-        import json as orjson
-
-JSON_LIBRARY = orjson
+    import json
+JSON_LIBRARY = json
 
 
-def default_rules():
+def default_rules() -> dict:
+    """
+    Build and return dict of default handlers rules.
+    :return:
+    """
     from vk.bot_framework.rules.rules import (
         Commands,
         Text,
@@ -56,7 +30,7 @@ def default_rules():
         FromBot,
     )
 
-    DEFAULT_RULES = {
+    _default_rules = {
         "commands": Commands,
         "text": Text,
         "payload": Payload,
@@ -68,12 +42,16 @@ def default_rules():
         "in_pm": InPersonalMessages,
         "from_bot": FromBot,
     }
-    return DEFAULT_RULES
+    return _default_rules
 
 
-def default_extensions():
+def default_extensions() -> dict:
+    """
+    Build and return dict of default dispatcher extensions
+    :return:
+    """
     from vk.bot_framework.extensions import Polling
 
-    DEFAULT_EXTENSIONS = {"polling": Polling}
+    _default_extensions = {"polling": Polling}
 
-    return DEFAULT_EXTENSIONS
+    return _default_extensions

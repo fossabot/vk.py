@@ -21,7 +21,7 @@ setuptools.setup(
     ],
     extras_require={
         'uvloop': ["uvloop"],
-        'orjson': ["orjson"],
+        'ujson': ["ujson"],
     },
     install_requires=[
         "aiohttp",

@@ -1,5 +1,5 @@
 from .middleware import MiddlewareManager
-from .extension import ExtensionsManager
+from .extension import ExtensionsManager, BaseExtension
 from vk.utils import ContextInstanceMixin
 from vk import VK
 
@@ -75,7 +75,7 @@ class Dispatcher(ContextInstanceMixin):
         return decorator
 
     def register_event_handler(
-        self, coro: typing.Callable, event_type: Event, rules: typing.List
+            self, coro: typing.Callable, event_type: Event, rules: typing.List
     ):
         """
         Register event handler.
@@ -128,13 +128,30 @@ class Dispatcher(ContextInstanceMixin):
         """
         self._rule_factory.setup(rule)
 
+    def setup_extension(self, extension: BaseExtension):
+        """
+        Add extension to extensions list with extension manager.
+        :param extension:
+        :return:
+        """
+        self._extensions_manager.setup(extension)
+
+    def run_extension(self, name: str, **kwargs):
+        """
+        Run extensions with extension manager.
+        :param name:
+        :param kwargs:
+        :return:
+        """
+        await self._extensions_manager.run_extension(name, **kwargs)
+
     async def _process_event(self, event: dict):
         """
         Handle 1 event coming from VK.
         :param event:
         :return:
         """
-        data = {}  # dict for transfer data from middlewares to handler.
+        data = {}  # dict for transfer data from middlewares to handlers and filters.
         # examples/bot_framework/simple_middleware.py
 
         _skip_handler, data = await self._middleware_manager.trigger_pre_process_middlewares(
@@ -143,12 +160,12 @@ class Dispatcher(ContextInstanceMixin):
         # returns service value '_skip_handler' and data variable (check upper).
 
         if (
-            not _skip_handler
+                not _skip_handler
         ):  # if middlewares don`t skip this handler, dispatcher be check rules and execute handlers.
             ev = await get_event_object(event)  # get event pydantic model.
             for handler in self._hanlders:  # check handlers
                 if (
-                    handler.event_type.value == ev.type
+                        handler.event_type.value == ev.type
                 ):  # if hanlder type is equal event pydantic model.
                     try:
                         result = await handler.execute_handler(
@@ -157,12 +174,13 @@ class Dispatcher(ContextInstanceMixin):
                         # return non-False value, other handlers doesn`t be executed.
                         if result:
                             break
-                    except Exception: # noqa
+                    except Exception:  # noqa
                         logger.exception(
                             f"Error in handler ({handler.handler.__name__}):"
                         )
 
-        await self._middleware_manager.trigger_post_process_middlewares()  # trigger post_process_event funcs in middlewares.
+        await self._middleware_manager.trigger_post_process_middlewares()  # trigger post_process_event funcs in
+        # middlewares.
 
     async def _process_events(self, events: typing.List[dict]):
         """

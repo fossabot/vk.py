@@ -55,9 +55,12 @@ class APIErrorDispatcher:
         def decorator(coro: typing.Callable):
             handler = APIErrorHandler(error_code, coro)
             self._handlers.append(handler)
+
         return decorator
 
-    async def error_handle(self, json: typing.Dict) -> typing.Union[typing.Dict, typing.NoReturn]:
+    async def error_handle(
+        self, json: typing.Dict
+    ) -> typing.Union[typing.Dict, typing.NoReturn]:
         logger.debug("Some exception from API handle..")
         error = json["error"]
 

@@ -1,11 +1,11 @@
-from ..dispatcher.rule import NamedRule, BaseRule
-from vk.types.message import Action
-from vk.constants import JSON_LIBRARY
-
-from vk import types
-
-import typing
 import logging
+import typing
+
+from ..dispatcher.rule import BaseRule
+from ..dispatcher.rule import NamedRule
+from vk import types
+from vk.constants import JSON_LIBRARY
+from vk.types.message import Action
 
 logger = logging.getLogger(__name__)
 
@@ -131,16 +131,13 @@ class MessageArgsValidate(NamedRule):
         if len(args) != len(self.args_validators):
             return False
         passed = True
-        for arg in args:
-            for validator in self.args_validators:
-                result = validator(arg)
-                if not result:
-                    passed = False
-                    logger.debug(f"Result of MessageArgsValidate rule: {passed}")
-                    return passed
-        if passed:
-            logger.debug(f"Result of MessageArgsValidate rule: {passed}")
-            return passed
+        for index, arg in enumerate(args):
+            result = self.args_validators[index](arg)
+            if not result:
+                logger.debug("Result of MessageArgsValidate rule: False")
+                return False
+        logger.debug(f"Result of MessageArgsValidate rule: {passed}")
+        return passed
 
 
 class InChat(NamedRule):

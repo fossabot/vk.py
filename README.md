@@ -4,7 +4,7 @@
 
 # Welcome to vk.py 👋
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000) [ ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ](https://github.com/prostomarkeloff/vk.py/blob/master/LICENSE) [![Twitter: prostomarkeloff](https://img.shields.io/twitter/follow/prostomarkeloff.svg?style=social)](https://twitter.com/prostomarkeloff)
+![Version](https://img.shields.io/badge/version-0.1.0-blue.svg?cacheSeconds=2592000) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ](https://github.com/prostomarkeloff/vk.py/blob/master/LICENSE) [![Twitter: prostomarkeloff](https://img.shields.io/twitter/follow/prostomarkeloff.svg?style=social)](https://twitter.com/prostomarkeloff)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cac2f27aab0a41f993660a525c054bb5)](https://app.codacy.com/app/prostomarkeloff/vk.py?utm_source=github.com&utm_medium=referral&utm_content=prostomarkeloff/vk.py&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.org/prostomarkeloff/vk.py.svg?branch=master)](https://travis-ci.org/prostomarkeloff/vk.py)
 
@@ -67,7 +67,7 @@ Example of use bot framework, with docker integration [click](https://github.com
 ## Performance
 The fastest Python library for accessing VK API.
 
-- Accept and handle event from LongPoll API in bot framework (with sending a message to the user): lower than 0.1s 
+- Accept and handle event from LongPoll API in bot framework (with sending a message to the user): lower than 0.1s
 - Check 100 handlers and execute 100 filters in bot framework (without sending a message to the user): lower than 0.001s
 
 ## Alternatives

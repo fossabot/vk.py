@@ -185,3 +185,14 @@ class FromBot(NamedRule):
         logger.debug(f"Result of FromBot rule: {result}")
 
         return result
+
+
+class WithReplyMessage(NamedRule):
+    key = "with_reply_message"
+
+    def __init__(self, with_reply_message: bool):
+        self.with_reply_message: bool = with_reply_message
+
+    async def check(self, message: types.Message, data: dict):
+        logger.debug(f"Result of WithReplyMessage rule: {message.reply_message}")
+        return message.reply_message

@@ -47,6 +47,7 @@ class Message(BaseModel):
     payload: str = None
     action: MessageAction = None
     fwd_messages: typing.List["Message"] = None
+    reply_message: "Message" = None
 
     async def reply(self, message: str, attachment: str = None, keyboard: dict = None):
         return await self.api.messages.send(
@@ -74,7 +75,7 @@ class Message(BaseModel):
         """
         try:
             return self.text.split()[1::]
-        except:
+        except:  # noqa
             return []
 
 

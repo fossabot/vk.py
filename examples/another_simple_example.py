@@ -16,8 +16,6 @@ async def send_message():
     resp = await api.messages.send(peer_id=1, message="hello!", random_id=0)
     print(resp)
 
-
-
 if __name__ == "__main__":
     task_manager.add_task(send_message)
     task_manager.run()

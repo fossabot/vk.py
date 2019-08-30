@@ -8,6 +8,10 @@ logger = logging.getLogger(__name__)
 
 
 class SkipHandler(Exception):
+    """
+    Raise this which you want skip handlers.
+    """
+
     pass
 
 

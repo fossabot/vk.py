@@ -186,5 +186,28 @@ class WithReplyMessage(NamedRule):
         self.with_reply_message: bool = with_reply_message
 
     async def check(self, message: types.Message, data: dict):
-        logger.debug(f"Result of WithReplyMessage rule: {message.reply_message}")
-        return message.reply_message
+        logger.debug(f"Result of WithReplyMessage rule: {bool(message.reply_message)}")
+        return bool(message.reply_message)
+
+
+class WithFwdMessages(NamedRule):
+    key = "with_fwd_messages"
+
+    def __init__(self, with_fwd_messages: bool):
+        self.with_reply_message: bool = with_fwd_messages
+
+    async def check(self, message: types.Message, data: dict):
+        logger.debug(f"Result of WithFwdMessages rule: {bool(message.fwd_messages)}")
+        return bool(message.fwd_messages)
+
+
+class CountFwdMessages(NamedRule):
+    key = "count_fwd_messages"
+
+    def __init__(self, count_fwd_messages: int):
+        self.count_fwd_messages: int = count_fwd_messages
+
+    async def check(self, message: types.Message, data: dict):
+        result = len(message.fwd_messages) == self.count_fwd_messages
+        logger.debug(f"Result of CountFwdMessages rule: {result}")
+        return result

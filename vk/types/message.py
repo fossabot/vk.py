@@ -1,8 +1,9 @@
-from .base import BaseModel
-from .attachments import Attachment, Geo
+import typing
 from enum import Enum
 
-import typing
+from .attachments import Attachment
+from .attachments import Geo
+from .base import BaseModel
 
 
 # https://vk.com/dev/objects/message
@@ -46,7 +47,7 @@ class Message(BaseModel):
     geo: Geo = None
     payload: str = None
     action: MessageAction = None
-    fwd_messages: typing.List["Message"] = None
+    fwd_messages: typing.List["Message"] = []
     reply_message: "Message" = None
 
     async def reply(self, message: str, attachment: str = None, keyboard: dict = None):

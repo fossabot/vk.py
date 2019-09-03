@@ -31,12 +31,13 @@ class VK(ContextInstanceMixin):
     """
     The main object of VKAPI, have basically methods to access in API.
     """
+
     def __init__(
-            self,
-            access_token: str,
-            *,
-            loop: AbstractEventLoop = None,
-            client: ClientSession = None,
+        self,
+        access_token: str,
+        *,
+        loop: AbstractEventLoop = None,
+        client: ClientSession = None,
     ):
 
         """
@@ -59,7 +60,7 @@ class VK(ContextInstanceMixin):
         VK.set_current(self)
 
     async def _api_request(
-            self, method_name: typing.AnyStr, params: dict = None, _raw_mode: bool = False
+        self, method_name: typing.AnyStr, params: dict = None, _raw_mode: bool = False
     ) -> dict:
         """
 

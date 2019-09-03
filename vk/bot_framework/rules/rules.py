@@ -1,11 +1,11 @@
-from ..dispatcher.rule import NamedRule, BaseRule
-from vk.types.message import Action
-from vk.constants import JSON_LIBRARY
-
-from vk import types
-
-import typing
 import logging
+import typing
+
+from ..dispatcher.rule import BaseRule
+from ..dispatcher.rule import NamedRule
+from vk import types
+from vk.constants import JSON_LIBRARY
+from vk.types.message import Action
 
 logger = logging.getLogger(__name__)
 
@@ -20,8 +20,7 @@ class Command(BaseRule):
         self.command: str = command
 
     async def check(self, message: types.Message, data: dict):
-        text = message.text.lower()
-        result = f"{self.prefix}{self.command}" == text
+        result = f"{self.prefix}{self.command}" == message.text.lower()
         logger.debug(f"Result of Command rule: {result}")
         return result
 
@@ -33,8 +32,7 @@ class Text(NamedRule):
         self.text: str = text
 
     async def check(self, message: types.Message, data: dict):
-        text = message.text.lower()
-        result = text == self.text.lower()
+        result = message.text.lower() == self.text.lower()
         logger.debug(f"Result of Text rule: {result}")
         return result
 
@@ -47,13 +45,13 @@ class Commands(NamedRule):
         self.prefix = "/"
 
     async def check(self, message: types.Message, data: dict):
-        text = message.text.lower().split()[0]
-        _accepted = False
+        passed = False
         for command in self.commands:
-            if text == f"{self.prefix}{command}":
-                _accepted = True
-        logger.debug(f"Result of Commands rule: {_accepted}")
-        return _accepted
+            if message.text.lower().split()[0] == f"{self.prefix}{command}":
+                passed = True
+                break
+        logger.debug(f"Result of Commands rule: {passed}")
+        return passed
 
 
 class Payload(NamedRule):
@@ -63,9 +61,8 @@ class Payload(NamedRule):
         self.payload = payload
 
     async def check(self, message: types.Message, data: dict):
-        payload = message.payload
-        if payload:
-            payload = JSON_LIBRARY.loads(payload)
+        if message.payload:
+            payload = JSON_LIBRARY.loads(message.payload)
             result = payload == self.payload
             logger.debug(f"Result of Payload rule: {result}")
             return result
@@ -78,9 +75,8 @@ class ChatAction(NamedRule):
         self.action = action
 
     async def check(self, message: types.Message, data: dict):
-        action = message.action.type
-        if action:
-            action = Action(action)
+        if message.action.type:
+            action = Action(message.action.type)
             result = action is self.action
             logger.debug(f"Result of ChatAction rule: {result}")
             return result
@@ -94,14 +90,14 @@ class DataCheck(NamedRule):
 
     async def check(self, *args):
         data: dict = args[1]
-        _passed = True
+        passed = True
         for key, value in self.data.items():
             value_data = data.get(key)
             if value_data != value:
-                _passed = False
+                passed = False
                 break
-        logger.debug(f"Result of DataCheck rule: {_passed}")
-        return _passed
+        logger.debug(f"Result of DataCheck rule: {passed}")
+        return passed
 
 
 class MessageCountArgs(NamedRule):
@@ -115,8 +111,7 @@ class MessageCountArgs(NamedRule):
         self.count_args = count_args
 
     async def check(self, message: types.Message, data: dict):
-        args = message.get_args()
-        result = len(args) == self.count_args
+        result = len(message.get_args()) == self.count_args
         logger.debug(f"Result of MessageCountArgs rule: {result}")
         return result
 
@@ -135,17 +130,14 @@ class MessageArgsValidate(NamedRule):
         args = message.get_args()
         if len(args) != len(self.args_validators):
             return False
-        _passed = True
-        for arg in args:
-            for validator in self.args_validators:
-                result = validator(arg)
-                if not result:
-                    _passed = False
-                    logger.debug(f"Result of MessageArgsValidate rule: {_passed}")
-                    return _passed
-        if _passed:
-            logger.debug(f"Result of MessageArgsValidate rule: {_passed}")
-            return _passed
+        passed = True
+        for index, arg in enumerate(args):
+            result = self.args_validators[index](arg)
+            if not result:
+                logger.debug("Result of MessageArgsValidate rule: False")
+                return False
+        logger.debug(f"Result of MessageArgsValidate rule: {passed}")
+        return passed
 
 
 class InChat(NamedRule):
@@ -184,4 +176,38 @@ class FromBot(NamedRule):
         result = self.from_bot is bool(message.from_id < 0)
         logger.debug(f"Result of FromBot rule: {result}")
 
+        return result
+
+
+class WithReplyMessage(NamedRule):
+    key = "with_reply_message"
+
+    def __init__(self, with_reply_message: bool):
+        self.with_reply_message: bool = with_reply_message
+
+    async def check(self, message: types.Message, data: dict):
+        logger.debug(f"Result of WithReplyMessage rule: {bool(message.reply_message)}")
+        return bool(message.reply_message)
+
+
+class WithFwdMessages(NamedRule):
+    key = "with_fwd_messages"
+
+    def __init__(self, with_fwd_messages: bool):
+        self.with_reply_message: bool = with_fwd_messages
+
+    async def check(self, message: types.Message, data: dict):
+        logger.debug(f"Result of WithFwdMessages rule: {bool(message.fwd_messages)}")
+        return bool(message.fwd_messages)
+
+
+class CountFwdMessages(NamedRule):
+    key = "count_fwd_messages"
+
+    def __init__(self, count_fwd_messages: int):
+        self.count_fwd_messages: int = count_fwd_messages
+
+    async def check(self, message: types.Message, data: dict):
+        result = len(message.fwd_messages) == self.count_fwd_messages
+        logger.debug(f"Result of CountFwdMessages rule: {result}")
         return result

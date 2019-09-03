@@ -42,7 +42,7 @@ class MiddlewareManager:
 
 class AbstractMiddleware(ABC):
     @abstractmethod
-    async def pre_process_event(self, event, data: dict):
+    async def pre_process_event(self, event, data: dict) -> dict:
         """
         Called before checking filters and execute handler
         :param event:
@@ -52,7 +52,7 @@ class AbstractMiddleware(ABC):
         pass
 
     @abstractmethod
-    async def post_process_event(self):
+    async def post_process_event(self) -> None:
         """
         Called after handler
         :return:

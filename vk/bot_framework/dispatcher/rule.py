@@ -18,9 +18,9 @@ class AbstractRule(ABC):
 
 
 class BaseRule(AbstractRule):
-    async def __call__(self, *args):
+    async def __call__(self, event, data: dict) -> bool:
         logger.debug(f"Rule {self.__class__.__name__} succesfully called!")
-        return await self.check(*args)
+        return await self.check(event, data)
 
 
 class NamedRule(BaseRule):

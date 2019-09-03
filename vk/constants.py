@@ -28,6 +28,9 @@ def default_rules() -> dict:
         InPersonalMessages,
         InChat,
         FromBot,
+        WithReplyMessage,
+        WithFwdMessages,
+        CountFwdMessages,
     )
 
     _default_rules = {
@@ -41,6 +44,9 @@ def default_rules() -> dict:
         "in_chat": InChat,
         "in_pm": InPersonalMessages,
         "from_bot": FromBot,
+        "with_reply_message": WithReplyMessage,
+        "with_fwd_messages": WithFwdMessages,
+        "count_fwd_messages": CountFwdMessages,
     }
     return _default_rules
 

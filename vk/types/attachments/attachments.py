@@ -51,7 +51,7 @@ class Attachment(BaseModel):
     posted_photo: Optional[PostedPhoto]
     video: Optional[Video]
     audio: Optional[Audio]
-    document: Optional[Document]
+    doc: Document = None
     graffiti: Optional[Graffiti]
     link: Optional[Link]
     note: Optional[Note]

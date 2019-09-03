@@ -4,6 +4,8 @@ from enum import IntEnum
 from vk.types.additional import PhotoSizes
 from vk.types.attachments import Graffiti, AudioMsg
 
+import typing
+
 # https://vk.com/dev/objects/doc
 
 
@@ -34,3 +36,4 @@ class Document(BaseModel):
     date: int = None
     type: DocumentType = None
     preview: DocumentPreview = None
+    access_key: str = None

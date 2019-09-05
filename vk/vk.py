@@ -43,7 +43,7 @@ class VK(ContextInstanceMixin):
         """
 
         :param access_token: access token of VK user/community for access to VK methods.
-        :param loop: asyncio event loop, uses in Task manager/etc.
+        :param loop: asyncio event loop, uses in Task manager/dispatcher extensions/etc.
         :param client: aiohttp client session
         """
         self.access_token = access_token
@@ -57,6 +57,7 @@ class VK(ContextInstanceMixin):
 
         self.error_dispatcher = APIErrorDispatcher(self)
 
+        self.__api_object = self.__get_api()
         VK.set_current(self)
 
     async def _api_request(
@@ -103,7 +104,7 @@ class VK(ContextInstanceMixin):
         """
         return await self.api_request("execute", params={"code": code})
 
-    def get_api(self) -> API:
+    def __get_api(self) -> API:
         """
         Get API class
         :return:
@@ -112,7 +113,14 @@ class VK(ContextInstanceMixin):
         API.set_current(api)
         return api
 
-    async def close(self):
+    def get_api(self) -> API:
+        """
+        Get API class
+        :return:
+        """
+        return self.__api_object
+
+    async def close(self) -> None:
         """
         Close aiohttp client session.
         :return:

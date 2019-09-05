@@ -2,7 +2,7 @@ from vk.types.events.community import event as eventobj
 from vk.types.events.community.events_list import Event
 
 
-async def get_event_object(event) -> eventobj:
+def get_event_object(event) -> eventobj:
     _event_type = Event(event["type"])
 
     if _event_type is Event.MESSAGE_NEW:

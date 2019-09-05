@@ -62,12 +62,12 @@ class APIErrorDispatcher:
         self, json: typing.Dict
     ) -> typing.Union[typing.Dict, typing.NoReturn]:
         logger.debug("Some exception from API handle..")
-        error = json["error"]
+        error: dict = json["error"]
 
         code: int = error["error_code"]
         for handler in self._handlers:
             if handler.error_code == code:
                 return await handler.execute(error)
 
-        msg: typing.AnyStr = error["error_msg"]
+        msg: str = error["error_msg"]
         raise APIException(f"[{code}] {msg}")

@@ -41,7 +41,7 @@ class Dispatcher(ContextInstanceMixin):
         """
         Register message handler
 
-        >> dp.register_message_hanlder(my_handler, [])
+        >>> dp.register_message_handler(my_handler, [])
 
         :param coro:
         :param rules:
@@ -162,7 +162,7 @@ class Dispatcher(ContextInstanceMixin):
             not _skip_handler
         ):  # if middlewares don`t skip this handler, dispatcher be check
             # rules and execute handlers.
-            ev = await get_event_object(event)  # get event pydantic model.
+            ev = get_event_object(event)  # get event pydantic model.
             for handler in self._hanlders:  # check handlers
                 if (
                     handler.event_type.value == ev.type

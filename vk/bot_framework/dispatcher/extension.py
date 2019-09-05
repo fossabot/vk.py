@@ -52,7 +52,7 @@ class ExtensionsManager:
 
         self.extensions[extension.key] = extension
 
-    async def run_extension(self, name: str, **kwargs) -> None:
+    def run_extension(self, name: str, **kwargs) -> None:
         """
 
         :param name: name of extension
@@ -63,5 +63,5 @@ class ExtensionsManager:
         if not extension:
             raise RuntimeError("Undefined extension")
 
-        extension = extension(**kwargs)
-        asyncio.create_task(extension.run(self.dp))
+        extension = extension(**kwargs)  # noqa
+        self.dp.vk.loop.create_task(extension.run(self.dp))

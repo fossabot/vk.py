@@ -117,6 +117,6 @@ def get_event_object(event) -> eventobj:
         ev = eventobj.GroupChangePhoto(**event)
 
     else:
-        raise RuntimeError("Unexpected behavior")
+        raise RuntimeError("Unexpected behavior. May be you handle NOT vk event.")
 
     return ev

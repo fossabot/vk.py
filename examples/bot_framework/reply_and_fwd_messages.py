@@ -27,7 +27,7 @@ async def handle_event(message: types.Message, data: dict):
 
 
 async def run():
-    await dp.run_polling()
+    dp.run_polling()
 
 
 if __name__ == "__main__":

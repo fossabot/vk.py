@@ -135,14 +135,14 @@ class Dispatcher(ContextInstanceMixin):
         """
         self._extensions_manager.setup(extension)
 
-    async def run_extension(self, name: str, **kwargs):
+    def run_extension(self, name: str, **kwargs):
         """
         Run extensions with extension manager.
         :param name:
         :param kwargs:
         :return:
         """
-        await self._extensions_manager.run_extension(name, **kwargs)
+        self._extensions_manager.run_extension(name, **kwargs)
 
     async def _process_event(self, event: dict):
         """
@@ -184,14 +184,14 @@ class Dispatcher(ContextInstanceMixin):
 
     async def _process_events(self, events: typing.List[dict]):
         """
-        Process events coming from polling or callback-api.
+        Process events coming from extensions.
         :param events: list of events.
         :return:
         """
         for event in events:
             self.vk.loop.create_task(self._process_event(event))
 
-    async def run_polling(self):
-        await self._extensions_manager.run_extension(
+    def run_polling(self):
+        self._extensions_manager.run_extension(
             "polling", group_id=self.group_id, vk=self.vk
         )

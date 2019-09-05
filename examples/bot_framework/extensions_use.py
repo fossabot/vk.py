@@ -25,7 +25,7 @@ async def run():
     from vk.bot_framework.extensions import RabbitMQ
 
     dp.setup_extension(RabbitMQ)
-    await dp.run_extension("rabbitmq", vk=vk, queue_name="test_queue")
+    dp.run_extension("rabbitmq", vk=vk, queue_name="test_queue")
 
 
 if __name__ == "__main__":

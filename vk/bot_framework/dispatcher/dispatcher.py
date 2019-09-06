@@ -30,7 +30,7 @@ class Dispatcher(ContextInstanceMixin):
             self, default_extensions()
         )
 
-        self._storage: AbstractStorage = None
+        self._storage: typing.Optional[AbstractStorage] = None
 
     @property
     def storage(self):

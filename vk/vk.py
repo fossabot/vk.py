@@ -1,28 +1,27 @@
 """
 A part of library which represent a main object of VK API.
 """
-
 import asyncio
-from asyncio import AbstractEventLoop
-
-import typing
 import logging
+import typing
+from asyncio import AbstractEventLoop
 
 from aiohttp import ClientSession
 
-from vk.constants import API_VERSION, API_LINK
-from vk.exceptions import APIErrorDispatcher
-from vk.utils import ContextInstanceMixin
-from vk.methods import API
+from vk.constants import API_LINK
+from vk.constants import API_VERSION
 from vk.constants import JSON_LIBRARY
+from vk.exceptions import APIErrorDispatcher
+from vk.methods import API
+from vk.utils import ContextInstanceMixin
 
 
 try:
     import uvloop  # noqa
+
+    uvloop.install()
 except ImportError:
     uvloop = None
-if uvloop:
-    uvloop.install()
 
 logger = logging.getLogger(__name__)
 

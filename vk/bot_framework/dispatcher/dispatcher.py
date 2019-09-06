@@ -109,7 +109,7 @@ class Dispatcher(ContextInstanceMixin):
 
         >>> @dp.event_handler(Event.WALL_REPLY_NEW)
         >>> async def my_func(event: eventobj.WallReplyNew, data: dict):
-        >>>    print(event)
+        >>>     print(event)
 
         :param event_type:
         :param rules:

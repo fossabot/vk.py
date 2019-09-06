@@ -1,6 +1,6 @@
-from vk.utils.mixins import ContextInstanceMixin
-
 import pydantic
+
+from vk.utils.mixins import ContextInstanceMixin
 
 
 class BaseModel(pydantic.BaseModel, ContextInstanceMixin):
@@ -12,7 +12,10 @@ class BaseModel(pydantic.BaseModel, ContextInstanceMixin):
         return str(self.dict(skip_defaults=True))
 
     def __repr__(self):
-        return "%s(%r)" % (self.__class__, self.dict())
+        args = ", ".join(
+            (f"{key}={value}" for key, value in self.dict(skip_defaults=True).items())
+        )
+        return "{}({})".format(self.__class__.__name__, args)
 
     @property
     def vk(self):

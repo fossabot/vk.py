@@ -1,14 +1,21 @@
-from abc import ABC, abstractmethod
-from typing import Optional
-
-import typing
 import logging
-import asyncio
+import typing
+from abc import ABC
+from abc import abstractmethod
+
+T = typing.TypeVar("T")
 
 logger = logging.getLogger(__name__)
 
 
 class AbstractExtension(ABC):
+    @abstractmethod
+    def __init__(self, **kwargs):
+        """
+        Method which accept all extension arguments.
+        :param kwargs:
+        """
+
     @abstractmethod
     async def get_events(self) -> typing.List:
         """
@@ -33,7 +40,7 @@ class BaseExtension(AbstractExtension, ABC):
     May be added to extensions with ExtensionsManager and
     used for get events.
 
-    >> extension_manager.run_extension(name=unique_key)
+    >>> extension_manager.run_extension(name=unique_key)
     """
 
     key = None  # unique key for access to extension
@@ -52,16 +59,19 @@ class ExtensionsManager:
 
         self.extensions[extension.key] = extension
 
-    def run_extension(self, name: str, **kwargs) -> None:
+    def run_extension(self, name: str, **extension_init_params) -> None:
         """
 
         :param name: name of extension
-        :param kwargs: params which accept extension constructor
+        :param extension_init_params: params which accept extension constructor
         :return:
         """
-        extension: Optional[BaseExtension] = self.extensions.get(name)
+        if typing.TYPE_CHECKING:
+            BaseExtension = typing.Type[T]  # noqa
+
+        extension: BaseExtension = self.extensions.get(name)  # noqa
         if not extension:
             raise RuntimeError("Undefined extension")
 
-        extension = extension(**kwargs)  # noqa
+        extension: BaseExtension = extension(**extension_init_params)
         self.dp.vk.loop.create_task(extension.run(self.dp))

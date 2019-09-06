@@ -51,6 +51,13 @@ class Message(BaseModel):
     reply_message: "Message" = None
 
     async def reply(self, message: str, attachment: str = None, keyboard: dict = None):
+        """
+        Answer to message with reply.
+        :param message:
+        :param attachment:
+        :param keyboard:
+        :return:
+        """
         return await self.api.messages.send(
             message=message,
             peer_id=self.peer_id,
@@ -61,6 +68,13 @@ class Message(BaseModel):
         )
 
     async def answer(self, message: str, attachment: str = None, keyboard: dict = None):
+        """
+        Answer to message without reply.
+        :param message:
+        :param attachment:
+        :param keyboard:
+        :return:
+        """
         return await self.api.messages.send(
             message=message,
             peer_id=self.peer_id,
@@ -69,14 +83,14 @@ class Message(BaseModel):
             random_id=0,
         )
 
-    def get_args(self):
+    def get_args(self) -> typing.List[str]:
         """
         Return message args splitted by whitespace without first (0) element.
-        :return: typing.List[str]
+        :return:
         """
         try:
             return self.text.split()[1::]
-        except:  # noqa
+        except IndexError:
             return []
 
 

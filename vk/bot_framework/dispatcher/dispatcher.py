@@ -6,11 +6,13 @@ from .extension import ExtensionsManager
 from .handler import Handler
 from .middleware import MiddlewareManager
 from .rule import RuleFactory
+from .storage import AbstractStorage
 from vk import VK
 from vk.constants import default_extensions
 from vk.constants import default_rules
-from vk.types.events.community.events_list import Event
+from vk.types import BotEvent as Event
 from vk.utils import ContextInstanceMixin
+from vk.utils import time_logging
 from vk.utils.get_event import get_event_object
 
 logger = logging.getLogger(__name__)
@@ -27,6 +29,18 @@ class Dispatcher(ContextInstanceMixin):
         self._extensions_manager: ExtensionsManager = ExtensionsManager(
             self, default_extensions()
         )
+
+        self._storage: AbstractStorage = None
+
+    @property
+    def storage(self):
+        if not self._storage:
+            raise RuntimeError("Storage not setuped.")
+        return self._storage
+
+    @storage.setter
+    def storage(self, storage: AbstractStorage):
+        self._storage = storage
 
     def _register_handler(self, handler: Handler):
         """
@@ -55,9 +69,9 @@ class Dispatcher(ContextInstanceMixin):
         """
         Register message handler with decorator.
 
-        @dp.message_handler(text="hello")
-        async def my_func(msg: types.Message, data: dict):
-            print(msg)
+        >>> @dp.message_handler(text="hello")
+        >>> async def my_func(msg: types.Message, data: dict):
+        >>>    print(msg)
 
 
         :param rules:
@@ -79,7 +93,7 @@ class Dispatcher(ContextInstanceMixin):
         """
         Register event handler.
 
-        >> dp.register_event_hanlder(my_handler, Event.WallReplyNew, [])
+        >>> dp.register_event_hanlder(my_handler, Event.WallReplyNew, [])
 
         :param coro:
         :param event_type:
@@ -93,9 +107,9 @@ class Dispatcher(ContextInstanceMixin):
         """
         Register event handler with decorator.
 
-        @dp.event_handler(Event.WALL_REPLY_NEW)
-        async def my_func(event: eventobj.WallReplyNew, data: dict):
-            print(event)
+        >>> @dp.event_handler(Event.WALL_REPLY_NEW)
+        >>> async def my_func(event: eventobj.WallReplyNew, data: dict):
+        >>>    print(event)
 
         :param event_type:
         :param rules:
@@ -135,15 +149,16 @@ class Dispatcher(ContextInstanceMixin):
         """
         self._extensions_manager.setup(extension)
 
-    def run_extension(self, name: str, **kwargs):
+    def run_extension(self, name: str, **extension_init_params):
         """
         Run extensions with extension manager.
-        :param name:
-        :param kwargs:
+        :param name: name of extension
+        :param extension_init_params: params which accept extension constructor
         :return:
         """
-        self._extensions_manager.run_extension(name, **kwargs)
+        self._extensions_manager.run_extension(name, **extension_init_params)
 
+    @time_logging(logger)
     async def _process_event(self, event: dict):
         """
         Handle 1 event coming from VK.

@@ -7,7 +7,7 @@ def time_logging(logger):
         @functools.wraps(func)
         async def wrapped(*args):
             timer_1 = timer()
-            logger.debug("Start processing...")
+            logger.debug("Start processing coroutine...")
             result = await func(*args)
             logger.debug(f"Proccessed. Took {timer() - timer_1} seconds.")
             return result

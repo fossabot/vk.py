@@ -43,7 +43,7 @@ class RedisStorage(AbstractAsyncStorage):
     async def place(
         self, key: typing.AnyStr, value: typing.Any, expire=0, pexpire=0
     ) -> None:
-        await self.connection.set(key, value)
+        await self.connection.set(key, value, expire=expire, pexpire=pexpire)
 
     async def get(
         self, key: typing.AnyStr, default: typing.Any = None

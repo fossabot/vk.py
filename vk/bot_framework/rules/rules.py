@@ -20,7 +20,9 @@ class Command(BaseRule):
         self.command: str = command
 
     async def check(self, message: types.Message, data: dict):
-        result = f"{self.prefix}{self.command}" == message.text.lower()
+        msg = message.text.lower()
+        result = f"{self.prefix}{self.command}" == msg
+        logger.debug(f"Processing text of message. Text in message: {msg}")
         logger.debug(f"Result of Command rule: {result}")
         return result
 
@@ -32,7 +34,9 @@ class Text(NamedRule):
         self.text: str = text
 
     async def check(self, message: types.Message, data: dict):
-        result = message.text.lower() == self.text.lower()
+        msg = message.text.lower()
+        result = msg == self.text.lower()
+        logger.debug(f"Processing text of message. Text in message: {msg}")
         logger.debug(f"Result of Text rule: {result}")
         return result
 
@@ -46,10 +50,12 @@ class Commands(NamedRule):
 
     async def check(self, message: types.Message, data: dict):
         passed = False
+        msg = message.text.lower().split()[0]
         for command in self.commands:
-            if message.text.lower().split()[0] == f"{self.prefix}{command}":
+            if msg == f"{self.prefix}{command}":
                 passed = True
                 break
+        logger.debug(f"Processing text of message. Text in message: {msg}")
         logger.debug(f"Result of Commands rule: {passed}")
         return passed
 
@@ -64,6 +70,9 @@ class Payload(NamedRule):
         if message.payload:
             payload = JSON_LIBRARY.loads(message.payload)
             result = payload == self.payload
+            logger.debug(
+                f"Processing payload of message. Payload in message: {payload}"
+            )
             logger.debug(f"Result of Payload rule: {result}")
             return result
 
@@ -78,6 +87,7 @@ class ChatAction(NamedRule):
         if message.action.type:
             action = Action(message.action.type)
             result = action is self.action
+            logger.debug(f"Processing action of message. Action in message: {action}")
             logger.debug(f"Result of ChatAction rule: {result}")
             return result
 
@@ -111,7 +121,9 @@ class MessageCountArgs(NamedRule):
         self.count_args = count_args
 
     async def check(self, message: types.Message, data: dict):
-        result = len(message.get_args()) == self.count_args
+        count = len(message.get_args())
+        result = count == self.count_args
+        logger.debug(f"Received {count} args in message")
         logger.debug(f"Result of MessageCountArgs rule: {result}")
         return result
 
@@ -128,11 +140,17 @@ class MessageArgsValidate(NamedRule):
 
     async def check(self, message: types.Message, data: dict):
         args = message.get_args()
-        if len(args) != len(self.args_validators):
+        count_args = len(args)
+        count_validators = len(self.args_validators)
+        if count_args != count_validators:
+            logger.debug(
+                f"Received {count_args} in message. Passed validators {count_validators}"
+            )
+            logger.debug(f"Result of MessageArgsValidate rule: False")
             return False
         passed = True
-        for index, arg in enumerate(args):
-            result = self.args_validators[index](arg)
+        for validator, arg in zip(self.args_validators, args):
+            result = validator(arg)
             if not result:
                 logger.debug("Result of MessageArgsValidate rule: False")
                 return False
@@ -148,6 +166,7 @@ class InChat(NamedRule):
 
     async def check(self, message: types.Message, data: dict):
         result = self.in_chat is bool(message.peer_id >= 2e9)
+        logger.debug(f"Received peer_id: {message.peer_id}")
         logger.debug(f"Result of InChat rule: {result}")
 
         return result
@@ -161,6 +180,7 @@ class InPersonalMessages(NamedRule):
 
     async def check(self, message: types.Message, data: dict):
         result = self.in_pm is bool(message.peer_id < 2e9)
+        logger.debug(f"Received peer_id: {message.peer_id}")
         logger.debug(f"Result of InPersonalMessages rule: {result}")
 
         return result
@@ -174,6 +194,7 @@ class FromBot(NamedRule):
 
     async def check(self, message: types.Message, data: dict):
         result = self.from_bot is bool(message.from_id < 0)
+        logger.debug(f"Received from_id: {message.from_id}")
         logger.debug(f"Result of FromBot rule: {result}")
 
         return result
@@ -208,6 +229,8 @@ class CountFwdMessages(NamedRule):
         self.count_fwd_messages: int = count_fwd_messages
 
     async def check(self, message: types.Message, data: dict):
-        result = len(message.fwd_messages) == self.count_fwd_messages
+        count = len(message.fwd_messages)
+        result = count == self.count_fwd_messages
+        logger.debug(f"Received fwd_messages: {count}")
         logger.debug(f"Result of CountFwdMessages rule: {result}")
         return result

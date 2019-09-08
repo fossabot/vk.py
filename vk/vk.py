@@ -49,7 +49,7 @@ class VK(ContextInstanceMixin):
         self.loop = loop if loop is not None else asyncio.get_event_loop()
         self.client = (
             client
-            if client is not None
+            if client is not None and isinstance(client, ClientSession)
             else ClientSession(json_serialize=JSON_LIBRARY.dumps)
         )
         self.api_version = API_VERSION
@@ -64,7 +64,8 @@ class VK(ContextInstanceMixin):
     ) -> dict:
         """
 
-        :param method_name: method of name when need to call :param params: parameters with method
+        :param method_name: method of name when need to call
+        :param params: parameters with method
         :param _raw_mode: signal of return 'raw' response, or not (basically, returns response["response"])
         :return:
         """

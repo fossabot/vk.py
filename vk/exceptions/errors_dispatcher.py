@@ -1,5 +1,5 @@
-import logging
 import asyncio
+import logging
 import typing
 
 from vk.exceptions.api_errors import APIException
@@ -36,7 +36,7 @@ class APIErrorDispatcher:
         self._handlers.append(APIErrorHandler(6, self._to_many_requests_handler))
 
     async def _to_many_requests_handler(self, json: typing.Dict) -> typing.Dict:
-        logger.debug("To many requests exception handle..")
+        logger.debug("To many requests error handle..")
         await asyncio.sleep(0.34)
         params = {}
         method_name = None
@@ -61,8 +61,9 @@ class APIErrorDispatcher:
     async def error_handle(
         self, json: typing.Dict
     ) -> typing.Union[typing.Dict, typing.NoReturn]:
-        logger.debug("Some exception from API handle..")
+        logger.debug("Some error from API handle..")
         error: dict = json["error"]
+        logger.debug(f"Error data: {error}")
 
         code: int = error["error_code"]
         for handler in self._handlers:

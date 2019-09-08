@@ -12,6 +12,7 @@ from vk import VK
 from vk.constants import default_extensions
 from vk.constants import default_rules
 from vk.types import BotEvent as Event
+from vk.utils import args_logging
 from vk.utils import ContextInstanceMixin
 from vk.utils import time_logging
 from vk.utils.get_event import get_event_object
@@ -172,6 +173,7 @@ class Dispatcher(ContextInstanceMixin):
         self._extensions_manager.run_extension(name, **extension_init_params)
 
     @time_logging(logger)
+    @args_logging(logger)
     async def _process_event(self, event: dict):
         """
         Handle 1 event coming from VK.
@@ -185,6 +187,9 @@ class Dispatcher(ContextInstanceMixin):
             event, data
         )  # trigger pre_process_event funcs in middlewares.
         # returns service value '_skip_handler' and data variable (check upper).
+
+        logger.debug(f"Pre-process middlewares return this data: {data}")
+        logger.debug(f"Pre-process middlewares result of skip_handler: {_skip_handler}")
 
         if (
             not _skip_handler
@@ -201,6 +206,10 @@ class Dispatcher(ContextInstanceMixin):
                         )  # if execute hanlder func
                         # return non-False value, other handlers doesn`t be executed.
                         if result:
+                            logger.debug(
+                                f"Event handler ({handler.handler.__name__}) successfully executed. Other "
+                                f"handlers doesn`t be executed..."
+                            )
                             break
                     except Exception:  # noqa
                         logger.exception(
@@ -217,9 +226,8 @@ class Dispatcher(ContextInstanceMixin):
         :return:
         """
         for event in events:
+            logger.debug(f"Start processing event with type '{event['type']}'")
             self.vk.loop.create_task(self._process_event(event))
 
     def run_polling(self):
-        self._extensions_manager.run_extension(
-            "polling", group_id=self.group_id, vk=self.vk
-        )
+        self.run_extension("polling", group_id=self.group_id, vk=self.vk)

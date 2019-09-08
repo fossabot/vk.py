@@ -40,7 +40,7 @@ class APIErrorDispatcher:
         await asyncio.sleep(0.34)
         params = {}
         method_name = None
-        for param in json["error"]["request_params"]:
+        for param in json["request_params"]:
             key = param["key"]
             value = param["value"]
             if key == "method":

@@ -10,13 +10,6 @@ logger = logging.getLogger(__name__)
 
 class AbstractExtension(ABC):
     @abstractmethod
-    def __init__(self, **kwargs):
-        """
-        Method which accept all extension arguments.
-        :param kwargs:
-        """
-
-    @abstractmethod
     async def get_events(self) -> typing.List:
         """
         Get events from any resource and returns list of events.

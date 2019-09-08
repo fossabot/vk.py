@@ -20,9 +20,9 @@ logger = logging.getLogger(__name__)
 
 class Dispatcher(ContextInstanceMixin):
     def __init__(self, vk: VK, group_id: int):
-        self.vk: VK = vk
-        self.group_id: int = group_id
-        self._hanlders: typing.List[Handler] = []
+        self._vk: VK = vk
+        self._group_id: int = group_id
+        self._handlers: typing.List[Handler] = []
 
         self._middleware_manager: MiddlewareManager = MiddlewareManager(self)
         self._rule_factory: RuleFactory = RuleFactory(default_rules())
@@ -32,6 +32,16 @@ class Dispatcher(ContextInstanceMixin):
 
         self._storage: typing.Optional[AbstractStorage] = None
 
+        self.set_current(self)
+
+    @property
+    def group_id(self):
+        return self._group_id
+
+    @property
+    def vk(self):
+        return self._vk
+
     @property
     def storage(self):
         if not self._storage:
@@ -40,6 +50,8 @@ class Dispatcher(ContextInstanceMixin):
 
     @storage.setter
     def storage(self, storage: AbstractStorage):
+        if not isinstance(storage, AbstractStorage):
+            raise RuntimeError("Unexpected storage.")
         self._storage = storage
 
     def _register_handler(self, handler: Handler):
@@ -48,7 +60,7 @@ class Dispatcher(ContextInstanceMixin):
         :param handler:
         :return:
         """
-        self._hanlders.append(handler)
+        self._handlers.append(handler)
         logger.debug(f"Handler '{handler.handler.__name__}' successfully added!")
 
     def register_message_handler(self, coro: typing.Callable, rules: typing.List):
@@ -178,7 +190,7 @@ class Dispatcher(ContextInstanceMixin):
         ):  # if middlewares don`t skip this handler, dispatcher be check
             # rules and execute handlers.
             ev = get_event_object(event)  # get event pydantic model.
-            for handler in self._hanlders:  # check handlers
+            for handler in self._handlers:  # check handlers
                 if (
                     handler.event_type.value == ev.type
                 ):  # if hanlder type is equal event pydantic model.

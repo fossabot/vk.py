@@ -1,6 +1,6 @@
-from abc import ABC, abstractmethod
-
 import logging
+from abc import ABC
+from abc import abstractmethod
 
 logger = logging.getLogger(__name__)
 
@@ -17,13 +17,13 @@ class AbstractRule(ABC):
         pass
 
 
-class BaseRule(AbstractRule):
+class BaseRule(AbstractRule, ABC):
     async def __call__(self, event, data: dict) -> bool:
         logger.debug(f"Rule {self.__class__.__name__} succesfully called!")
         return await self.check(event, data)
 
 
-class NamedRule(BaseRule):
+class NamedRule(BaseRule, ABC):
     """
     May be added to rules with RuleFactory and
     called in handlers by unique key;

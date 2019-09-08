@@ -1,6 +1,6 @@
 import asyncio
-import typing
 import logging
+import typing
 
 from .auto_reload import _auto_reload
 
@@ -57,7 +57,7 @@ class TaskManager:
         """
         Close event loop manually
 
-        >> task_manager.close()
+        >>> task_manager.close()
         :return:
         """
         self.loop.close()

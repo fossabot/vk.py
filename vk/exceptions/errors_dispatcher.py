@@ -35,12 +35,12 @@ class APIErrorDispatcher:
 
         self._handlers.append(APIErrorHandler(6, self._to_many_requests_handler))
 
-    async def _to_many_requests_handler(self, json: typing.Dict) -> typing.Dict:
+    async def _to_many_requests_handler(self, error: typing.Dict) -> typing.Dict:
         logger.debug("To many requests error handle..")
         await asyncio.sleep(0.34)
         params = {}
         method_name = None
-        for param in json["request_params"]:
+        for param in error["request_params"]:
             key = param["key"]
             value = param["value"]
             if key == "method":

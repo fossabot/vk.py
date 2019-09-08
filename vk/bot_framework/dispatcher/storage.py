@@ -45,6 +45,45 @@ class AbstractStorage(ABC):
         """
 
 
+class AbstractAsyncStorage(ABC):
+    @abstractmethod
+    async def place(self, key: typing.AnyStr, value: typing.Any) -> None:
+        """
+        Place value to storage.
+        :param key:
+        :param value:
+        :return:
+        """
+
+    @abstractmethod
+    async def get(
+        self, key: typing.AnyStr, default: typing.Any = None
+    ) -> typing.Optional[typing.Any]:
+        """
+        Get value by key from storage or get default value.
+        :param key:
+        :param default:
+        :return:
+        """
+
+    @abstractmethod
+    async def delete(self, key: typing.AnyStr) -> None:
+        """
+        Delete key/value from storage by key
+        :param key:
+        :return:
+        """
+
+    @abstractmethod
+    async def update(self, key: typing.AnyStr, value: typing.Any):
+        """
+        Update value in storage by key.
+        :param key:
+        :param value:
+        :return:
+        """
+
+
 class Storage(AbstractStorage):
     def place(self, key: typing.AnyStr, value: typing.Any) -> None:
         if hasattr(self, key):

@@ -6,6 +6,7 @@ from .extension import ExtensionsManager
 from .handler import Handler
 from .middleware import MiddlewareManager
 from .rule import RuleFactory
+from .storage import AbstractAsyncStorage
 from .storage import AbstractStorage
 from vk import VK
 from vk.constants import default_extensions
@@ -30,7 +31,7 @@ class Dispatcher(ContextInstanceMixin):
             self, default_extensions()
         )
 
-        self._storage: typing.Optional[AbstractStorage] = None
+        self._storage: typing.Union[AbstractStorage, AbstractAsyncStorage, None] = None
 
         self.set_current(self)
 
@@ -50,7 +51,7 @@ class Dispatcher(ContextInstanceMixin):
 
     @storage.setter
     def storage(self, storage: AbstractStorage):
-        if not isinstance(storage, AbstractStorage):
+        if not isinstance(storage, (AbstractStorage, AbstractAsyncStorage)):
             raise RuntimeError("Unexpected storage.")
         self._storage = storage
 

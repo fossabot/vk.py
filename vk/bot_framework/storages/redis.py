@@ -7,7 +7,6 @@ try:
     import aioredis  # noqa
 except ImportError:
     aioredis = None
-    raise RuntimeError("For use this storage install aioredis (pip install aioredis)")
 
 
 class RedisStorage(AbstractAsyncStorage):
@@ -18,6 +17,10 @@ class RedisStorage(AbstractAsyncStorage):
         db: str = None,
         password: str = None,
     ):
+        if aioredis is None:
+            raise RuntimeError(
+                "For use this storage install aioredis (pip install aioredis)"
+            )
         self._address = address
         self._db = db
         self._password = password

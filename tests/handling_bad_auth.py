@@ -11,7 +11,7 @@ def add_error_handler(vk):
 
 
 async def error_handler(error):
-    print(error["error_msg"])
+    print(error)
 
 
 async def test_auth():

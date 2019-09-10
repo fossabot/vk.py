@@ -130,7 +130,6 @@ class Dispatcher(ContextInstanceMixin):
 
         def decorator(coro: typing.Callable):
             nonlocal named_rules, standart_named_rules
-            print(standart_named_rules)
             named_rules.update(**standart_named_rules)
             named_rules = self._rule_factory.get_rules(named_rules)
             self.register_message_handler(coro, named_rules + list(rules))

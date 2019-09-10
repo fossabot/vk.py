@@ -1,10 +1,11 @@
-from vk import VK
-from vk.utils import TaskManager
-from vk.bot_framework import Dispatcher
-from vk.keyboards import Keyboard, ButtonColor
-from vk import types
-
 import logging
+
+from vk import types
+from vk import VK
+from vk.bot_framework import Dispatcher
+from vk.keyboards import ButtonColor
+from vk.keyboards import Keyboard
+from vk.utils import TaskManager
 
 logging.basicConfig(level="INFO")
 
@@ -17,7 +18,7 @@ api = vk.get_api()
 dp = Dispatcher(vk, gid)
 
 keyboard = Keyboard(one_time=False)
-keyboard.add_text_button("Hello, my friend!", payload={"command": "hello"})
+keyboard.add_text_button("Hello, my friend!", payload="hello")
 keyboard.add_text_button("Another text", color=ButtonColor.SECONDARY)
 
 

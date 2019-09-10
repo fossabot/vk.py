@@ -47,9 +47,6 @@ class Kafka(BaseExtension):
                     dp._process_events(events)
                 else:
                     dp._process_events([events])
-                    import asyncio
-
-                    asyncio.gather
         finally:
             # Will leave consumer group; perform autocommit if enabled.
             await self.consumer.stop()

@@ -44,6 +44,14 @@ class AbstractStorage(ABC):
         :return:
         """
 
+    @abstractmethod
+    def exists(self, key: typing.AnyStr):
+        """
+        Check value exists in storage
+        :param key:
+        :return:
+        """
+
 
 class AbstractAsyncStorage(ABC):
     @abstractmethod
@@ -83,28 +91,42 @@ class AbstractAsyncStorage(ABC):
         :return:
         """
 
+    @abstractmethod
+    async def exists(self, key: typing.AnyStr):
+        """
+        Check value exists in storage
+        :param key:
+        :return:
+        """
+
 
 class Storage(AbstractStorage):
+    def __init__(self):
+        self._dct = {}
+
     def place(self, key: typing.AnyStr, value: typing.Any) -> None:
-        if hasattr(self, key):
+        if key in self._dct:
             raise RuntimeError("Storage already have this key.")
-        setattr(self, key, value)
+        self._dct[key] = value
 
     def get(
         self, key: typing.AnyStr, default: typing.Any = None
     ) -> typing.Optional[typing.Any]:
-        if hasattr(self, key):
-            return getattr(self, key)
+        if key in self._dct:
+            return self._dct[key]
         else:
             return default
 
     def delete(self, key: typing.AnyStr) -> None:
-        if hasattr(self, key):
-            delattr(self, key)
+        if key in self._dct:
+            del self._dct[key]
         else:
             raise RuntimeError("Undefined key.")
 
-    def update(self, key: typing.AnyStr, value: typing.Any):
-        if not hasattr(self, key):
+    def update(self, key: typing.AnyStr, value: typing.Any) -> None:
+        if key not in self._dct:
             raise RuntimeError("Storage don`t have this key.")
-        setattr(self, key, value)
+        self._dct[key] = value
+
+    def exists(self, key: typing.AnyStr):
+        return "key" in self._dct

@@ -17,19 +17,3 @@ def time_logging(logger):
         return wrapped
 
     return wrapper
-
-
-def args_logging(logger):
-    def wrapper(func):
-        @functools.wraps(func)
-        async def wrapped(*args, **kwargs):
-            logger.debug(f"Entered to coroutine ({func.__qualname__})...")
-            result = await func(*args, **kwargs)
-            logger.debug(
-                f"Exited from coroutine ({func.__qualname__}) with result: {result}"
-            )
-            return result
-
-        return wrapped
-
-    return wrapper

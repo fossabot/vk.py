@@ -50,6 +50,11 @@ class RuleFactory:
         logger.debug(f"Rule {rule.__class__.__name__} succesfully added!")
 
     def get_rules(self, user_rules: dict):
+        """
+        Get rules objects by named_rules.
+        :param user_rules:
+        :return:
+        """
         rules = []
         for key, value in user_rules.items():
             if key in self.config:

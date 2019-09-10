@@ -53,10 +53,13 @@ class APIErrorDispatcher:
 
     def error_handler(self, error_code: int):
         def decorator(coro: typing.Callable):
-            handler = APIErrorHandler(error_code, coro)
-            self._handlers.append(handler)
+            self.register_error_handler(error_code, coro)
 
         return decorator
+
+    def register_error_handler(self, error_code, coro):
+        handler = APIErrorHandler(error_code, coro)
+        self._handlers.append(handler)
 
     async def error_handle(
         self, json: typing.Dict

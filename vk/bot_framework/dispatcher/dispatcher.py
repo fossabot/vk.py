@@ -78,41 +78,12 @@ class Dispatcher(ContextInstanceMixin):
         handler = Handler(event_type, coro, rules)
         self._register_handler(handler)
 
-    def message_handler(
-        self,
-        commands=None,
-        text=None,
-        payload=None,
-        chat_action=None,
-        data_check=None,
-        count_args=None,
-        have_args=None,
-        in_chat=None,
-        in_pm=None,
-        from_bot=None,
-        with_reply_message=None,
-        with_fwd_messages=None,
-        count_fwd_messages=None,
-        *rules,
-        **named_rules,
-    ):
+    def message_handler(self, *rules, **named_rules):
         """
         Register message handler with decorator.
 
         standart named rules:
-        :param commands:
-        :param text:
-        :param payload:
-        :param chat_action:
-        :param data_check:
-        :param count_args:
-        :param have_args:
-        :param in_chat:
-        :param in_pm:
-        :param from_bot:
-        :param with_reply_message:
-        :param with_fwd_messages:
-        :param count_fwd_messages:
+
 
         :param rules: other user rules
         :param named_rules: other user named rules
@@ -121,15 +92,6 @@ class Dispatcher(ContextInstanceMixin):
 
         def decorator(coro: typing.Callable):
             nonlocal named_rules
-            standart_named_rules = {
-                k: v
-                for k, v in locals().items()
-                if v is not None
-                and k != "coro"
-                and k != "self"
-                and k != "rules"
-                and k != "named_rules"
-            }
             named_rules.update(**standart_named_rules)
             named_rules = self._rule_factory.get_rules(named_rules)
             self.register_message_handler(coro, named_rules + list(rules))

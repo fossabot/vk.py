@@ -1,6 +1,8 @@
 import asyncio
 import logging
+import os
 import typing
+import warnings
 
 from .auto_reload import _auto_reload
 
@@ -42,6 +44,8 @@ class TaskManager:
             if asyncio_debug_mode:
                 self.loop.set_debug(enabled=True)
             if auto_reload:
+                if os.name == "nt" or os.name == "win32":
+                    warnings.warn("Auto reload maybe unstable works on Windows")
                 self.loop.create_task(_auto_reload())
 
             [self.loop.create_task(task()) for task in self.tasks]

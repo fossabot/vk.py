@@ -1,9 +1,9 @@
-import logging
 import asyncio
+import logging
 
-from vk.utils import mixins
 from vk import VK
 from vk.constants import JSON_LIBRARY
+from vk.utils import mixins
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +25,8 @@ class BotLongPoll(mixins.ContextInstanceMixin):
         self.ts = None
 
         self.runned = False
+
+        self._update_polling = self._prepare_longpoll
 
     async def _prepare_longpoll(self):
         """
@@ -61,7 +63,7 @@ class BotLongPoll(mixins.ContextInstanceMixin):
             f"{server}?act=a_check&key={key}&ts={ts}&wait=20"
         ) as response:
             resp = await response.json(loads=JSON_LIBRARY.loads)
-            logger.debug(f"Get updates from polling: {resp['updates']}")
+            logger.debug(f"Response from polling: {resp}")
             return resp
 
     async def listen(self) -> list:
@@ -73,11 +75,15 @@ class BotLongPoll(mixins.ContextInstanceMixin):
             updates = await self.get_updates(
                 key=self.key, server=self.server, ts=self.ts
             )
-            self.ts = updates["ts"]
-            if updates["updates"]:
-                return updates["updates"]
+            ts = updates.get("ts")
+            self.ts = ts if ts else self.ts
+            updates = updates.get("updates")
+            if updates:
+                logger.debug(f"Get updates from polling: {updates}")
+                return updates
         except Exception:  # noqa
             logger.exception("Polling have trouble... Sleeping 1 minute..")
+            await self._update_polling()
             await asyncio.sleep(60)
 
     async def run(self) -> dict:

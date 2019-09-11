@@ -78,7 +78,7 @@ class BotLongPoll(mixins.ContextInstanceMixin):
             ts = updates.get("ts")
             self.ts = ts if ts else self.ts
             updates_new = updates.get("updates")
-            if updates:
+            if updates_new:
                 logger.debug(f"Get updates from polling: {updates_new}")
                 return updates_new
             if updates.get("failed"):

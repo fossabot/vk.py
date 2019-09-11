@@ -77,11 +77,11 @@ class BotLongPoll(mixins.ContextInstanceMixin):
             )
             ts = updates.get("ts")
             self.ts = ts if ts else self.ts
-            updates = updates.get("updates")
+            updates_new = updates.get("updates")
             if updates:
-                logger.debug(f"Get updates from polling: {updates}")
-                return updates
-            if updates["failed"]:
+                logger.debug(f"Get updates from polling: {updates_new}")
+                return updates_new
+            if updates.get("failed"):
                 raise Exception("Update key and server")
         except Exception:  # noqa
             logger.exception("Polling have trouble... Sleeping 1 minute..")

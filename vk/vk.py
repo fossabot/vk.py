@@ -73,6 +73,7 @@ class VK(ContextInstanceMixin):
             params = {}
 
         params.update({"v": self.api_version, "access_token": self.access_token})
+        logger.debug(f"Params to send: {params}")
         async with self.client.post(API_LINK + method_name, params=params) as response:
             try:
                 json: typing.Dict = await response.json(loads=JSON_LIBRARY.loads)

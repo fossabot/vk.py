@@ -3,6 +3,7 @@ import logging
 from vk import types
 from vk import VK
 from vk.bot_framework import Dispatcher
+from vk.bot_framework import Storage
 from vk.bot_framework.storages import RedisStorage
 from vk.utils import TaskManager
 
@@ -15,21 +16,24 @@ task_manager = TaskManager(vk.loop)
 api = vk.get_api()
 
 dp = Dispatcher(vk, gid)
-storage: RedisStorage = RedisStorage("redis://localhost", vk.loop)
+redis_storage: RedisStorage = RedisStorage("redis://localhost", vk.loop)  # create redis
+storage = Storage()  # create base storage for place any
 
 dp.storage = storage
 
 
 @dp.message_handler(text="hello")
 async def handle_event(message: types.Message, data: dict):
-    c = await dp.storage.get("really_needed_counter", 0)
+    redis: RedisStorage = await dp.storage.get(
+        "redis"
+    )  # you have access to redis storage
+    c = await redis.get("really_needed_counter", 0)  # equal API
     await message.answer(f"Hello! {c}")
-    await dp.storage.update("really_needed_counter", int(c) + 1)
+    await redis.update("really_needed_counter", int(c) + 1)
 
 
 async def run():
-    await dp.storage.create_connection()
-    await dp.storage.place("really_needed_counter", 1)
+    dp.storage.place("redis", redis_storage)  # best practice
     dp.run_polling()
 
 

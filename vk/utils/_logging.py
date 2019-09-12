@@ -9,8 +9,9 @@ def time_logging(logger):
             timer_1 = timer()
             logger.debug(f"Start processing coroutine ({func.__qualname__})...")
             result = await func(*args, **kwargs)
+            time_result = timer() - timer_1
             logger.debug(
-                f"Coroutine ({func.__qualname__}) proccessed. Took {round(timer() - timer_1, 2)} seconds."
+                f"Coroutine ({func.__qualname__}) proccessed. Took {time_result:.3f} seconds."
             )
             return result
 

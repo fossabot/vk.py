@@ -1,12 +1,17 @@
 import asyncio
+import logging
 import typing
 
+from ...utils import time_logging
 from ..dispatcher.storage import AbstractAsyncStorage
 
 try:
     import aioredis  # noqa
 except ImportError:
     aioredis = None
+
+
+logger = logging.getLogger(__name__)
 
 
 class RedisStorage(AbstractAsyncStorage):
@@ -43,11 +48,15 @@ class RedisStorage(AbstractAsyncStorage):
     async def place(
         self, key: typing.AnyStr, value: typing.Any, expire=0, pexpire=0
     ) -> None:
+        if not self.connection:
+            await self.create_connection()
         await self.connection.set(key, value, expire=expire, pexpire=pexpire)
 
     async def get(
         self, key: typing.AnyStr, default: typing.Any = None
     ) -> typing.Optional[typing.Any]:
+        if not self.connection:
+            await self.create_connection()
         value = await self.connection.get(key)
         if value is None:
             return default
@@ -59,11 +68,15 @@ class RedisStorage(AbstractAsyncStorage):
     async def delete(
         self, key: typing.AnyStr, *keys: typing.Tuple[typing.AnyStr]
     ) -> None:
+        if not self.connection:
+            await self.create_connection()
         await self.connection.delete(key, *keys)
 
     async def exists(
         self, key: typing.AnyStr, *keys: typing.Tuple[typing.AnyStr]
     ) -> bool:
+        if not self.connection:
+            await self.create_connection()
         result = await self.connection.exists(key, *keys)
         if result == 0:
             return False

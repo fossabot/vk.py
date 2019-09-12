@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import typing
 
 from vk import VK
 from vk.constants import JSON_LIBRARY
@@ -66,7 +67,7 @@ class BotLongPoll(mixins.ContextInstanceMixin):
             logger.debug(f"Response from polling: {resp}")
             return resp
 
-    async def listen(self) -> list:
+    async def listen(self) -> typing.List[dict]:
         """
 
         :return: list of updates coming from VK

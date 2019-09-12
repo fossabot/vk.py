@@ -1,5 +1,5 @@
-from typing import List
 import typing
+from typing import List
 
 
 class BaseMethod:
@@ -11,10 +11,12 @@ class BaseMethod:
         return self.__dict__
 
     def __repr__(self):
-        return "%s(%r)" % (self.__class__, self.__dict__)
+        return "{}({!r})".format(self.__class__, self.__dict__)
 
     async def api_request(self, method_name: str, params: dict = None):
-        return await self.vk._api_request(method_name, params, _raw_mode=True)
+        result = await self.vk._api_request(method_name, params, _raw_mode=True)
+        if result is not None:
+            return result
 
     @staticmethod
     def create_params(params):

@@ -1,6 +1,9 @@
 import asyncio
 import concurrent.futures
+import multiprocessing
 import typing
+
+_pool = concurrent.futures.ThreadPoolExecutor(multiprocessing.cpu_count())
 
 
 class BackgroundTask:
@@ -18,8 +21,6 @@ class BackgroundTask:
         self._async_or_sync = async_or_sync
         self._async_or_sync_args = async_or_sync_args
         self.is_async = asyncio.iscoroutinefunction(async_or_sync)
-
-        self._pool = concurrent.futures.ThreadPoolExecutor()
 
     async def __call__(self):
         await self.__run()
@@ -39,8 +40,6 @@ class BackgroundTask:
                 loop.create_task(self._async_or_sync())
             return
         if self._async_or_sync_args:
-            loop.run_in_executor(
-                self._pool, self._async_or_sync, self._async_or_sync_args
-            )
+            loop.run_in_executor(_pool, self._async_or_sync, self._async_or_sync_args)
         else:
-            loop.run_in_executor(self._pool, self._async_or_sync)
+            loop.run_in_executor(_pool, self._async_or_sync)

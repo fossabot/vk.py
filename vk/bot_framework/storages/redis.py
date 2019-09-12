@@ -2,13 +2,12 @@ import asyncio
 import logging
 import typing
 
-from ...utils import time_logging
 from ..dispatcher.storage import AbstractAsyncStorage
 
 try:
     import aioredis  # noqa
 except ImportError:
-    aioredis = None
+    raise RuntimeError("For use this storage install aioredis (pip install aioredis)")
 
 
 logger = logging.getLogger(__name__)
@@ -22,10 +21,6 @@ class RedisStorage(AbstractAsyncStorage):
         db: str = None,
         password: str = None,
     ):
-        if aioredis is None:
-            raise RuntimeError(
-                "For use this storage install aioredis (pip install aioredis)"
-            )
         self._address = address
         self._db = db
         self._password = password

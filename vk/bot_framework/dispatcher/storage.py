@@ -101,6 +101,10 @@ class AbstractAsyncStorage(ABC):
 
 
 class Storage(AbstractStorage):
+    """
+    Basic storage
+    """
+
     def __init__(self):
         self._dct = {}
 

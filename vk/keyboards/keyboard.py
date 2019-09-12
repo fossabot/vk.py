@@ -2,7 +2,6 @@ import logging
 import typing
 from enum import Enum
 
-
 from ..exceptions import KeyboardException
 from vk.constants import JSON_LIBRARY
 
@@ -161,7 +160,7 @@ class Keyboard:
         return JSON_LIBRARY.dumps(self.keyboard)
 
     @classmethod
-    def get_empty_keyboard(cls) -> typing.AnyStr:
+    def get_empty_keyboard(cls: "Keyboard") -> typing.AnyStr:
         """
 
         :return:

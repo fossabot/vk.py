@@ -24,6 +24,8 @@ def cached_handler(storage: RedisStorage, expire=10, for_specify_user=False):
         @functools.wraps(func)
         async def wrapped(*args, **kwargs):
             message = MessageNew.get_current()
+            if not message:
+                raise RuntimeError("Now caching available only for Message_New event")
             if for_specify_user:
                 cache_name = (
                     f"__coro_tocache:{func.__name__}:user:{message.object.from_id}__"

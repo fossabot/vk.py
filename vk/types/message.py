@@ -83,6 +83,36 @@ class Message(BaseModel):
             random_id=0,
         )
 
+    async def cached_answer(
+        self, message: str, attachment: str = None, keyboard: dict = None
+    ):
+        from vk.bot_framework.caching import CachedResponse
+
+        """
+        Answer to message without reply.
+        :param message:
+        :param attachment:
+        :param keyboard:
+        :return: cached object
+        """
+        await self.api.messages.send(
+            message=message,
+            peer_id=self.peer_id,
+            attachment=attachment,
+            keyboard=keyboard,
+            random_id=0,
+        )
+        resp = CachedResponse(
+            method_name="messages.send",
+            method_params={
+                "message": message,
+                "attachment": attachment,
+                "keyboard": keyboard,
+                "random_id": 0,
+            },
+        )
+        return resp
+
     def get_args(self) -> typing.List[str]:
         """
         Return message args splitted by whitespace without first (0) element.

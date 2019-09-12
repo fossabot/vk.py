@@ -75,12 +75,7 @@ class VK(ContextInstanceMixin):
         params.update({"v": self.api_version, "access_token": self.access_token})
         logger.debug(f"Params to send: {params}")
         async with self.client.post(API_LINK + method_name, data=params) as response:
-            try:
-                json: typing.Dict = await response.json(loads=JSON_LIBRARY.loads)
-            except Exception:  # content type, json decode errors
-                html = await response.text()
-                logger.debug(f"Response from API (html): {html}")
-                return  # noqa
+            json: typing.Dict = await response.json(loads=JSON_LIBRARY.loads)
             logger.debug(f"Method {method_name} called. Response from API: {json}")
             if "error" in json:
                 return await self.error_dispatcher.error_handle(json)

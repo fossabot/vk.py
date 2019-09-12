@@ -14,9 +14,7 @@ class BaseMethod:
         return "{}({!r})".format(self.__class__, self.__dict__)
 
     async def api_request(self, method_name: str, params: dict = None):
-        result = await self.vk._api_request(method_name, params, _raw_mode=True)
-        if result is not None:
-            return result
+        return await self.vk._api_request(method_name, params, _raw_mode=True)
 
     @staticmethod
     def create_params(params):

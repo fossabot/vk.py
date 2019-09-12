@@ -660,10 +660,7 @@ class Messages(BaseMethod):
         method = self.get_method_name(self.send)
         params = self.create_params(locals())
         r = await self.api_request(method, params)
-        try:
-            return m.Send(**r)
-        except Exception:  # noqa
-            return m.Send(response=1)
+        return m.Send(**r)
 
     async def set_activity(
         self,

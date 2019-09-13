@@ -5,6 +5,8 @@ from .extension import BaseExtension
 from .extension import ExtensionsManager
 from .handler import Handler
 from .middleware import MiddlewareManager
+from .rule import BaseRule
+from .rule import NamedRule
 from .rule import RuleFactory
 from .storage import AbstractAsyncStorage
 from .storage import AbstractStorage
@@ -31,7 +33,7 @@ class Dispatcher(ContextInstanceMixin):
             self, default_extensions()
         )
 
-        self._storage: typing.Union[AbstractStorage, AbstractAsyncStorage, None] = None
+        self._storage: typing.Optional[AbstractStorage, AbstractAsyncStorage] = None
 
         self.set_current(self)
 
@@ -80,7 +82,7 @@ class Dispatcher(ContextInstanceMixin):
 
     def message_handler(
         self,
-        *rules,
+        *rules: typing.Tuple[typing.Type[BaseRule]],
         commands=None,
         text=None,
         payload=None,
@@ -94,7 +96,7 @@ class Dispatcher(ContextInstanceMixin):
         with_reply_message=None,
         with_fwd_messages=None,
         count_fwd_messages=None,
-        **named_rules,
+        **named_rules: typing.Dict[str, typing.Type[NamedRule]],
     ):
         """
         Register message handler with decorator.

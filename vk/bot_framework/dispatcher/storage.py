@@ -100,6 +100,20 @@ class AbstractAsyncStorage(ABC):
         """
 
 
+class AbstractExpiredStorage(AbstractStorage):
+    @abstractmethod
+    def place(self, key: typing.AnyStr, value: typing.Any, expire: int) -> None:  # noqa
+        pass
+
+
+class AbstractAsyncExpiredStorage(AbstractAsyncStorage):
+    @abstractmethod
+    async def place(
+        self, key: typing.AnyStr, value: typing.Any, expire: int
+    ) -> None:  # noqa
+        pass
+
+
 class Storage(AbstractStorage):
     """
     Basic storage

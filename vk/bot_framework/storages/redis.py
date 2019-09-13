@@ -1,8 +1,7 @@
 import asyncio
-import logging
 import typing
 
-from ..dispatcher.storage import AbstractAsyncStorage
+from ..dispatcher.storage import AbstractAsyncExpiredStorage
 
 try:
     import aioredis  # noqa
@@ -10,10 +9,7 @@ except ImportError:
     raise RuntimeError("For use this storage install aioredis (pip install aioredis)")
 
 
-logger = logging.getLogger(__name__)
-
-
-class RedisStorage(AbstractAsyncStorage):
+class RedisStorage(AbstractAsyncExpiredStorage):
     def __init__(
         self,
         address: str,
@@ -58,6 +54,8 @@ class RedisStorage(AbstractAsyncStorage):
         return value.decode()
 
     async def update(self, key: typing.AnyStr, value: typing.Any, expire=0, pexpire=0):
+        if not self.connection:
+            await self.create_connection()
         await self.place(key, value, expire, pexpire)
 
     async def delete(

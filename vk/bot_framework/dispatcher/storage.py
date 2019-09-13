@@ -147,4 +147,4 @@ class Storage(AbstractStorage):
         self._dct[key] = value
 
     def exists(self, key: typing.AnyStr):
-        return "key" in self._dct
+        return key in self._dct

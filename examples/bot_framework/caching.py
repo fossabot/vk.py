@@ -26,8 +26,8 @@ dp.storage = storage
 @dp.message_handler(text="text")
 @cached_handler(redis_storage, expire=20, for_specify_user=True)
 async def test(msg: types.Message, data):
-    resp = await storage.get("hello", 0)
-    await storage.update("hello", int(resp) + 1)
+    resp = await redis_storage.get("hello", 0)
+    await redis_storage.update("hello", int(resp) + 1)
     return await msg.cached_answer(f"{resp}")
 
 

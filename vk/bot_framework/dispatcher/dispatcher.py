@@ -80,6 +80,7 @@ class Dispatcher(ContextInstanceMixin):
 
     def message_handler(
         self,
+        *rules,
         commands=None,
         text=None,
         payload=None,
@@ -93,7 +94,6 @@ class Dispatcher(ContextInstanceMixin):
         with_reply_message=None,
         with_fwd_messages=None,
         count_fwd_messages=None,
-        *rules,
         **named_rules,
     ):
         """
@@ -191,7 +191,7 @@ class Dispatcher(ContextInstanceMixin):
         """
         self._rule_factory.setup(rule)
 
-    def setup_extension(self, extension: BaseExtension):
+    def setup_extension(self, extension: typing.Type[BaseExtension]):
         """
         Add extension to extensions list with extension manager.
         :param extension:

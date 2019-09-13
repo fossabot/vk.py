@@ -40,13 +40,15 @@ class BaseExtension(AbstractExtension, ABC):
 
 
 class ExtensionsManager:
-    def __init__(self, dp, default_extensions: typing.Dict[str, BaseExtension]):
+    def __init__(
+        self, dp, default_extensions: typing.Dict[str, typing.Type[BaseExtension]]
+    ):
         self.dp = dp
-        self.extensions: typing.Dict[str, BaseExtension] = {}
+        self.extensions: typing.Dict[str, typing.Type[BaseExtension]] = {}
 
         self.extensions.update(default_extensions)
 
-    def setup(self, extension: BaseExtension):
+    def setup(self, extension: typing.Type[BaseExtension]):
         if extension.key is None:
             raise RuntimeError("Unallowed key for extension")
 

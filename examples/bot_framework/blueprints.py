@@ -16,13 +16,19 @@ task_manager = TaskManager(vk.loop)
 
 dp = Dispatcher(vk, gid)
 
-
 bp = Blueprint()
+
+other_bp = Blueprint(commands=["tested"])
 
 
 @bp.message_handler(text="hello")
 async def handler(message: types.Message, data: dict):
     await message.answer("hello my friend!")
+
+
+@other_bp.message_handler()
+async def handler_yes(message: types.Message, data: dict):
+    await message.answer("Yes.")
 
 
 @bp.event_handler(BotEvent.WALL_POST_NEW)
@@ -32,6 +38,7 @@ async def handler_reply_new(event, data: dict):
 
 async def run():
     dp.setup_blueprint(bp)
+    dp.setup_blueprint(other_bp)
     dp.run_polling()
 
 

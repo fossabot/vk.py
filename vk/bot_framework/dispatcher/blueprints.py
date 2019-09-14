@@ -69,11 +69,7 @@ class AbstractBlueprint(ABC):
 
 
 class Blueprint(AbstractBlueprint):
-    def __init__(
-        self,
-        *rules: typing.Tuple[typing.Type[BaseRule]],
-        **named_rules: typing.Dict[str, typing.Any]
-    ):
+    def __init__(self, *rules: typing.Tuple[BaseRule], **named_rules):
         self.default_rules = rules
         self.default_named_rules = named_rules
 

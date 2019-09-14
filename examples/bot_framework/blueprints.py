@@ -3,7 +3,7 @@ import logging
 from vk import types
 from vk import VK
 from vk.bot_framework import Dispatcher
-from vk.bot_framework.dispatcher.blueprints import Blueprint
+from vk.bot_framework.dispatcher import Blueprint
 from vk.types import BotEvent
 from vk.utils import TaskManager
 

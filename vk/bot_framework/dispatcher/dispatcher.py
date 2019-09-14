@@ -1,6 +1,7 @@
 import logging
 import typing
 
+from .blueprints import Blueprint
 from .extension import BaseExtension
 from .extension import ExtensionsManager
 from .handler import Handler
@@ -200,6 +201,17 @@ class Dispatcher(ContextInstanceMixin):
         :return:
         """
         self._extensions_manager.setup(extension)
+
+    def setup_blueprint(self, blueprint: Blueprint):
+        for handler in blueprint.handlers.copy():
+            named_rules = self._rule_factory.get_rules(handler.named_rules)
+            handler.rules.extend(named_rules)
+            if handler.event_type is Event.MESSAGE_NEW:
+                self.register_message_handler(handler.coro, handler.rules)
+            else:
+                self.register_event_handler(
+                    handler.coro, handler.event_type, handler.rules
+                )
 
     def run_extension(self, name: str, **extension_init_params):
         """

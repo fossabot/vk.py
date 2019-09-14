@@ -41,9 +41,9 @@ class VK(ContextInstanceMixin):
 
         """
 
-        :param access_token: access token of VK user/community for access to VK methods.
-        :param loop: asyncio event loop, uses in Task manager/dispatcher extensions/etc.
-        :param client: aiohttp client session
+        :param str access_token: access token of VK user/community for access to VK methods.
+        :param AbstractEventLoop loop: asyncio event loop, uses in Task manager/dispatcher extensions/etc.
+        :param ClientSession client: aiohttp client session
         """
         self.access_token = access_token
         self.loop = loop if loop is not None else asyncio.get_event_loop()
@@ -64,9 +64,9 @@ class VK(ContextInstanceMixin):
     ) -> dict:
         """
 
-        :param method_name: method of name when need to call
-        :param params: parameters with method
-        :param _raw_mode: signal of return 'raw' response, or not (basically, returns response["response"])
+        :param str method_name: method of name when need to call
+        :param dict params: parameters with method
+        :param bool _raw_mode: signal of return 'raw' response, or not (basically, returns response["response"])
         :return:
         """
         if params is None or not isinstance(params, dict):
@@ -89,8 +89,8 @@ class VK(ContextInstanceMixin):
     async def api_request(self, method_name: str, params: dict = None) -> dict:
         """
         Send api request to VK server
-        :param method_name:
-        :param params:
+        :param method_name: method to execute
+        :param params: parameters of method
         :return:
         """
         if params:

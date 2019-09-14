@@ -62,13 +62,10 @@ Example of use bot framework, with docker integration [click](https://github.com
 - Bot framework out of-the-box.
 - Fully typed, thanks to Pydantic.
 - Compatible with PyPy.
-
-
-## Performance
-The fastest Python library for accessing VK API.
-
-- Accept and handle event from LongPoll API in bot framework (with sending a message to the user): lower than 0.1s
-- Check 100 handlers and execute 100 filters in bot framework (without sending a message to the user): lower than 0.001s
+- Have a lot of tools (in bot framework) out-of-the-box for creating largest and powerful applications:
+    * caching
+    * blueprints
+    * FSM (WIP)
 
 ## Alternatives
 

@@ -58,6 +58,8 @@ t1.py
 t2.py
 t3.py
 .test.txt
+exam.c
+exam.pyx
 
 # Django stuff:
 *.log

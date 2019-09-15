@@ -15,15 +15,15 @@ from vk.exceptions import APIErrorDispatcher
 from vk.methods import API
 from vk.utils import ContextInstanceMixin
 
+logger = logging.getLogger(__name__)
 
 try:
     import uvloop  # noqa
 
-    uvloop.install()
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     uvloop = None
-
-logger = logging.getLogger(__name__)
+    logging.debug("Uvloop not found.. will be used standart asyncio event-loop.")
 
 
 class VK(ContextInstanceMixin):
@@ -52,7 +52,6 @@ class VK(ContextInstanceMixin):
             if client is not None and isinstance(client, ClientSession)
             else ClientSession(json_serialize=JSON_LIBRARY.dumps)
         )
-        self.api_version = API_VERSION
 
         self.error_dispatcher = APIErrorDispatcher(self)
 
@@ -69,10 +68,13 @@ class VK(ContextInstanceMixin):
         :param bool _raw_mode: signal of return 'raw' response, or not (basically, returns response["response"])
         :return:
         """
+        if params:
+            params = {k: v for k, v in params.items() if v is not None}
+
         if params is None or not isinstance(params, dict):
             params = {}
 
-        params.update({"v": self.api_version, "access_token": self.access_token})
+        params.update({"v": API_VERSION, "access_token": self.access_token})
         logger.debug(f"Params to send: {params}")
         async with self.client.post(API_LINK + method_name, data=params) as response:
             json: typing.Dict = await response.json(loads=JSON_LIBRARY.loads)
@@ -93,8 +95,6 @@ class VK(ContextInstanceMixin):
         :param params: parameters of method
         :return:
         """
-        if params:
-            params = {k: v for k, v in params.items() if v is not None}
         return await self._api_request(method_name=method_name, params=params)
 
     async def execute_api_request(self, code: str) -> dict:

@@ -42,7 +42,7 @@ class TaskManager:
                 self.loop.run_until_complete(on_startup())
 
             if asyncio_debug_mode:
-                self.loop.set_debug(enabled=True)
+                self.loop.set_debug(True)
             if auto_reload:
                 if os.name == "nt" or os.name == "win32":
                     warnings.warn("Auto reload maybe unstable works on Windows")

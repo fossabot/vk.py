@@ -3,18 +3,23 @@ import concurrent.futures
 import multiprocessing
 import typing
 
-_pool = concurrent.futures.ThreadPoolExecutor(multiprocessing.cpu_count())
+_pool: concurrent.futures.ThreadPoolExecutor = concurrent.futures.ThreadPoolExecutor(
+    multiprocessing.cpu_count()
+)
 
 
 class BackgroundTask:
     def __init__(
         self,
         async_or_sync: typing.Union[typing.Awaitable, typing.Callable],
-        *async_or_sync_args
+        *async_or_sync_args: typing.Tuple[typing.Any]
     ):
         """
         Run task in background.
-        If task is synchronous his will running in ThreadPoolExecutor.
+        If task is synchronous it will running in ThreadPoolExecutor.
+
+        Pretty works with blocking tasks, bad works with cpu-bound tasks.
+
         :param async_or_sync:
         :param async_or_sync_args:
         """

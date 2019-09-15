@@ -53,7 +53,12 @@ class Dispatcher(ContextInstanceMixin):
         return self._storage
 
     @storage.setter
-    def storage(self, storage: AbstractStorage):
+    def storage(self, storage: typing.Union[AbstractAsyncStorage, AbstractStorage]):
+        """
+        Set storage in dispatcher.
+        :param storage:
+        :return:
+        """
         if not isinstance(storage, (AbstractStorage, AbstractAsyncStorage)):
             raise RuntimeError("Unexpected storage.")
         self._storage = storage
@@ -181,7 +186,7 @@ class Dispatcher(ContextInstanceMixin):
     def setup_middleware(self, middleware):
         """
         Add middleware to middlewares list with middleware manager.
-        :param middleware:
+        :param middleware: some middleware
         :return:
         """
         self._middleware_manager.setup(middleware)
@@ -189,7 +194,7 @@ class Dispatcher(ContextInstanceMixin):
     def setup_rule(self, rule):
         """
         Add named rule to named rules list with rule factory.
-        :param rule:
+        :param rule: some rule
         :return:
         """
         self._rule_factory.setup(rule)
@@ -197,12 +202,17 @@ class Dispatcher(ContextInstanceMixin):
     def setup_extension(self, extension: typing.Type[BaseExtension]):
         """
         Add extension to extensions list with extension manager.
-        :param extension:
+        :param extension: some extension
         :return:
         """
         self._extensions_manager.setup(extension)
 
     def setup_blueprint(self, blueprint: Blueprint):
+        """
+        Setup blueprint in application.
+        :param blueprint: blueprint instance
+        :return:
+        """
         for handler in blueprint.handlers.copy():
             named_rules = self._rule_factory.get_rules(handler.named_rules)
             handler.rules.extend(named_rules)
@@ -225,8 +235,8 @@ class Dispatcher(ContextInstanceMixin):
     @time_logging(logger)
     async def _process_event(self, event: dict):
         """
-        Handle 1 event coming from VK.
-        :param event:
+        Handle 1 event coming from extensions/vk.
+        :param event: 1 event coming from extensions/vk
         :return:
         """
         data = {}  # dict for transfer data from middlewares to handlers and filters.
@@ -271,7 +281,7 @@ class Dispatcher(ContextInstanceMixin):
     async def _process_events(self, events: typing.List[dict]):
         """
         Process events coming from extensions.
-        :param events: list of events.
+        :param events: list of events coming from extension/vk.
         :return:
         """
         for event in events:

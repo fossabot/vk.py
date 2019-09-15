@@ -33,7 +33,7 @@ def default_rules() -> dict:
         CountFwdMessages,
     )
 
-    _default_rules = {
+    _default_rules: dict = {
         "commands": Commands,
         "text": Text,
         "payload": Payload,
@@ -58,6 +58,6 @@ def default_extensions() -> dict:
     """
     from vk.bot_framework.extensions import Polling
 
-    _default_extensions = {"polling": Polling}
+    _default_extensions: dict = {"polling": Polling}
 
     return _default_extensions

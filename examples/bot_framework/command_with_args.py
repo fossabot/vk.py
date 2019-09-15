@@ -16,8 +16,11 @@ api = vk.get_api()
 dp = Dispatcher(vk, gid)
 
 
-async def arg_checker(arg: str):
+async def arg_checker(arg: str, message: types.Message):
     # some asynchronous operation...
+    # all async-validators accept message arg. example usecase:
+    # user introduce bad password, you can answer user about his error
+    # await message.answer("Bad password!")
     return True
 
 

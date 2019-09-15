@@ -152,7 +152,7 @@ class MessageArgsValidate(NamedRule):
         passed = True
         for validator, arg in zip(self.args_validators, args):
             if iscoroutinefunction(validator):
-                result = await validator(arg)
+                result = await validator(arg, message)
             else:
                 result = validator(arg)
             if not result:

@@ -5,6 +5,7 @@ from .blueprints import Blueprint
 from .extension import BaseExtension
 from .extension import ExtensionsManager
 from .handler import Handler
+from .middleware import BaseMiddleware
 from .middleware import MiddlewareManager
 from .rule import BaseRule
 from .rule import NamedRule
@@ -206,6 +207,17 @@ class Dispatcher(ContextInstanceMixin):
         :return:
         """
         self._extensions_manager.setup(extension)
+
+    def middleware(self):
+        """
+        Add middleware to middlewares list with decorator.
+        :return:
+        """
+
+        def decorator(middleware_instance: typing.Type[BaseMiddleware]):
+            self.setup_middleware(middleware_instance())
+
+        return decorator
 
     def setup_blueprint(self, blueprint: Blueprint):
         """

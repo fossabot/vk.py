@@ -1,10 +1,12 @@
-from vk import VK
-from vk.utils import TaskManager
-from vk.bot_framework import Dispatcher, rules
-from vk.bot_framework import BaseMiddleware, SkipHandler
-from vk import types
-
 import logging
+
+from vk import types
+from vk import VK
+from vk.bot_framework import BaseMiddleware
+from vk.bot_framework import Dispatcher
+from vk.bot_framework import rules
+from vk.bot_framework import SkipHandler
+from vk.utils import TaskManager
 
 logging.basicConfig(level="INFO")
 
@@ -17,6 +19,7 @@ api = vk.get_api()
 dp = Dispatcher(vk, gid)
 
 
+@dp.middleware()
 class MyMiddleware(BaseMiddleware):
     async def pre_process_event(self, event, data: dict):
         print("Called before handlers!")
@@ -31,7 +34,7 @@ class MyMiddleware(BaseMiddleware):
 
 @dp.message_handler(rules.Command("start"))
 async def handle(message: types.Message, data: dict):
-    print(data["my_message"]) # hello, handler!
+    print(data["my_message"])  # hello, handler!
     await message.reply("Hello!")
 
 
@@ -40,6 +43,6 @@ async def run():
 
 
 if __name__ == "__main__":
-    dp.setup_middleware(MyMiddleware())  # setup middleware
+    # or: dp.setup_middleware(MyMiddleware())
     task_manager.add_task(run)
     task_manager.run()

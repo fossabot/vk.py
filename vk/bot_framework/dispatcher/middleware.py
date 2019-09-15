@@ -1,8 +1,9 @@
-from abc import ABC, abstractmethod
-from .handler import SkipHandler
-
-import typing
 import logging
+import typing
+from abc import ABC
+from abc import abstractmethod
+
+from .handler import SkipHandler
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +33,7 @@ class MiddlewareManager:
                     f"Middleware {middleware.__class__.__name__} skip handler!"
                 )
                 _skip_handler = True
+                break  # skip other middlewares when middleware skip handler
 
         return _skip_handler, data
 

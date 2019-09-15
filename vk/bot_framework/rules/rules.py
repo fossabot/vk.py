@@ -1,5 +1,6 @@
 import logging
 import typing
+from asyncio import iscoroutinefunction
 
 from ..dispatcher.rule import BaseRule
 from ..dispatcher.rule import NamedRule
@@ -144,13 +145,16 @@ class MessageArgsValidate(NamedRule):
         count_validators = len(self.args_validators)
         if count_args != count_validators:
             logger.debug(
-                f"Received {count_args} in message. Passed validators {count_validators}"
+                f"Received {count_args} args in message. Passed validators {count_validators}"
             )
             logger.debug(f"Result of MessageArgsValidate rule: False")
             return False
         passed = True
         for validator, arg in zip(self.args_validators, args):
-            result = validator(arg)
+            if iscoroutinefunction(validator):
+                result = await validator(arg)
+            else:
+                result = validator(arg)
             if not result:
                 logger.debug("Result of MessageArgsValidate rule: False")
                 return False

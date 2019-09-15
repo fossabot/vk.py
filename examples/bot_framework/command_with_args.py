@@ -1,9 +1,9 @@
-from vk import VK
-from vk.utils import TaskManager
-from vk.bot_framework import Dispatcher
-from vk import types
-
 import logging
+
+from vk import types
+from vk import VK
+from vk.bot_framework import Dispatcher
+from vk.utils import TaskManager
 
 logging.basicConfig(level="INFO")
 
@@ -16,12 +16,27 @@ api = vk.get_api()
 dp = Dispatcher(vk, gid)
 
 
-@dp.message_handler(commands=["buy"], have_args=[lambda arg: arg.isdigit(), lambda arg: arg > 10])
+async def arg_checker(arg: str):
+    # some asynchronous operation...
+    return True
+
+
+@dp.message_handler(
+    commands=["buy"], have_args=[lambda arg: arg.isdigit(), lambda arg: arg > 10]
+)
 async def handler(message: types.Message, data: dict):
     """
     Validate args. You may add to list lambda`s, or sync func`s with 1 arg (arg) and returned bool-like value.
+    Or you can add to list async-validators (example usecase: you have 1 arg which signal of user id,
+    you want check this user_id, but your database support only asynchronous calls... You can add asynchronous validators! -
+    check example down).
     """
     await message.answer("Ok.")
+
+
+@dp.message_handler(commands=["send"], have_args=[arg_checker])
+async def async_arg_checker(message: types.Message, data: dict):
+    await message.answer("Sending...")
 
 
 @dp.message_handler(commands=["add"], count_args=2)

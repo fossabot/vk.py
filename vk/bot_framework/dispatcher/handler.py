@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import typing
 from types import FunctionType
@@ -42,7 +43,9 @@ class Handler:
             _execute = False
             ctx_handler_data = {}
             for rule in self.rules:
-                if isinstance(rule, FunctionType) or isinstance(rule, LambdaType):
+                if not asyncio.iscoroutinefunction(rule) and not isinstance(
+                    rule, BaseRule
+                ):
                     result = rule(*args)
                 else:
                     result = await rule(*args)

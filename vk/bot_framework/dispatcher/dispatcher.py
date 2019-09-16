@@ -90,7 +90,7 @@ class Dispatcher(ContextInstanceMixin):
 
     def message_handler(
         self,
-        *rules: typing.Tuple[typing.Type[BaseRule]],
+        *rules: typing.Tuple[typing.Type[BaseRule], typing.Callable, typing.Awaitable],
         commands: typing.Optional[typing.List[str]] = None,
         text: typing.Optional[str] = None,
         payload: typing.Optional[str] = None,

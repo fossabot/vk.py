@@ -1,8 +1,9 @@
-from vk.types.events.community.events_list import Event
-from vk.bot_framework.dispatcher.rule import BaseRule
-
-import typing
 import logging
+import typing
+from asyncio import iscoroutinefunction
+
+from vk.bot_framework.dispatcher.rule import BaseRule
+from vk.types.events.community.events_list import Event
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,10 @@ class Handler:
         if self.rules:
             _execute = False
             for rule in self.rules:
-                result = await rule(*args)
+                if not iscoroutinefunction(rule):
+                    result = rule(*args)
+                else:
+                    result = await rule(*args)
                 if not result:
                     _execute = False
                     break

@@ -19,18 +19,22 @@ class APIErrorHandler:
         :return:
         """
         try:
-            await self.handler(error)
+            return await self.handler(error)
         except Exception:  # noqa
             logging.exception("Exception occured in error handler...: ")
 
 
+if typing.TYPE_CHECKING:
+    from vk import VK
+
+
 class APIErrorDispatcher:
-    def __init__(self, vk):
+    def __init__(self, vk: "VK"):
         """
 
         :param vk:
         """
-        self.vk = vk
+        self.vk: "VK" = vk
         self._handlers: typing.List[APIErrorHandler] = []
 
         self._handlers.append(APIErrorHandler(6, self._to_many_requests_handler))

@@ -39,6 +39,7 @@ class Handler:
         # args - (event, data)
         if self.rules:
             _execute = False
+            ctx_handler_data = {}
             for rule in self.rules:
                 if not iscoroutinefunction(rule):
                     result = rule(*args)
@@ -47,12 +48,14 @@ class Handler:
                 if not result:
                     _execute = False
                     break
+                if isinstance(result, dict):
+                    ctx_handler_data.update(result)
                 _execute = True
 
             if _execute:
+                args[1].update(ctx_handler_data)
                 await self.handler(*args)
                 return True
-
         else:
             await self.handler(*args)
             return True

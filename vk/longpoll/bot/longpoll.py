@@ -84,15 +84,17 @@ class BotLongPoll(mixins.ContextInstanceMixin):
             )
             if updates.get("failed"):
                 raise Exception("Update key and server")
-            self.ts = updates.get("ts")
-            updates_new = updates.get("updates")
+            self.ts: typing.Optional[str] = updates.get("ts")
+            updates_new: typing.Optional[
+                typing.List[typing.Dict[str, typing.Any]]
+            ] = updates.get("updates")
             if updates_new:
                 logger.debug(f"Get updates from polling: {updates_new}")
                 return updates_new
         except Exception:  # noqa
-            logger.exception("Polling have trouble... Sleeping 1 minute..")
+            logger.exception("Polling have trouble... Sleeping 10 seconds..")
             await self._update_polling()
-            await asyncio.sleep(60)
+            await asyncio.sleep(10)
 
     async def run(self) -> dict:
         """

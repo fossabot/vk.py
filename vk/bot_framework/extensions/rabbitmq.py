@@ -43,6 +43,6 @@ class RabbitMQ(BaseExtension):
                     async with message.process():
                         events = JSON_LIBRARY.loads(message.body.decode())
                         if isinstance(events, list):
-                            dp._process_events(events)
+                            await dp._process_events(events)
                         else:
-                            dp._process_events([events])
+                            await dp._process_events([events])

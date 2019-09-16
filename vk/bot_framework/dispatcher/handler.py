@@ -1,6 +1,7 @@
 import logging
 import typing
-from asyncio import iscoroutinefunction
+from types import FunctionType
+from types import LambdaType
 
 from vk.bot_framework.dispatcher.rule import BaseRule
 from vk.types.events.community.events_list import Event
@@ -41,7 +42,7 @@ class Handler:
             _execute = False
             ctx_handler_data = {}
             for rule in self.rules:
-                if not iscoroutinefunction(rule):
+                if isinstance(rule, FunctionType) or isinstance(rule, LambdaType):
                     result = rule(*args)
                 else:
                     result = await rule(*args)

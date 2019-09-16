@@ -12,6 +12,7 @@ from .rule import NamedRule
 from .rule import RuleFactory
 from .storage import AbstractAsyncStorage
 from .storage import AbstractStorage
+from vk import types
 from vk import VK
 from vk.constants import default_extensions
 from vk.constants import default_rules
@@ -90,20 +91,22 @@ class Dispatcher(ContextInstanceMixin):
     def message_handler(
         self,
         *rules: typing.Tuple[typing.Type[BaseRule]],
-        commands=None,
-        text=None,
-        payload=None,
-        chat_action=None,
-        data_check=None,
-        count_args=None,
-        have_args=None,
-        in_chat=None,
-        in_pm=None,
-        from_bot=None,
-        with_reply_message=None,
-        with_fwd_messages=None,
-        count_fwd_messages=None,
-        **named_rules: typing.Dict[str, typing.Type[NamedRule]],
+        commands: typing.Optional[typing.List[str]] = None,
+        text: typing.Optional[str] = None,
+        payload: typing.Optional[str] = None,
+        chat_action: typing.Optional[types.message.Action] = None,
+        data_check: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
+        count_args: typing.Optional[int] = None,
+        have_args: typing.Optional[
+            typing.List[typing.Union[typing.Callable, typing.Awaitable]]
+        ] = None,
+        in_chat: typing.Optional[bool] = None,
+        in_pm: typing.Optional[bool] = None,
+        from_bot: typing.Optional[bool] = None,
+        with_reply_message: typing.Optional[bool] = None,
+        with_fwd_messages: typing.Optional[bool] = None,
+        count_fwd_messages: typing.Optional[int] = None,
+        **named_rules: typing.Dict[str, typing.Any],
     ):
         """
         Register message handler with decorator.

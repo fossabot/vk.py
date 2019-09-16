@@ -71,7 +71,7 @@ class VK(ContextInstanceMixin):
         if params:
             params = {k: v for k, v in params.items() if v is not None}
 
-        if params is None or not isinstance(params, dict):
+        elif params is None or not isinstance(params, dict):
             params = {}
 
         params.update({"v": API_VERSION, "access_token": self.access_token})

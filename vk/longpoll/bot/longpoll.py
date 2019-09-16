@@ -3,6 +3,7 @@ import logging
 import typing
 
 from vk import VK
+from vk.constants import API_VERSION
 from vk.constants import JSON_LIBRARY
 from vk.utils import mixins
 
@@ -27,9 +28,14 @@ class BotLongPoll(mixins.ContextInstanceMixin):
 
         self.runned = False
 
-        self._update_polling = self._prepare_longpoll
-
     async def _prepare_longpoll(self):
+        await self.vk.api_request(
+            "groups.setLongPollSettings",
+            {"group_id": self.group_id, "enabled": 1, "api_version": API_VERSION},
+        )
+        await self._update_polling()
+
+    async def _update_polling(self):
         """
         :return:
         """
@@ -39,7 +45,7 @@ class BotLongPoll(mixins.ContextInstanceMixin):
         self.ts = resp["ts"]
 
         logger.debug(
-            f"Prepare polling. Server - {self.server}. Key - {self.key}. TS - {self.ts}"
+            f"Update polling credentials. Server - {self.server}. Key - {self.key}. TS - {self.ts}"
         )
 
     async def get_server(self) -> dict:

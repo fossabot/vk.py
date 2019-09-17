@@ -18,6 +18,8 @@ class ExpiringDict(dict):
 
     def set_with_ttl(self, key, value, ttl: int):
         if ttl and isinstance(ttl, int):
+            if ttl == -1:
+                ttl = time.time()
             value = (value, time.time() + ttl)
         else:
             value = (value, time.time() + self._standart_ttl)
@@ -45,12 +47,12 @@ class ExpiringDict(dict):
             return item[0]
 
 
-class TTLRUStorage(AbstractAsyncExpiredStorage):
+class TTLDictStorage(AbstractAsyncExpiredStorage):
     def __init__(self):
         self._storage: ExpiringDict = ExpiringDict()
 
     async def place(
-        self, key: typing.AnyStr, value: typing.Any, expire: int = 10
+        self, key: typing.AnyStr, value: typing.Any, expire: int = -1
     ) -> None:
         if key in self._storage:
             raise RuntimeError("Storage already have this key.")
@@ -71,7 +73,7 @@ class TTLRUStorage(AbstractAsyncExpiredStorage):
             raise RuntimeError("Undefined key.")
 
     async def update(
-        self, key: typing.AnyStr, value: typing.Any, expire: int = 10
+        self, key: typing.AnyStr, value: typing.Any, expire: int = -1
     ) -> None:
         if key not in self._storage:
             raise RuntimeError("Storage don`t have this key.")

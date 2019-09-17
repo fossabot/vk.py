@@ -47,10 +47,12 @@ def cached_handler(
                     raise ValueError(
                         "Unexpected Response. Please return 'CachedResponse' for use this decorator"
                     )
-
-                await storage.place(
-                    cache_name, JSON_LIBRARY.dumps(result.dict()), expire=expire
-                )
+                try:
+                    await storage.place(
+                        cache_name, JSON_LIBRARY.dumps(result.dict()), expire=expire
+                    )
+                except RuntimeError:
+                    pass
                 return result
 
         return wrapped

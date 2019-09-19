@@ -36,9 +36,7 @@ def cooldown_handler(
             if not isinstance(message, Message):
                 raise RuntimeError("Cooldown supports only message hanlders")
             if for_specify_user:
-                cooldown_name = (
-                    f"__coro_tocooldown:{func.__name__}:user:{message.from_id}__"
-                )
+                cooldown_name = f"__coro_tocooldown:{func.__name__}:user:{message.from_id}_{message.peer_id}__"
             else:
                 cooldown_name = f"__coro_tocooldown:{func.__name__}__"
             have_cooldown = await storage.exists(cooldown_name)

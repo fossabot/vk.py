@@ -29,7 +29,7 @@ def cached_handler(
             if not isinstance(message, Message):
                 raise RuntimeError("Now caching only message handlers is supported.")
             if for_specify_user:
-                cache_name = f"__coro_tocache:{func.__name__}:user:{message.from_id}__"
+                cache_name = f"__coro_tocache:{func.__name__}:user:{message.from_id}_{message.peer_id}__"
             else:
                 cache_name = f"__coro_tocache:{func.__name__}__"
             in_cache = await storage.exists(cache_name)

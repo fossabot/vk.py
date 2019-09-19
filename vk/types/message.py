@@ -86,7 +86,7 @@ class Message(BaseModel):
     async def cached_answer(
         self, message: str, attachment: str = None, keyboard: dict = None
     ):
-        from vk.bot_framework.caching import CachedResponse
+        from vk.bot_framework.addons.caching import CachedResponse
 
         """
         Answer to message without reply.

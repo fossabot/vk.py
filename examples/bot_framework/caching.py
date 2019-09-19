@@ -4,7 +4,7 @@ from vk import types
 from vk import VK
 from vk.bot_framework import Dispatcher
 from vk.bot_framework import Storage
-from vk.bot_framework.caching import cached_handler
+from vk.bot_framework.addons.caching import cached_handler
 from vk.bot_framework.storages import RedisStorage
 from vk.utils import TaskManager
 

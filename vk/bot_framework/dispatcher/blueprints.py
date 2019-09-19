@@ -75,6 +75,34 @@ class Blueprint(AbstractBlueprint):
 
         self.handlers: typing.List[HandlerInBlueprint] = []
 
+        self._name = "A yet another blueprint"
+        self._description = "Hm..."
+        self._meta: dict = {}  # storage a any information here
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def description(self) -> str:
+        return self._description
+
+    @property
+    def meta(self) -> dict:
+        return self._meta
+
+    @name.setter
+    def name(self, new_name: str):
+        self._name = new_name
+
+    @description.setter
+    def description(self, new_description: str):
+        self._description = new_description
+
+    @meta.setter
+    def meta(self, new_meta: dict):
+        self._meta = new_meta
+
     def message_handler(
         self,
         *rules: typing.Tuple[typing.Type[BaseRule]],

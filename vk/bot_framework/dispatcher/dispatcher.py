@@ -8,7 +8,6 @@ from .handler import Handler
 from .middleware import BaseMiddleware
 from .middleware import MiddlewareManager
 from .rule import BaseRule
-from .rule import NamedRule
 from .rule import RuleFactory
 from .storage import AbstractAsyncStorage
 from .storage import AbstractStorage
@@ -38,7 +37,17 @@ class Dispatcher(ContextInstanceMixin):
 
         self._storage: typing.Optional[AbstractStorage, AbstractAsyncStorage] = None
 
+        self._registered_blueprints: typing.List[Blueprint] = []
+
         self.set_current(self)
+
+    @property
+    def handlers(self) -> typing.List[Handler]:
+        return self._handlers
+
+    @property
+    def registered_blueprints(self) -> typing.List[Blueprint]:
+        return self._registered_blueprints
 
     @property
     def group_id(self):
@@ -237,6 +246,7 @@ class Dispatcher(ContextInstanceMixin):
                 self.register_event_handler(
                     handler.coro, handler.event_type, handler.rules
                 )
+        self._registered_blueprints.append(blueprint)
 
     def run_extension(self, name: str, **extension_init_params):
         """

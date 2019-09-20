@@ -18,11 +18,11 @@ api = vk.get_api()
 dp = Dispatcher(vk, gid)
 
 keyboard = Keyboard(one_time=False)
-keyboard.add_text_button("Hello, my friend!", payload="hello")
+keyboard.add_text_button("Hello, my friend!", payload={"hello": "world"})
 keyboard.add_text_button("Another text", color=ButtonColor.SECONDARY)
 
 
-@dp.message_handler(payload="hello")
+@dp.message_handler(payload={"hello": "world"})
 async def handle_event(message: types.Message, data: dict):
     await message.reply("Hello :)")
 

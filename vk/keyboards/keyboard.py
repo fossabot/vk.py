@@ -36,7 +36,7 @@ class Keyboard:
         self.keyboard = {"one_time": one_time, "buttons": self.buttons}
 
     @staticmethod
-    def generate_payload(payload: str) -> str:
+    def generate_payload(payload: dict) -> str:
         if payload is None:
             payload = ""
         return payload
@@ -61,7 +61,7 @@ class Keyboard:
         current_row.append(action)
 
     def add_text_button(
-        self, text: str, color: ButtonColor = ButtonColor.PRIMARY, payload: str = None
+        self, text: str, color: ButtonColor = ButtonColor.PRIMARY, payload: dict = None
     ):
         """
 
@@ -95,7 +95,7 @@ class Keyboard:
 
         self._add_button(action)
 
-    def add_location_button(self, payload: str = None):
+    def add_location_button(self, payload: dict = None):
         """
 
         :param payload:
@@ -108,7 +108,7 @@ class Keyboard:
 
         self._add_button(action)
 
-    def add_vkpay_button(self, hash: str, payload: str = None):
+    def add_vkpay_button(self, hash: str, payload: dict = None):
         """
 
         :param hash:
@@ -124,7 +124,7 @@ class Keyboard:
 
         self._add_button(action)
 
-    def add_vkapps_button(self, app_id: int, owner_id: int, payload: str = None):
+    def add_vkapps_button(self, app_id: int, owner_id: int, payload: dict = None):
         """
 
         :param app_id:

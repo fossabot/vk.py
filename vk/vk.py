@@ -77,7 +77,9 @@ class VK(ContextInstanceMixin):
         params.update({"v": API_VERSION, "access_token": self.access_token})
         logger.debug(f"Params to send: {params}")
         async with self.client.post(API_LINK + method_name, data=params) as response:
-            json: typing.Dict = await response.json(loads=JSON_LIBRARY.loads)
+            json: typing.Dict[str, typing.Any] = await response.json(
+                loads=JSON_LIBRARY.loads
+            )
             logger.debug(f"Method {method_name} called. Response from API: {json}")
             if "error" in json:
                 return await self.error_dispatcher.error_handle(json)
@@ -85,8 +87,7 @@ class VK(ContextInstanceMixin):
             if _raw_mode:
                 return json
 
-            response = json["response"]
-            return response
+            return json["response"]
 
     async def api_request(self, method_name: str, params: dict = None) -> dict:
         """

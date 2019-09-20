@@ -5,7 +5,6 @@ from enum import Enum
 from ..exceptions import KeyboardException
 from vk.constants import JSON_LIBRARY
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -36,6 +35,12 @@ class Keyboard:
         self.buttons = [[]]
         self.keyboard = {"one_time": one_time, "buttons": self.buttons}
 
+    @staticmethod
+    def generate_payload(payload: str) -> str:
+        if payload is None:
+            payload = ""
+        return payload
+
     def add_row(self):
         """
 
@@ -56,7 +61,7 @@ class Keyboard:
         current_row.append(action)
 
     def add_text_button(
-        self, text: str, color: ButtonColor = ButtonColor.PRIMARY, payload=None
+        self, text: str, color: ButtonColor = ButtonColor.PRIMARY, payload: str = None
     ):
         """
 
@@ -65,10 +70,7 @@ class Keyboard:
         :param payload:
         :return:
         """
-        if payload is None:
-            payload = ""
-
-        payload = JSON_LIBRARY.dumps(payload)
+        payload = self.generate_payload(payload)
 
         if not isinstance(color, ButtonColor):
             logger.warning("Invalid button color. Used 'PRIMARY'")
@@ -100,10 +102,7 @@ class Keyboard:
         :return:
         """
 
-        if payload is None:
-            payload = ""
-
-        payload = JSON_LIBRARY.dumps(payload)
+        payload = self.generate_payload(payload)
 
         action = {"action": {"type": ButtonType.LOCATION.value, "payload": payload}}
 
@@ -117,10 +116,7 @@ class Keyboard:
         :return:
         """
 
-        if payload is None:
-            payload = ""
-
-        payload = JSON_LIBRARY.dumps(payload)
+        payload = self.generate_payload(payload)
 
         action = {
             "action": {"type": ButtonType.VKPAY.value, "payload": payload, "hash": hash}
@@ -136,10 +132,7 @@ class Keyboard:
         :param payload:
         :return:
         """
-        if payload is None:
-            payload = ""
-
-        payload = JSON_LIBRARY.dumps(payload)
+        payload = self.generate_payload(payload)
 
         action = {
             "action": {
@@ -165,6 +158,6 @@ class Keyboard:
 
         :return:
         """
-        keyboard = cls(one_time=True)
+        keyboard = cls(one_time=True)  # noqa
         keyboard.keyboard["buttons"] = []
         return keyboard.get_keyboard()

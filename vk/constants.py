@@ -1,15 +1,29 @@
 """
 A file which contains all project constants.
 """
+from vk.utils._json import AbstractJsonLibrary
+from vk.utils._json import JsonLibrary
 
 API_VERSION: str = "5.101"  # current api version https://vk.com/dev/versions
 API_LINK: str = "https://api.vk.com/method/"  # link to access API
 
 try:
-    import ujson as json  # noqa
+    import orjson  # noqa
 except ImportError:
+    orjson = None
+
+try:
+    import ujson  # noqa
+except ImportError:
+    ujson = None
+
+if not (ujson or orjson):
     import json
-JSON_LIBRARY = json
+else:
+    json = None
+
+_JSONLIB: AbstractJsonLibrary = [lib for lib in [orjson, ujson, json] if lib][0]  # noqa
+JSON_LIBRARY = JsonLibrary(_JSONLIB)
 
 
 def default_rules() -> dict:

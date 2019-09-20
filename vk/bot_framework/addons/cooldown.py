@@ -8,8 +8,6 @@ from vk.bot_framework.dispatcher.storage import AbstractAsyncExpiredStorage
 from vk.types.message import Message
 
 COOLDOWN_MESSAGE = "Please, wait: {cooldown} seconds"  # replace this in own code by:
-
-
 # set_cooldown_message(message)
 
 

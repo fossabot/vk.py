@@ -17,6 +17,11 @@ Built-in rules.
 
 class Command(BaseRule):
     prefix = "/"
+    meta = {
+        "name": "Command",
+        "description": "A simple rule for checking messages for the specified command",
+        "deprecated": False,
+    }
 
     def __init__(self, command: str = None):
         self.command: str = command
@@ -31,6 +36,11 @@ class Command(BaseRule):
 
 class Text(NamedRule):
     key = "text"
+    meta = {
+        "name": "Text",
+        "description": "A simple rule for checking message for the specified text",
+        "deprecated": False,
+    }
 
     def __init__(self, text: str):
         self.text: str = text
@@ -47,6 +57,11 @@ class Commands(NamedRule):
     key = "commands"
 
     prefix = "/"  # prefix for command
+    meta = {
+        "name": "Commands",
+        "description": "A simple rule for checking messages for the specified commands",
+        "deprecated": False,
+    }
 
     def __init__(self, commands: typing.List[str]):
         self.commands = commands
@@ -65,6 +80,11 @@ class Commands(NamedRule):
 
 class Payload(NamedRule):
     key = "payload"
+    meta = {
+        "name": "Payload",
+        "description": "A simple rule for checking messages for the specified payload",
+        "deprecated": False,
+    }
 
     def __init__(self, payload: dict):
         self.payload = payload
@@ -82,6 +102,11 @@ class Payload(NamedRule):
 
 class ChatAction(NamedRule):
     key = "chat_action"
+    meta = {
+        "name": "ChatAction",
+        "description": "A simple rule for checking messages for the specified chat_action",
+        "deprecated": False,
+    }
 
     def __init__(self, action: Action):
         self.action = action
@@ -97,6 +122,11 @@ class ChatAction(NamedRule):
 
 class DataCheck(NamedRule):
     key = "data_check"
+    meta = {
+        "name": "DataCheck",
+        "description": "A simple rule for checking 'data' variable for the specified data",
+        "deprecated": False,
+    }
 
     def __init__(self, data: typing.Dict[str, typing.Any]):
         self.data = data  # for example: {"my_key": "my_value"}
@@ -119,6 +149,11 @@ class MessageCountArgs(NamedRule):
     """
 
     key = "count_args"
+    meta = {
+        "name": "MessageCountArgs",
+        "description": "A simple rule for checking messages for the specified count of arguments",
+        "deprecated": False,
+    }
 
     def __init__(self, count_args: int):
         self.count_args = count_args
@@ -137,6 +172,11 @@ class MessageArgsValidate(NamedRule):
     """
 
     key = "have_args"
+    meta = {
+        "name": "MessageArgsValidate",
+        "description": "A simple rule for checking messages for the specified args",
+        "deprecated": False,
+    }
 
     def __init__(self, args_validators: typing.List[typing.Callable]):
         self.args_validators = args_validators
@@ -166,6 +206,11 @@ class MessageArgsValidate(NamedRule):
 
 class InChat(NamedRule):
     key = "in_chat"
+    meta = {
+        "name": "InChat",
+        "description": "A simple rule for checking messages for the specified peer_id (in chat)",
+        "deprecated": False,
+    }
 
     def __init__(self, in_chat: bool):
         self.in_chat: bool = in_chat
@@ -180,6 +225,12 @@ class InChat(NamedRule):
 
 class InPersonalMessages(NamedRule):
     key = "in_pm"
+    meta = {
+        "name": "InPersonalMessages",
+        "description": "A simple rule for checking messages for the specified peer_id (in "
+        "personal messages)",
+        "deprecated": False,
+    }
 
     def __init__(self, in_pm: bool):
         self.in_pm: bool = in_pm
@@ -194,6 +245,11 @@ class InPersonalMessages(NamedRule):
 
 class FromBot(NamedRule):
     key = "from_bot"
+    meta = {
+        "name": "FromBot",
+        "description": "A simple rule for checking messages for the specified peer_id (from bot)",
+        "deprecated": False,
+    }
 
     def __init__(self, from_bot: bool):
         self.from_bot: bool = from_bot
@@ -208,6 +264,11 @@ class FromBot(NamedRule):
 
 class WithReplyMessage(NamedRule):
     key = "with_reply_message"
+    meta = {
+        "name": "WithReplyMessage",
+        "description": "A simple rule for checking messages for the availablity reply message",
+        "deprecated": False,
+    }
 
     def __init__(self, with_reply_message: bool):
         self.with_reply_message: bool = with_reply_message
@@ -219,6 +280,11 @@ class WithReplyMessage(NamedRule):
 
 class WithFwdMessages(NamedRule):
     key = "with_fwd_messages"
+    meta = {
+        "name": "WithFwdMessages",
+        "description": "A simple rule for checking messages for the availablity forward messages",
+        "deprecated": False,
+    }
 
     def __init__(self, with_fwd_messages: bool):
         self.with_reply_message: bool = with_fwd_messages
@@ -230,6 +296,11 @@ class WithFwdMessages(NamedRule):
 
 class CountFwdMessages(NamedRule):
     key = "count_fwd_messages"
+    meta = {
+        "name": "CountFwdMessages",
+        "description": "A simple rule for checking messages for count of forwarded messages",
+        "deprecated": False,
+    }
 
     def __init__(self, count_fwd_messages: int):
         self.count_fwd_messages: int = count_fwd_messages

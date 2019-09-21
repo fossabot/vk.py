@@ -43,19 +43,39 @@ class Dispatcher(ContextInstanceMixin):
 
     @property
     def handlers(self) -> typing.List[Handler]:
+        """
+        Returns a list of registered handlers.
+        :return:
+        """
         return self._handlers
 
     @property
     def registered_blueprints(self) -> typing.List[Blueprint]:
+        """
+        Returns a list of registered blueprints.
+        :return:
+        """
         return self._registered_blueprints
 
     @property
     def group_id(self):
+        """
+        Returns a group id.
+        :return:
+        """
         return self._group_id
 
     @property
     def vk(self):
         return self._vk
+
+    @property
+    def middlewares(self):
+        """
+        Returns a list of registered middlewares.
+        :return:
+        """
+        return self._middleware_manager.middlewares
 
     @property
     def storage(self):

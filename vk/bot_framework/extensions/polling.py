@@ -14,13 +14,12 @@ class Polling(BaseExtension):
         self._longpoll: BotLongPoll = BotLongPoll(group_id, vk)
 
     async def get_events(self) -> typing.List:
-        events = await self._longpoll.listen()
-        return events
+        return await self._longpoll.listen()
 
     async def run(self, dp):
         await self._longpoll._prepare_longpoll()
+
         logger.info("Polling started!")
+
         while True:
-            events = await self.get_events()
-            if events:
-                await dp._process_events(events)
+            await dp._process_events(await self.get_events())

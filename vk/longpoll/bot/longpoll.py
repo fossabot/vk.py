@@ -22,9 +22,9 @@ class BotLongPoll(mixins.ContextInstanceMixin):
         """
         self.vk = vk
         self.group_id = group_id
-        self.server = None
-        self.key = None
-        self.ts = None
+        self.server: typing.Optional[str] = None
+        self.key: typing.Optional[str] = None
+        self.ts: typing.Optional[str] = None
 
         self.runned = False
 
@@ -82,29 +82,46 @@ class BotLongPoll(mixins.ContextInstanceMixin):
             updates = await self.get_updates(
                 key=self.key, server=self.server, ts=self.ts
             )
+
+            # Handle errors from vkontakte 
             if updates.get("failed"):
-                raise Exception("Update key and server")
-            self.ts: typing.Optional[str] = updates.get("ts")
-            updates_new: typing.Optional[
-                typing.List[typing.Dict[str, typing.Any]]
-            ] = updates.get("updates")
-            if updates_new:
-                logger.debug(f"Get updates from polling: {updates_new}")
-                return updates_new
+                logger.debug(f"Longpolling responded with failed: {updates['failed']}")
+
+                if updates["failed"] == 1:
+                    self.ts = updates["ts"]
+                elif updates["failed"] in (2, 3):
+                    await self._update_polling()
+
+                return []
+
+            if "ts" not in updates or "updates" not in updates:
+                raise Exception("Vkontakte responded with incorrect reponse")
+
+            self.ts = updates["ts"]
+            
+            logger.debug(f"Got updates through polling: {updates['updates']}")
+            
+            return updates["updates"]
+
         except Exception:  # noqa
-            logger.exception("Polling have trouble... Sleeping 10 seconds..")
-            await self._update_polling()
+            logger.exception("Received exception while polling... Sleeping 10 seconds...")
+            
             await asyncio.sleep(10)
+            await self._update_polling()
+
+            return []
 
     async def run(self) -> dict:
         """
 
         :return: last update coming from VK
         """
+
         if not self.runned:
             await self._prepare_longpoll()
             self.runned = True
             logger.info("Polling started!")
+
         while True:
             events = await self.listen()
             if events:

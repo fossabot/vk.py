@@ -16,8 +16,9 @@ Built-in rules.
 
 
 class Command(BaseRule):
+    prefix = "/"
+
     def __init__(self, command: str = None):
-        self.prefix = "/"
         self.command: str = command
 
     async def check(self, message: types.Message, data: dict):
@@ -45,9 +46,10 @@ class Text(NamedRule):
 class Commands(NamedRule):
     key = "commands"
 
+    prefix = "/"  # prefix for command
+
     def __init__(self, commands: typing.List[str]):
         self.commands = commands
-        self.prefix = "/"
 
     async def check(self, message: types.Message, data: dict):
         passed = False
@@ -64,7 +66,7 @@ class Commands(NamedRule):
 class Payload(NamedRule):
     key = "payload"
 
-    def __init__(self, payload: str):
+    def __init__(self, payload: dict):
         self.payload = payload
 
     async def check(self, message: types.Message, data: dict):

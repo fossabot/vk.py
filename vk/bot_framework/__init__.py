@@ -1,3 +1,6 @@
+"""
+Easy to learn, fast to code, built on vk.py.
+"""
 from .dispatcher import Dispatcher
 from .dispatcher.handler import SkipHandler
 from .dispatcher.storage import Storage

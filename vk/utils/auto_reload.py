@@ -27,7 +27,6 @@ async def _auto_reload():
     """
     Coro which see changes in your code and restart him.
 
-    WARNING: unstable work in Windows.
     :return:
     """
     async for _ in awatch("."):

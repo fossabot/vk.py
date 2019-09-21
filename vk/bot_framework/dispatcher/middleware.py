@@ -20,6 +20,11 @@ class MiddlewareManager:
         if middleware.is_configured():
             raise RuntimeError("Middleware already configured!")
 
+        if middleware.meta and middleware.meta.get("deprecated", False):
+            raise DeprecationWarning(
+                f"This middleware (({middleware.__class__.__name__})) deprecated."
+            )
+
         self.middlewares.append(middleware)
         logger.info(f"Middleware '{middleware.__class__.__name__}' successfully added!")
 
@@ -62,7 +67,9 @@ class AbstractMiddleware(ABC):
         pass
 
 
-class BaseMiddleware(AbstractMiddleware):
+class BaseMiddleware(AbstractMiddleware, ABC):
+    meta = None
+
     def __init__(self):
         self._manager = None
         self._configured = False

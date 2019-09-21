@@ -60,7 +60,12 @@ class RuleFactory:
         rules = []
         for key, value in user_rules.items():
             if key in self.config:
-                rules.append(self.config[key](value))
+                rule: BaseRule = self.config[key](value)
+                if rule.meta and rule.meta.get("deprecated", False):
+                    raise DeprecationWarning(
+                        f"This rule ({rule.__class__.__name__}) deprecated."
+                    )
+                rules.append(rule)
                 continue
             else:
                 raise RuntimeError(f"Unknown rule passed: {key}")

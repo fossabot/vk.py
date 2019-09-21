@@ -1,8 +1,6 @@
 import asyncio
 import logging
 import typing
-from types import FunctionType
-from types import LambdaType
 
 from vk.bot_framework.dispatcher.rule import BaseRule
 from vk.types.events.community.events_list import Event

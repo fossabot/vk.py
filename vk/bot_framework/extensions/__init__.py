@@ -1,2 +1,3 @@
-from .polling import Polling  # noqa
-from .rabbitmq import RabbitMQ  # noqa
+from .kafka import Kafka
+from .polling import Polling
+from .rabbitmq import RabbitMQ

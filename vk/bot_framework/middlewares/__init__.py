@@ -1,1 +1,1 @@
-from .middlewares import SimpleLoggingMiddleware, OnlyMessagesMiddleware
+from .middlewares import *

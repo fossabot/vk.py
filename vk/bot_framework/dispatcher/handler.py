@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class SkipHandler(Exception):
     """
-    Raise this which you want skip handlers.
+    Raise this when you want skip handlers.
     """
 
     pass
@@ -31,6 +31,16 @@ class Handler:
         self.event_type: Event = event_type
         self.handler: typing.Callable = handler
         self.rules: typing.List[BaseRule] = rules
+
+        self._meta: typing.Dict[str, typing.Any] = {}
+
+    @property
+    def meta(self):
+        return self._meta
+
+    @meta.setter
+    def meta(self, value: typing.Dict[str, typing.Any]):
+        self._meta = value
 
     async def execute_handler(self, *args):
         """

@@ -74,6 +74,29 @@ class Dispatcher(ContextInstanceMixin):
             raise RuntimeError("Unexpected storage.")
         self._storage = storage
 
+    def described_handler(
+        self,
+        name: str = None,
+        description: str = None,
+        deprecated: bool = False,
+        **other_meta: dict,
+    ):
+        def decorator(coro: typing.Callable):
+            for handler in self.handlers:
+                if id(handler.handler) == id(coro):
+                    meta = {
+                        "name": name,
+                        "description": description,
+                        "deprecated": deprecated,
+                        **other_meta,
+                    }
+                    if handler.handler.__doc__:  # or set description in comments
+                        meta["description"] = handler.handler.__doc__
+                    handler.meta = {k: v for k, v in meta.items() if v is not None}
+                    break
+
+        return decorator
+
     def _register_handler(self, handler: Handler):
         """
         Append handler to handlers list

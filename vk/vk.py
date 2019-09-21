@@ -59,13 +59,18 @@ class VK(ContextInstanceMixin):
         VK.set_current(self)
 
     async def _api_request(
-        self, method_name: typing.AnyStr, params: dict = None, _raw_mode: bool = False
+        self,
+        method_name: typing.AnyStr,
+        params: dict = None,
+        _raw_mode: bool = False,
+        ignore_errors: bool = False,
     ) -> dict:
         """
 
         :param str method_name: method of name when need to call
         :param dict params: parameters with method
         :param bool _raw_mode: signal of return 'raw' response, or not (basically, returns response["response"])
+        :param ignore_errors: signal of errors ignore
         :return:
         """
         if params:
@@ -82,18 +87,21 @@ class VK(ContextInstanceMixin):
             )
             logger.debug(f"Method {method_name} called. Response from API: {json}")
             if "error" in json:
-                return await self.error_dispatcher.error_handle(json)
+                return await self.error_dispatcher.error_handle(json, ignore_errors)
 
             if _raw_mode:
                 return json
 
             return json["response"]
 
-    async def api_request(self, method_name: str, params: dict = None) -> dict:
+    async def api_request(
+        self, method_name: str, params: dict = None, ignore_errors: bool = False
+    ) -> dict:
         """
         Send api request to VK server
         :param method_name: method to execute
         :param params: parameters of method
+        :param ignore_errors: signal of errors ignore
         :return:
         """
         return await self._api_request(method_name=method_name, params=params)

@@ -95,7 +95,7 @@ class BotLongPoll(mixins.ContextInstanceMixin):
                 return []
 
             if "ts" not in updates or "updates" not in updates:
-                raise Exception("Vkontakte responded with incorrect reponse")
+                raise Exception("Vkontakte responded with incorrect response")
 
             self.ts = updates["ts"]
             

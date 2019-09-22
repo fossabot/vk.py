@@ -49,6 +49,16 @@ class Dispatcher(ContextInstanceMixin):
         """
         return self._handlers
 
+    def get_handler(self, handler_coro: typing.Callable):
+        """
+        Get handler object by handler coroutine.
+        :param handler_coro:
+        :return:
+        """
+        for handler in self.handlers:
+            if handler.handler is handler_coro:
+                return handler
+
     @property
     def registered_blueprints(self) -> typing.List[Blueprint]:
         """
@@ -102,18 +112,18 @@ class Dispatcher(ContextInstanceMixin):
         **other_meta: dict,
     ):
         def decorator(coro: typing.Callable):
-            for handler in self.handlers:
-                if id(handler.handler) == id(coro):
-                    meta = {
-                        "name": name,
-                        "description": description,
-                        "deprecated": deprecated,
-                        **other_meta,
-                    }
-                    if handler.handler.__doc__:  # or set description in comments
-                        meta["description"] = handler.handler.__doc__
-                    handler.meta = {k: v for k, v in meta.items() if v is not None}
-                    break
+            handler = self.get_handler(coro)
+            if not handler:
+                raise RuntimeError("Handler not registered.")
+            meta = {
+                "name": name,
+                "description": description,
+                "deprecated": deprecated,
+                **other_meta,
+            }
+            if handler.handler.__doc__:  # or set description in comments
+                meta["description"] = handler.handler.__doc__.strip()
+            handler.meta = {k: v for k, v in meta.items() if v is not None}
 
         return decorator
 

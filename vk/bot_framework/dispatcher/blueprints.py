@@ -73,11 +73,15 @@ class Blueprint(AbstractBlueprint):
         self.default_rules = rules
         self.default_named_rules = named_rules
 
-        self.handlers: typing.List[HandlerInBlueprint] = []
+        self._handlers: typing.List[HandlerInBlueprint] = []
 
         self._name = "A yet another blueprint"
         self._description = "Hm..."
         self._meta: dict = {}  # storage a any information here
+
+    @property
+    def handlers(self):
+        return self._handlers
 
     @property
     def name(self) -> str:

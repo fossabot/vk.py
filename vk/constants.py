@@ -45,6 +45,7 @@ def default_rules() -> dict:
         WithReplyMessage,
         WithFwdMessages,
         CountFwdMessages,
+        Regex,
     )
 
     _default_rules: dict = {
@@ -61,6 +62,7 @@ def default_rules() -> dict:
         "with_reply_message": WithReplyMessage,
         "with_fwd_messages": WithFwdMessages,
         "count_fwd_messages": CountFwdMessages,
+        "regex": Regex,
     }
     return _default_rules
 

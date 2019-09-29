@@ -77,6 +77,10 @@ class Dispatcher(ContextInstanceMixin):
 
     @property
     def vk(self):
+        """
+        Returns a passed vk object.
+        :return:
+        """
         return self._vk
 
     @property
@@ -121,7 +125,7 @@ class Dispatcher(ContextInstanceMixin):
                 "deprecated": deprecated,
                 **other_meta,
             }
-            if handler.handler.__doc__:  # or set description in comments
+            if handler.handler.__doc__:  # or set description in docstring
                 meta["description"] = handler.handler.__doc__.strip()
             handler.meta = {k: v for k, v in meta.items() if v is not None}
 

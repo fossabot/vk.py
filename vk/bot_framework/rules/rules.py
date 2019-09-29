@@ -1,4 +1,5 @@
 import logging
+import re
 import typing
 from asyncio import iscoroutinefunction
 
@@ -310,4 +311,23 @@ class CountFwdMessages(NamedRule):
         result = count == self.count_fwd_messages
         logger.debug(f"Received fwd_messages: {count}")
         logger.debug(f"Result of CountFwdMessages rule: {result}")
+        return result
+
+
+class Regex(NamedRule):
+    key = "regex"
+    meta = {
+        "name": "regex",
+        "description": "A simple rule for checking message text via regex",
+        "deprecated": False,
+    }
+
+    def __init__(self, pattern: str):
+        self.pattern: typing.Pattern = re.compile(pattern, re.IGNORECASE | re.MULTILINE)
+
+    async def check(self, message: types.Message, data: dict):
+        msg = message.text.lower()
+        result = re.search(self.pattern, msg)
+        logger.debug(f"Processing text of message. Text in message: {msg}")
+        logger.debug(f"Result of Regex rule: {result}")
         return result

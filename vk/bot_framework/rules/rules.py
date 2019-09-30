@@ -57,7 +57,7 @@ class Text(NamedRule):
 class Commands(NamedRule):
     key = "commands"
 
-    prefix = "/"  # prefix for command
+    prefix: typing.Iterable = "/"  # prefixes for command
     meta = {
         "name": "Commands",
         "description": "A simple rule for checking messages for the specified commands",
@@ -71,9 +71,13 @@ class Commands(NamedRule):
         passed = False
         msg = message.text.lower().split()[0]
         for command in self.commands:
-            if msg == f"{self.prefix}{command}":
-                passed = True
+            if passed:
                 break
+            for prefix in self.prefix:
+                if msg == f"{prefix}{command}":
+                    passed = True
+                    break
+
         logger.debug(f"Processing text of message. Text in message: {msg}")
         logger.debug(f"Result of Commands rule: {passed}")
         return passed

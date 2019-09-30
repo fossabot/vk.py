@@ -24,6 +24,8 @@ async def valid_id(arg: str, message: Message):
     try:
         result = await vk.api_request("users.get", {"user_ids": arg})
     except APIException:
+        if have_answer:
+            await message.answer(have_answer)
         return False
     if not result and have_answer:
         await message.answer(have_answer)

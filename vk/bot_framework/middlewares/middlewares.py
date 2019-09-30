@@ -1,5 +1,4 @@
 import logging
-import time
 
 from ..dispatcher.handler import SkipHandler
 from ..dispatcher.middleware import BaseMiddleware

@@ -202,6 +202,8 @@ class MessageArgsValidate(NamedRule):
                 logger.debug("Result of MessageArgsValidate rule: False")
                 return False
         logger.debug(f"Result of MessageArgsValidate rule: {passed}")
+        if passed:
+            return {"args": message.get_args()}
         return passed
 
 

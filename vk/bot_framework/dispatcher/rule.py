@@ -62,8 +62,8 @@ class RuleFactory:
             if key in self.config:
                 rule: BaseRule = self.config[key](value)
                 if rule.meta and rule.meta.get("deprecated", False):
-                    raise DeprecationWarning(
-                        f"This rule ({rule.__class__.__name__}) deprecated."
+                    logger.warning(
+                        f"This rule ({rule.__class__.__name__}) deprecated. Not recommended to use."
                     )
                 rules.append(rule)
                 continue

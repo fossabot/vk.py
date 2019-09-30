@@ -21,8 +21,8 @@ class MiddlewareManager:
             raise RuntimeError("Middleware already configured!")
 
         if middleware.meta and middleware.meta.get("deprecated", False):
-            raise DeprecationWarning(
-                f"This middleware (({middleware.__class__.__name__})) deprecated."
+            logger.warning(
+                f"This middleware (({middleware.__class__.__name__})) deprecated. Not recommended to use."
             )
 
         self.middlewares.append(middleware)

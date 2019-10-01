@@ -17,15 +17,20 @@ api = vk.get_api()
 
 dp = Dispatcher(vk, gid)
 storage = TTLDictStorage()  # in RAM
-cooldown.set_cooldown_message(
-    "Oh... Please wait {cooldown} seconds..."
-)  # or use standart message
+cd = cooldown.Cooldown(storage, standart_cooldown_time=10)
+
+
+# or you can pass own standart cd_time, message, etc...
 
 
 @dp.message_handler(text="text")
-@cooldown.cooldown_handler(
-    storage, cooldown_time=10, for_specify_user=True
-)  # have a simply design
+@cd.cooldown_handler(cooldown_time=10, for_specify_user=True)
+async def test(msg: types.Message, data):
+    await msg.answer("Hello!")
+
+
+@dp.message_handler(text="text2")
+@cd.cooldown_handler(cooldown_message="Please... Wait... {cooldown}.... seconds....")
 async def test(msg: types.Message, data):
     await msg.answer("Hello!")
 

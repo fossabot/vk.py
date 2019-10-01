@@ -19,7 +19,7 @@ async def valid_id(arg: str, message: Message):
 
     @dp.message_handler(commands=["hello"], have_args=[validators.valid_id])
     async def handle(message: types.Message, data: dict):
-        usr: types.Message = data["valid_id_user"]
+        usr: types.User = data["valid_id_user"]
         await message.answer(usr.first_name)
     :param message:
     :param arg:

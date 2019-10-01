@@ -37,6 +37,7 @@ class Command(BaseRule):
 
 class Text(NamedRule):
     key = "text"
+    IGNORE_CASE = True
     meta = {
         "name": "Text",
         "description": "A simple rule for checking message for the specified text",
@@ -47,7 +48,10 @@ class Text(NamedRule):
         self.text: str = text
 
     async def check(self, message: types.Message, data: dict):
-        msg = message.text.lower()
+        if self.IGNORE_CASE:
+            msg = message.text.lower()
+        else:
+            msg = message.text
         result = msg == self.text.lower()
         logger.debug(f"Processing text of message. Text in message: {msg}")
         logger.debug(f"Result of Text rule: {result}")
@@ -58,6 +62,7 @@ class Commands(NamedRule):
     key = "commands"
 
     prefix: typing.Iterable = "/"  # prefixes for command
+    IGNORE_CASE = True
     meta = {
         "name": "Commands",
         "description": "A simple rule for checking messages for the specified commands",
@@ -69,7 +74,10 @@ class Commands(NamedRule):
 
     async def check(self, message: types.Message, data: dict):
         passed = False
-        msg = message.text.lower().split()[0]
+        if self.IGNORE_CASE:
+            msg = message.text.lower().split()[0]
+        else:
+            msg = message.text.split()[0]
         for command in self.commands:
             if passed:
                 break

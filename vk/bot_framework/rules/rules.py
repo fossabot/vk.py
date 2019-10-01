@@ -205,6 +205,7 @@ class MessageArgsValidate(NamedRule):
             logger.debug(f"Result of MessageArgsValidate rule: False")
             return False
         passed = True
+        ctx_data = {}  # can send data from validators.
         for validator, arg in zip(self.args_validators, args):
             if iscoroutinefunction(validator):
                 result = await validator(arg, message)
@@ -213,9 +214,11 @@ class MessageArgsValidate(NamedRule):
             if not result:
                 logger.debug("Result of MessageArgsValidate rule: False")
                 return False
+            if isinstance(result, dict):
+                ctx_data.update(**result)
         logger.debug(f"Result of MessageArgsValidate rule: {passed}")
         if passed:
-            return {"args": message.get_args()}
+            return {"args": message.get_args(), **ctx_data}
         return passed
 
 

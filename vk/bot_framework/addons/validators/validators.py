@@ -3,8 +3,6 @@ from vk.exceptions import APIException
 from vk.types import Message
 from vk.types import User
 
-vk = VK.get_current(no_error=False)
-api = vk.get_api()
 
 validators_answers: dict = {"valid_id": "", "positive_number": ""}
 
@@ -25,6 +23,7 @@ async def valid_id(arg: str, message: Message):
     :param arg:
     :return:
     """
+    vk = VK.get_current()
     have_answer = validators_answers["valid_id"]
     if not arg.isdigit():
         if have_answer:

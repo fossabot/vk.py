@@ -1,6 +1,7 @@
 from vk import VK
 from vk.exceptions import APIException
 from vk.types import Message
+from vk.types import User
 
 vk = VK.get_current(no_error=False)
 api = vk.get_api()
@@ -13,12 +14,13 @@ async def valid_id(arg: str, message: Message):
     Validate passed in message ID.
     This validator just search user in VK which have this ID.
 
-    If all good - append to data received response from VKAPI in filed 'valid_id_user'.
+    If all good - append to data received response from VKAPI in field 'valid_id_user'.
     Example:
 
     @dp.message_handler(commands=["hello"], have_args=[validators.valid_id])
     async def handle(message: types.Message, data: dict):
-        await message.answer(data["valid_id_user"]["first_name"])
+        usr: types.Message = data["valid_id_user"]
+        await message.answer(usr.first_name)
     :param message:
     :param arg:
     :return:
@@ -37,7 +39,7 @@ async def valid_id(arg: str, message: Message):
     if not result and have_answer:
         await message.answer(have_answer)
     if result:
-        return {"valid_id_user": result[0]}
+        return {"valid_id_user": User(**result[0])}
     return result
 
 

@@ -50,6 +50,28 @@ class Message(BaseModel):
     fwd_messages: typing.List["Message"] = []
     reply_message: "Message" = None
 
+    @staticmethod
+    def _separate_message(text: str) -> list:
+        if not isinstance(text, bytes):
+            in_bytes = text.encode("utf-8")
+        else:
+            in_bytes = text
+        to_send: list = []
+        if len(in_bytes) > 4096:
+            chunks = [in_bytes[x : x + 4096] for x in range(0, len(in_bytes), 4096)]
+            [to_send.append(chunk.decode()) for chunk in chunks]
+
+        return to_send
+
+    async def _prepare_send(self, text: str, **kwargs):
+        to_send = self._separate_message(text)
+        sended = False
+        if to_send:
+            for s in to_send:
+                sended = True
+                await self.answer(message=s, **kwargs)
+        return sended
+
     async def reply(self, message: str, attachment: str = None, keyboard: dict = None):
         """
         Answer to message with reply.
@@ -58,6 +80,10 @@ class Message(BaseModel):
         :param keyboard:
         :return:
         """
+        p = await self._prepare_send(message, attachment=attachment, keyboard=keyboard)
+        if p:
+            return
+
         return await self.api.messages.send(
             message=message,
             peer_id=self.peer_id,
@@ -75,6 +101,10 @@ class Message(BaseModel):
         :param keyboard:
         :return:
         """
+        p = await self._prepare_send(message, attachment=attachment, keyboard=keyboard)
+        if p:
+            return
+
         return await self.api.messages.send(
             message=message,
             peer_id=self.peer_id,

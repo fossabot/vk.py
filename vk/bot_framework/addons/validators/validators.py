@@ -4,10 +4,10 @@ from vk.types import Message
 from vk.types import User
 
 
-validators_answers: dict = {"valid_id": "", "positive_number": ""}
+validators_answers: dict = {"valid_vkid": "", "positive_number": ""}
 
 
-async def valid_id(arg: str, message: Message):
+async def valid_vkid(arg: str, message: Message):
     """
     Validate passed in message ID.
     This validator just search user in VK which have this ID.
@@ -15,16 +15,16 @@ async def valid_id(arg: str, message: Message):
     If all good - append to data received response from VKAPI in field 'valid_id_user'.
     Example:
 
-    @dp.message_handler(commands=["hello"], have_args=[validators.valid_id])
+    @dp.message_handler(commands=["hello"], have_args=[validators.valid_vkid])
     async def handle(message: types.Message, data: dict):
-        usr: types.User = data["valid_id_user"]
+        usr: types.User = data["valid_vkid_user"]
         await message.answer(usr.first_name)
     :param message:
     :param arg:
     :return:
     """
     vk = VK.get_current()
-    have_answer = validators_answers["valid_id"]
+    have_answer = validators_answers["valid_vkid"]
     if not arg.isdigit():
         if have_answer:
             await message.answer(have_answer)
@@ -38,7 +38,7 @@ async def valid_id(arg: str, message: Message):
     if not result and have_answer:
         await message.answer(have_answer)
     if result:
-        return {"valid_id_user": User(**result[0])}
+        return {"valid_vkid_user": User(**result[0])}
     return result
 
 

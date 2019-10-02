@@ -13,7 +13,6 @@ class Validator(ContextInstanceMixin):
         self.validators_answers: dict = {
             "valid_vk_id": "",
             "positive_number": "",
-            "valid_vk_screenname": "",
             "valid_vk_group_id": "",
         }
 
@@ -48,33 +47,10 @@ class Validator(ContextInstanceMixin):
             return {"valid_vk_group_id_group": Community(**result[0])}
         return result
 
-    async def valid_vk_screenname(self, arg: str, message: Message):
-        """
-        Validate passed in message ScreenName.
-        Just like 'valid_vk_id', but with screenname.
-
-        If all good - append to data received response from VKAPI in field 'valid_vk_screenname_user'.
-        :param arg:
-        :param message:
-        :return:
-        """
-        have_answer = self.validators_answers["valid_vk_screenname"]
-        try:
-            result = await self.vk.api_request("users.get", {"user_ids": arg})
-        except APIException:
-            if have_answer:
-                await message.answer(have_answer)
-            return False
-        if not result and have_answer:
-            await message.answer(have_answer)
-        if result:
-            return {"valid_vk_screenname_user": User(**result[0])}
-        return result
-
     async def valid_vk_id(self, arg: str, message: Message):
         """
-        Validate passed in message ID.
-        This validator just search user in VK which have this ID.
+        Validate passed in message ID or screenname.
+        This validator just search user in VK which have this ID or screenname.
 
         If all good - append to data received response from VKAPI in field 'valid_vk_id_user'.
         Example:
@@ -89,10 +65,6 @@ class Validator(ContextInstanceMixin):
         """
 
         have_answer = self.validators_answers["valid_vk_id"]
-        if not arg.isdigit():
-            if have_answer:
-                await message.answer(have_answer)
-            return False
         try:
             result = await self.vk.api_request("users.get", {"user_ids": arg})
         except APIException:

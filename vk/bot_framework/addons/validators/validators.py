@@ -9,7 +9,7 @@ class Validator(ContextInstanceMixin):
     def __init__(self, vk: VK = None):
         self._vk = vk if vk else VK.get_current()
         self._api = vk.get_api()
-        self.validators_answers: dict = {"valid_vkid": "", "positive_number": ""}
+        self.validators_answers: dict = {"valid_vk_id": "", "positive_number": ""}
 
     @property
     def vk(self):
@@ -19,7 +19,7 @@ class Validator(ContextInstanceMixin):
     def api(self):
         return self._api
 
-    async def valid_vkid(self, arg: str, message: Message):
+    async def valid_vk_id(self, arg: str, message: Message):
         """
         Validate passed in message ID.
         This validator just search user in VK which have this ID.
@@ -27,16 +27,16 @@ class Validator(ContextInstanceMixin):
         If all good - append to data received response from VKAPI in field 'valid_id_user'.
         Example:
 
-        @dp.message_handler(commands=["hello"], have_args=[validators.valid_vkid])
+        @dp.message_handler(commands=["hello"], have_args=[validators.valid_vk_id])
         async def handle(message: types.Message, data: dict):
-            usr: types.User = data["valid_vkid_user"]
+            usr: types.User = data["valid_vk_id_user"]
             await message.answer(usr.first_name)
         :param message:
         :param arg:
         :return:
         """
 
-        have_answer = self.validators_answers["valid_vkid"]
+        have_answer = self.validators_answers["valid_vk_id"]
         if not arg.isdigit():
             if have_answer:
                 await message.answer(have_answer)
@@ -50,7 +50,7 @@ class Validator(ContextInstanceMixin):
         if not result and have_answer:
             await message.answer(have_answer)
         if result:
-            return {"valid_vkid_user": User(**result[0])}
+            return {"valid_vk_id_user": User(**result[0])}
         return result
 
     async def positive_number(self, arg: str, message: Message):

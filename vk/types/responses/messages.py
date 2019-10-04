@@ -1,14 +1,14 @@
-from .others import SimpleResponse
+import typing
+
+from ..additional import Email
+from ..attachments import Photo
 from ..base import BaseModel
 from ..chat import Chat
-from ..message import Message
 from ..community import Community
-from ..additional import Email
-from ..user import User
-from ..attachments import Photo
 from ..conversation import Conversation
-
-import typing
+from ..message import Message
+from ..user import User
+from .others import SimpleResponse
 
 
 class AddChatUser(SimpleResponse):
@@ -91,6 +91,7 @@ class GetConversationMembersResponseItem(BaseModel):
     invited_by: int = None
     join_date: int = None
     is_admin: bool = None
+    is_owner: bool = None
 
 
 class GetConversationMembersResponse(BaseModel):

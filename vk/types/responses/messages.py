@@ -100,7 +100,7 @@ class GetConversationMembersResponse(BaseModel):
     groups: typing.List[Community] = None
 
 
-class GetConverationMembers(BaseModel):
+class GetConversationMembers(BaseModel):
     response: GetConversationMembersResponse = None
 
 

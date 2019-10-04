@@ -30,11 +30,12 @@ from abc import ABC
 from abc import abstractmethod
 from collections import namedtuple
 
+from vk import types
 from vk.bot_framework.dispatcher.rule import BaseRule
 from vk.types import BotEvent as Event
 
 HandlerInBlueprint = namedtuple(
-    "HandlerInBlueprint", "coro event_type rules named_rules"
+    "HandlerInBlueprint", "coro event_type rules named_rules meta"
 )
 
 
@@ -43,7 +44,7 @@ class AbstractBlueprint(ABC):
     def message_handler(
         self,
         *rules: typing.Tuple[typing.Type[BaseRule]],
-        **named_rules: typing.Dict[str, typing.Any]
+        **named_rules: typing.Dict[str, typing.Any],
     ):
         """
         Register a message handler in blueprint.
@@ -57,7 +58,7 @@ class AbstractBlueprint(ABC):
         self,
         event_type: Event,
         *rules: typing.Tuple[typing.Type[BaseRule]],
-        **named_rules: typing.Dict[str, typing.Any]
+        **named_rules: typing.Dict[str, typing.Any],
     ):
         """
         Register a event handler in blueprint.
@@ -107,20 +108,101 @@ class Blueprint(AbstractBlueprint):
     def meta(self, new_meta: dict):
         self._meta = new_meta
 
+    def get_handler(self, handler_coro: typing.Callable):
+        """
+        Get handler object by handler coroutine.
+        :param handler_coro:
+        :return:
+        """
+        for handler in self.handlers:
+            if handler.coro is handler_coro:
+                return handler
+
+    def described_handler(
+        self,
+        name: str = None,
+        description: str = None,
+        deprecated: bool = False,
+        **other_meta: dict,
+    ):
+        def decorator(coro: typing.Callable):
+            handler = self.get_handler(coro)
+            if not handler:
+                raise RuntimeError("Handler not registered.")
+            meta = {
+                "name": name,
+                "description": description,
+                "deprecated": deprecated,
+                **other_meta,
+            }
+            if handler.coro.__doc__:  # or set description in docstring
+                meta["description"] = handler.coro.__doc__.strip()
+            handler.meta = {k: v for k, v in meta.items() if v is not None}
+
+        return decorator
+
     def message_handler(
         self,
-        *rules: typing.Tuple[typing.Type[BaseRule]],
-        **named_rules: typing.Dict[str, typing.Any]
+        *rules: typing.Tuple[typing.Type[BaseRule], typing.Callable, typing.Awaitable],
+        commands: typing.Optional[typing.List[str]] = None,
+        text: typing.Optional[str] = None,
+        payload: typing.Optional[str] = None,
+        chat_action: typing.Optional[types.message.Action] = None,
+        data_check: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
+        count_args: typing.Optional[int] = None,
+        have_args: typing.Optional[
+            typing.List[typing.Union[typing.Callable, typing.Awaitable]]
+        ] = None,
+        in_chat: typing.Optional[bool] = None,
+        in_pm: typing.Optional[bool] = None,
+        from_bot: typing.Optional[bool] = None,
+        with_reply_message: typing.Optional[bool] = None,
+        with_fwd_messages: typing.Optional[bool] = None,
+        count_fwd_messages: typing.Optional[int] = None,
+        **named_rules: typing.Dict[str, typing.Any],
     ):
+        """
+        Register message handler with decorator.
+
+        standart named rules:
+        :param commands:
+        :param text:
+        :param payload:
+        :param chat_action:
+        :param data_check:
+        :param count_args:
+        :param have_args:
+        :param in_chat:
+        :param in_pm:
+        :param from_bot:
+        :param with_reply_message:
+        :param with_fwd_messages:
+        :param count_fwd_messages:
+
+        :param rules: other user rules
+        :param named_rules: other user named rules
+        :return:
+        """
+        standart_named_rules = {
+            k: v
+            for k, v in locals().items()
+            if v is not None
+            and k != "coro"
+            and k != "self"
+            and k != "rules"
+            and k != "named_rules"
+        }
+
         def decorator(coro: typing.Callable):
             nonlocal rules, named_rules
 
             rules = list(rules)
             rules.extend(self.default_rules)
             named_rules.update(self.default_named_rules)
+            named_rules.update(**standart_named_rules)
 
             self.handlers.append(
-                HandlerInBlueprint(coro, Event.MESSAGE_NEW, rules, named_rules)
+                HandlerInBlueprint(coro, Event.MESSAGE_NEW, rules, named_rules, {})
             )
             return coro
 
@@ -130,7 +212,7 @@ class Blueprint(AbstractBlueprint):
         self,
         event_type: Event,
         *rules: typing.Tuple[typing.Type[BaseRule]],
-        **named_rules: typing.Dict[str, typing.Any]
+        **named_rules: typing.Dict[str, typing.Any],
     ):
         def decorator(coro: typing.Callable):
             nonlocal rules, named_rules
@@ -140,7 +222,7 @@ class Blueprint(AbstractBlueprint):
             named_rules.update(self.default_named_rules)
 
             self.handlers.append(
-                HandlerInBlueprint(coro, event_type, rules, named_rules)
+                HandlerInBlueprint(coro, event_type, rules, named_rules, {})
             )
             return coro
 

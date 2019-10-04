@@ -143,13 +143,14 @@ class Message(BaseModel):
         )
         return resp
 
-    def get_args(self) -> typing.List[str]:
+    def get_args(self, delete_element: int = 1) -> typing.List[str]:
         """
         Return message args splitted by whitespace without first (0) element.
+        :arg delete_element: return elemenets without 'delete_element - 1'
         :return:
         """
         try:
-            return self.text.split()[1::]
+            return self.text.split()[delete_element::]
         except IndexError:
             return []
 

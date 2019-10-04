@@ -192,11 +192,26 @@ class MessageArgsValidate(NamedRule):
         "deprecated": False,
     }
 
-    def __init__(self, args_validators: typing.List[typing.Callable]):
-        self.args_validators = args_validators
+    def __init__(
+        self,
+        args_validators: typing.Union[
+            typing.Tuple[int, typing.List[typing.Callable]],
+            typing.List[typing.Callable],
+        ],
+    ):
+        if isinstance(args_validators, list):
+            self.args_validators = args_validators
+            self.delete_element = 1
+        elif isinstance(args_validators, tuple):
+            if len(args_validators) < 2:
+                self.args_validators = args_validators
+                self.delete_element = 1
+            else:
+                self.delete_element = args_validators[0]
+                self.args_validators = self.args_validators[1]
 
     async def check(self, message: types.Message, data: dict):
-        args = message.get_args()
+        args = message.get_args(self.delete_element)
         count_args = len(args)
         count_validators = len(self.args_validators)
         if count_args != count_validators:

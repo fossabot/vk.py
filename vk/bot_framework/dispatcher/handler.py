@@ -2,6 +2,7 @@ import asyncio
 import logging
 import typing
 
+from vk.bot_framework.dispatcher import data_
 from vk.bot_framework.dispatcher.rule import BaseRule
 from vk.types.events.community.events_list import Event
 
@@ -49,7 +50,6 @@ class Handler:
         # args - (event, data)
         if self.rules:
             _execute = False
-            ctx_handler_data = {}
             for rule in self.rules:
                 if not asyncio.iscoroutinefunction(rule) and not isinstance(
                     rule, BaseRule
@@ -61,11 +61,11 @@ class Handler:
                     _execute = False
                     break
                 if isinstance(result, dict):
-                    ctx_handler_data.update(result)
+                    args[1].update(result)
+                    data_.set(args[1])
                 _execute = True
 
             if _execute:
-                args[1].update(ctx_handler_data)
                 await self.handler(*args)
                 return True
         else:

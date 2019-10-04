@@ -13,6 +13,7 @@ from .storage import AbstractAsyncStorage
 from .storage import AbstractStorage
 from vk import types
 from vk import VK
+from vk.bot_framework.dispatcher import data_
 from vk.constants import default_extensions
 from vk.constants import default_rules
 from vk.types import BotEvent as Event
@@ -328,6 +329,8 @@ class Dispatcher(ContextInstanceMixin):
             event, data
         )  # trigger pre_process_event funcs in middlewares.
         # returns service value '_skip_handler' and data variable (check upper).
+
+        data_.set(data)
 
         logger.debug(f"Pre-process middlewares return this data: {data}")
         logger.debug(f"Pre-process middlewares result of skip_handler: {_skip_handler}")

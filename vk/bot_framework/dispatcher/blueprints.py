@@ -137,7 +137,7 @@ class Blueprint(AbstractBlueprint):
             }
             if handler.coro.__doc__:  # or set description in docstring
                 meta["description"] = handler.coro.__doc__.strip()
-            handler.meta = {k: v for k, v in meta.items() if v is not None}
+            handler.meta.update({k: v for k, v in meta.items() if v is not None})
 
         return decorator
 

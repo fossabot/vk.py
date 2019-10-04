@@ -208,7 +208,7 @@ class MessageArgsValidate(NamedRule):
                 self.delete_element = 1
             else:
                 self.delete_element = args_validators[0]
-                self.args_validators = self.args_validators[1]
+                self.args_validators = args_validators[1]
 
     async def check(self, message: types.Message, data: dict):
         args = message.get_args(self.delete_element)

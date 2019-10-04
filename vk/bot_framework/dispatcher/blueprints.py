@@ -122,6 +122,7 @@ class Blueprint(AbstractBlueprint):
             self.handlers.append(
                 HandlerInBlueprint(coro, Event.MESSAGE_NEW, rules, named_rules)
             )
+            return coro
 
         return decorator
 
@@ -141,5 +142,6 @@ class Blueprint(AbstractBlueprint):
             self.handlers.append(
                 HandlerInBlueprint(coro, event_type, rules, named_rules)
             )
+            return coro
 
         return decorator

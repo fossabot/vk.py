@@ -13,10 +13,13 @@ except ImportError:
 class RabbitMQ(BaseExtension):
     key = "rabbitmq"
 
-    def __init__(self, vk, queue_name: str):
+    def __init__(
+        self, vk, queue_name: str, rabbitmq_url: str = "amqp://guest:guest@127.0.0.1/"
+    ):
         if aio_pika:
             self._vk = vk
             self._queue_name = queue_name
+            self._url = rabbitmq_url
         else:
             raise RuntimeWarning(
                 "Please install aio_pika (pip install aio_pika) for use this extension"
@@ -27,9 +30,7 @@ class RabbitMQ(BaseExtension):
 
     async def run(self, dp):
         logger.info("RabbitMQ consumer started!")
-        connection = await aio_pika.connect_robust(
-            "amqp://guest:guest@127.0.0.1/", loop=self._vk.loop
-        )
+        connection = await aio_pika.connect_robust(self._url, loop=self._vk.loop)
         async with connection:
 
             channel: aio_pika.Channel = await connection.channel()
@@ -41,8 +42,5 @@ class RabbitMQ(BaseExtension):
             async with queue.iterator() as queue_iter:
                 async for message in queue_iter:
                     async with message.process():
-                        events = JSON_LIBRARY.loads(message.body.decode())
-                        if isinstance(events, list):
-                            await dp._process_events(events)
-                        else:
-                            await dp._process_events([events])
+                        event = JSON_LIBRARY.loads(message.body.decode())
+                        await dp._process_events(event)

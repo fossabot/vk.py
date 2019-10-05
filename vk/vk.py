@@ -131,6 +131,12 @@ class VK(ContextInstanceMixin):
         """
         return self.__api_object
 
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        pass
+
     async def close(self) -> None:
         """
         Close aiohttp client session.

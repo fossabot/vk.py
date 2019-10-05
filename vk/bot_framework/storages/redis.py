@@ -6,7 +6,7 @@ from ..dispatcher.storage import AbstractAsyncExpiredStorage
 try:
     import aioredis  # noqa
 except ImportError:
-    raise RuntimeError("For use this storage install aioredis (pip install aioredis)")
+    aioredis = None
 
 
 class RedisStorage(AbstractAsyncExpiredStorage):
@@ -17,6 +17,10 @@ class RedisStorage(AbstractAsyncExpiredStorage):
         db: str = None,
         password: str = None,
     ):
+        if not aioredis:
+            raise RuntimeError(
+                "For use this storage install aioredis (pip install aioredis)"
+            )
         self._address = address
         self._db = db
         self._password = password

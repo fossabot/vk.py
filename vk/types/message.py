@@ -144,7 +144,7 @@ class Message(BaseModel):
         return resp
 
     def get_args(
-        self, delete_element: int = 1, separator: str = ""
+        self, delete_element: int = 1, separator: str = None
     ) -> typing.List[str]:
         """
         Return message args splitted by whitespace without first (0) element.

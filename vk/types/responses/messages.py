@@ -23,8 +23,8 @@ class CreateChat(SimpleResponse):
     pass
 
 
-class Delete(SimpleResponse):
-    pass
+class Delete(BaseModel):
+    response: typing.Union[dict, int] = None
 
 
 class DeleteChatPhotoResponse(BaseModel):

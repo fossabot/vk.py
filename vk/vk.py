@@ -5,6 +5,7 @@ import asyncio
 import logging
 import typing
 from asyncio import AbstractEventLoop
+from contextlib import asynccontextmanager
 
 from aiohttp import ClientSession
 
@@ -131,11 +132,12 @@ class VK(ContextInstanceMixin):
         """
         return self.__api_object
 
-    async def __aenter__(self):
-        return self
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        pass
+    @classmethod
+    @asynccontextmanager
+    async def with_token(cls, access_token: str):
+        vk = cls(access_token=access_token)
+        yield vk
+        await vk.close()
 
     async def close(self) -> None:
         """

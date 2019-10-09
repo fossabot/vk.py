@@ -51,7 +51,7 @@ class Keyboard:
 
         self.buttons.append([])
 
-    def _add_button(self, action):
+    def _add_button(self, action: dict) -> None:
         """
 
         :param action:
@@ -147,7 +147,9 @@ class Keyboard:
 
     def get_keyboard(self) -> typing.AnyStr:
         """
-
+        Get keyboard json for send.
+        Advice: don't call this function always you want to send keyboard.
+        If keyboard is 'static', you can generate json once and send every time.
         :return:
         """
         return JSON_LIBRARY.dumps(self.keyboard)

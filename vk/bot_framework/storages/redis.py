@@ -25,9 +25,9 @@ class RedisStorage(AbstractAsyncExpiredStorage):
         self._db = db
         self._password = password
         self._loop = loop
-        self.connection: typing.Optional[aioredis.Redis] = None
+        self.connection: typing.Optional["aioredis.Redis"] = None
 
-    async def create_connection(self) -> aioredis.Redis:
+    async def create_connection(self) -> "aioredis.Redis":
         if not self.connection:
             conn: aioredis.Redis = await aioredis.create_redis(
                 address=self._address,

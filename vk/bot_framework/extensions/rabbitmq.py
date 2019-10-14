@@ -43,4 +43,4 @@ class RabbitMQ(BaseExtension):
                 async for message in queue_iter:
                     async with message.process():
                         event = JSON_LIBRARY.loads(message.body.decode())
-                        await dp._process_events(event)
+                        await dp._process_events([event])

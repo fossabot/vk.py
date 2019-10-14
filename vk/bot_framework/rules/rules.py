@@ -126,7 +126,7 @@ class ChatAction(NamedRule):
         self.action = action
 
     async def check(self, message: types.Message, data: dict):
-        if message.action.type:
+        if message.action:
             action = Action(message.action.type)
             result = action is self.action
             logger.debug(f"Processing action of message. Action in message: {action}")

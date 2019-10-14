@@ -24,7 +24,6 @@ try:
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 except ImportError:
     uvloop = None
-    logging.debug("Uvloop not found.. will be used standart asyncio event-loop.")
 
 
 class VK(ContextInstanceMixin):

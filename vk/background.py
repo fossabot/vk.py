@@ -1,10 +1,11 @@
 import asyncio
 import concurrent.futures
+import functools
 import multiprocessing
 import typing
 
 _pool: concurrent.futures.ThreadPoolExecutor = concurrent.futures.ThreadPoolExecutor(
-    multiprocessing.cpu_count()
+    multiprocessing.cpu_count() * 5
 )
 
 
@@ -12,7 +13,8 @@ class BackgroundTask:
     def __init__(
         self,
         async_or_sync: typing.Union[typing.Awaitable, typing.Callable],
-        *async_or_sync_args: typing.Tuple[typing.Any]
+        *async_or_sync_args,
+        **async_or_sync_kwargs,
     ):
         """
         Run task in background.
@@ -25,6 +27,7 @@ class BackgroundTask:
         """
         self._async_or_sync = async_or_sync
         self._async_or_sync_args = async_or_sync_args
+        self._async_or_sync_kwargs = async_or_sync_kwargs
         self.is_async = asyncio.iscoroutinefunction(async_or_sync)
 
     async def __call__(self):
@@ -39,12 +42,16 @@ class BackgroundTask:
     async def __run(self) -> None:
         loop = asyncio.get_running_loop()
         if self.is_async:
-            if self._async_or_sync_args:
-                loop.create_task(self._async_or_sync(*self._async_or_sync_args))
-            else:
-                loop.create_task(self._async_or_sync())
+            loop.create_task(
+                self._async_or_sync(
+                    *self._async_or_sync_args, **self._async_or_sync_kwargs
+                )
+            )
             return
-        if self._async_or_sync_args:
-            loop.run_in_executor(_pool, self._async_or_sync, self._async_or_sync_args)
         else:
-            loop.run_in_executor(_pool, self._async_or_sync)
+            func = functools.partial(
+                self._async_or_sync,
+                *self._async_or_sync_args,
+                **self._async_or_sync_kwargs,
+            )
+            loop.run_in_executor(_pool, func=func)

@@ -17,17 +17,16 @@
 
 ## Install
 
-Newest version.
-
 ```sh
 pip install https://github.com/prostomarkeloff/vk.py/archive/master.zip --upgrade
 ```
 
-Stable version.
-
+In requirements.txt:
 ```sh
-pip install vk.py
+# some stuff
+https://github.com/prostomarkeloff/vk.py/archive/master.zip
 ```
+
 
 ## Usage
 

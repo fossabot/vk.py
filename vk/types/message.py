@@ -72,7 +72,9 @@ class Message(BaseModel):
                 await self.answer(message=s, **kwargs)
         return sended
 
-    async def reply(self, message: str, attachment: str = None, keyboard: dict = None):
+    async def reply(
+        self, message: str, attachment: str = None, keyboard: dict = None, **kwargs
+    ):
         """
         Answer to message with reply.
         :param message:
@@ -80,7 +82,9 @@ class Message(BaseModel):
         :param keyboard:
         :return:
         """
-        p = await self._prepare_send(message, attachment=attachment, keyboard=keyboard)
+        p = await self._prepare_send(
+            message, attachment=attachment, keyboard=keyboard, **kwargs
+        )
         if p:
             return
 
@@ -91,9 +95,12 @@ class Message(BaseModel):
             reply_to=self.id,
             keyboard=keyboard,
             random_id=0,
+            **kwargs
         )
 
-    async def answer(self, message: str, attachment: str = None, keyboard: dict = None):
+    async def answer(
+        self, message: str, attachment: str = None, keyboard: dict = None, **kwargs
+    ):
         """
         Answer to message without reply.
         :param message:
@@ -101,7 +108,9 @@ class Message(BaseModel):
         :param keyboard:
         :return:
         """
-        p = await self._prepare_send(message, attachment=attachment, keyboard=keyboard)
+        p = await self._prepare_send(
+            message, attachment=attachment, keyboard=keyboard, **kwargs
+        )
         if p:
             return
 
@@ -111,10 +120,11 @@ class Message(BaseModel):
             attachment=attachment,
             keyboard=keyboard,
             random_id=0,
+            **kwargs
         )
 
     async def cached_answer(
-        self, message: str, attachment: str = None, keyboard: dict = None
+        self, message: str, attachment: str = None, keyboard: dict = None, **kwargs
     ):
         from vk.bot_framework.addons.caching import CachedResponse
 
@@ -131,6 +141,7 @@ class Message(BaseModel):
             attachment=attachment,
             keyboard=keyboard,
             random_id=0,
+            **kwargs
         )
         resp = CachedResponse(
             method_name="messages.send",
@@ -139,6 +150,7 @@ class Message(BaseModel):
                 "attachment": attachment,
                 "keyboard": keyboard,
                 "random_id": 0,
+                **kwargs,
             },
         )
         return resp

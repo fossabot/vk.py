@@ -158,58 +158,18 @@ class Dispatcher(ContextInstanceMixin):
     def message_handler(
         self,
         *rules: typing.Tuple[typing.Type[BaseRule], typing.Callable, typing.Awaitable],
-        commands: typing.Optional[typing.List[str]] = None,
-        text: typing.Optional[str] = None,
-        payload: typing.Optional[str] = None,
-        chat_action: typing.Optional[types.message.Action] = None,
-        data_check: typing.Optional[typing.Dict[typing.Any, typing.Any]] = None,
-        count_args: typing.Optional[int] = None,
-        have_args: typing.Optional[
-            typing.List[typing.Union[typing.Callable, typing.Awaitable]]
-        ] = None,
-        in_chat: typing.Optional[bool] = None,
-        in_pm: typing.Optional[bool] = None,
-        from_bot: typing.Optional[bool] = None,
-        with_reply_message: typing.Optional[bool] = None,
-        with_fwd_messages: typing.Optional[bool] = None,
-        count_fwd_messages: typing.Optional[int] = None,
         **named_rules: typing.Dict[str, typing.Any],
     ):
         """
         Register message handler with decorator.
 
-        standart named rules:
-        :param commands:
-        :param text:
-        :param payload:
-        :param chat_action:
-        :param data_check:
-        :param count_args:
-        :param have_args:
-        :param in_chat:
-        :param in_pm:
-        :param from_bot:
-        :param with_reply_message:
-        :param with_fwd_messages:
-        :param count_fwd_messages:
-
         :param rules: other user rules
         :param named_rules: other user named rules
         :return:
         """
-        standart_named_rules = {
-            k: v
-            for k, v in locals().items()
-            if v is not None
-            and k != "coro"
-            and k != "self"
-            and k != "rules"
-            and k != "named_rules"
-        }
 
         def decorator(coro: typing.Callable):
-            nonlocal named_rules, standart_named_rules
-            named_rules.update(**standart_named_rules)
+            nonlocal named_rules
             named_rules = self._rule_factory.get_rules(named_rules)
             self.register_message_handler(coro, named_rules + list(rules))
             return coro

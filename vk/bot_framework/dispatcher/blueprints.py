@@ -28,15 +28,17 @@ Example usecase:
 import typing
 from abc import ABC
 from abc import abstractmethod
-from collections import namedtuple
 
-from vk import types
 from vk.bot_framework.dispatcher.rule import BaseRule
 from vk.types import BotEvent as Event
 
-HandlerInBlueprint = namedtuple(
-    "HandlerInBlueprint", "coro event_type rules named_rules meta"
-)
+
+class HandlerInBlueprint(typing.NamedTuple):
+    coro: typing.Callable
+    event_type: Event
+    rules: typing.List[BaseRule]
+    named_rules: typing.List[BaseRule]
+    meta: dict = {}
 
 
 class AbstractBlueprint(ABC):

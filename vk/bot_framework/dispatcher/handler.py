@@ -1,3 +1,4 @@
+import abc
 import asyncio
 import logging
 import typing
@@ -7,6 +8,35 @@ from vk.bot_framework.dispatcher.rule import BaseRule
 from vk.types.events.community.events_list import Event
 
 logger = logging.getLogger(__name__)
+
+
+class BaseHandler(abc.ABC):
+    @property
+    def event_type(self) -> Event:
+        raise NotImplementedError()
+
+    @property
+    def handler(self) -> typing.Callable:
+        raise NotImplementedError()
+
+    @property
+    def rules(self) -> typing.List[BaseRule]:
+        raise NotImplementedError()
+
+    @property
+    def meta(self) -> dict:
+        raise NotImplementedError()
+
+    @meta.setter
+    def meta(self, value):
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    async def execute_handler(self, *args):
+        """
+        Execute handler (after handler rules.)
+        args - (event, data)
+        """
 
 
 class SkipHandler(Exception):

@@ -4,6 +4,7 @@ import typing
 from .blueprints import Blueprint
 from .extension import BaseExtension
 from .extension import ExtensionsManager
+from .handler import BaseHandler
 from .handler import Handler
 from .middleware import BaseMiddleware
 from .middleware import MiddlewareManager
@@ -11,7 +12,6 @@ from .rule import BaseRule
 from .rule import RuleFactory
 from .storage import AbstractAsyncStorage
 from .storage import AbstractStorage
-from vk import types
 from vk import VK
 from vk.bot_framework.dispatcher import data_
 from vk.constants import default_extensions
@@ -25,10 +25,13 @@ logger = logging.getLogger(__name__)
 
 
 class Dispatcher(ContextInstanceMixin):
+
+    handler_class = Handler
+
     def __init__(self, vk: VK, group_id: int):
         self._vk: VK = vk
         self._group_id: int = group_id
-        self._handlers: typing.List[Handler] = []
+        self._handlers: typing.List[BaseHandler] = []
 
         self._middleware_manager: MiddlewareManager = MiddlewareManager(self)
         self._rule_factory: RuleFactory = RuleFactory(default_rules())
@@ -43,7 +46,7 @@ class Dispatcher(ContextInstanceMixin):
         self.set_current(self)
 
     @property
-    def handlers(self) -> typing.List[Handler]:
+    def handlers(self) -> typing.List[BaseHandler]:
         """
         Returns a list of registered handlers.
         :return:
@@ -132,7 +135,7 @@ class Dispatcher(ContextInstanceMixin):
 
         return decorator
 
-    def _register_handler(self, handler: Handler):
+    def _register_handler(self, handler: BaseHandler):
         """
         Append handler to handlers list
         :param handler:
@@ -152,7 +155,7 @@ class Dispatcher(ContextInstanceMixin):
         :return:
         """
         event_type = Event.MESSAGE_NEW
-        handler = Handler(event_type, coro, rules)
+        handler = self.handler_class(event_type, coro, rules)
         self._register_handler(handler)
 
     def message_handler(
@@ -189,7 +192,7 @@ class Dispatcher(ContextInstanceMixin):
         :param rules:
         :return:
         """
-        handler = Handler(event_type, coro, rules=rules)
+        handler = self.handler_class(event_type, coro, rules=rules)  # noqa
         self._register_handler(handler)
 
     def event_handler(self, event_type: Event, *rules, **named_rules):

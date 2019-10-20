@@ -120,6 +120,7 @@ class GetConversations(BaseModel):
 class GetConversationsByIdResponse(BaseModel):
     count: int = None
     items: typing.List[Conversation] = None
+    profiles: typing.List[User] = None
 
 
 class GetConversationsById(BaseModel):

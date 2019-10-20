@@ -1,10 +1,9 @@
-from .base import BaseModel
+import typing
 from enum import Enum
 
-from .chat import ChatPushSettings
 from .attachments import Photo
-
-import typing
+from .base import BaseModel
+from .chat import ChatPushSettings
 
 
 class ConversationCanWrite(BaseModel):
@@ -18,6 +17,16 @@ class Peer(BaseModel):
     local_id: int = None
 
 
+class ConversationChatSettingsACL(BaseModel):
+    can_change_info: bool = None
+    can_change_invite_link: bool = None
+    can_change_pin: bool = None
+    can_invite: bool = None
+    can_promote_users: bool = None
+    can_see_invite_link: bool = None
+    can_moderate: bool = None
+
+
 class ConversationChatSettings(BaseModel):
     members_count: int = None
     title: str = None
@@ -25,6 +34,9 @@ class ConversationChatSettings(BaseModel):
     state: str = None
     photo: Photo = None
     active_ids: typing.List[int] = None
+    admin_ids: typing.List[int] = None
+    owner_id: int = None
+    acl: ConversationChatSettingsACL = None
 
 
 class Conversation(BaseModel):

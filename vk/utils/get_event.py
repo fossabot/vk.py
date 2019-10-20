@@ -120,4 +120,5 @@ def get_event_object(event) -> eventobj:
         raise RuntimeError("Unexpected behavior. May be you handle NOT vk event.")
 
     ev.set_current(ev)
+    ev.object.set_current(ev.object)
     return ev

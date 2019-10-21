@@ -29,12 +29,12 @@ https://github.com/prostomarkeloff/vk.py/archive/master.zip
 
 Fast version with uvloop and ujson (only for *nix like OS):
 ```sh
-vk.py @ https://github.com/prostomarkeloff/vk.py/archive/master.zip#egg=vk.py[fast]
+pip https://github.com/prostomarkeloff/vk.py/archive/master.zip#egg=vk.py[fast]
 ```
 
 With **ultra** handlers:
 ```sh
-vk.py @ https://github.com/prostomarkeloff/vk.py/archive/master.zip#egg=vk.py[ultra]
+pip https://github.com/prostomarkeloff/vk.py/archive/master.zip#egg=vk.py[ultra]
 ```
 More about it: [click](https://github.com/prostomarkeloff/uvkpy)
 

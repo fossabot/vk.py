@@ -20,11 +20,10 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     extras_require={
-        'fast': ['ujson', 'uvloop']
+        "fast": ["ujson", "uvloop"],
+        "ultra": [
+            "uvkpy @ https://github.com/prostomarkeloff/uvkpy/archive/master.zip"
+        ],
     },
-    install_requires=[
-        "aiohttp",
-        "pydantic",
-        "watchgod",
-    ]
+    install_requires=["aiohttp", "pydantic", "watchgod"],
 )

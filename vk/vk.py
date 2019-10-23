@@ -151,3 +151,7 @@ class VK(ContextInstanceMixin):
         """
         if not self.client.closed:
             await self.client.close()
+
+    def __del__(self):
+        self.loop.create_task(self.close())
+        self.loop.close()

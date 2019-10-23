@@ -6,9 +6,10 @@ import time
 
 from vk.bot_framework.dispatcher.storage import AbstractAsyncExpiredStorage
 from vk.types.message import Message
+from vk.utils.mixins import ContextInstanceMixin
 
 
-class Cooldown:
+class Cooldown(ContextInstanceMixin):
     def __init__(
         self,
         storage: AbstractAsyncExpiredStorage,

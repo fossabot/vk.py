@@ -108,9 +108,8 @@ class Keyboard:
 
         self._add_button(action)
 
-    def add_vkpay_button(self, hash: str, payload: dict = None):
+    def add_vkpay_button(self, hash: str, payload: dict = None):  # noqa
         """
-
         :param hash:
         :param payload:
         :return:

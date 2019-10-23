@@ -20,13 +20,21 @@ class BotLongPoll(mixins.ContextInstanceMixin):
         :param group_id:
         :param vk:
         """
-        self.vk = vk
-        self.group_id = group_id
+        self._vk: VK = vk
+        self._group_id: int = group_id
         self.server: typing.Optional[str] = None
         self.key: typing.Optional[str] = None
         self.ts: typing.Optional[str] = None
 
-        self.runned = False
+        self.ran = False
+
+    @property
+    def vk(self) -> VK:
+        return self._vk
+
+    @property
+    def group_id(self) -> int:
+        return self._group_id
 
     async def _prepare_longpoll(self):
         await self.vk.api_request(
@@ -79,16 +87,16 @@ class BotLongPoll(mixins.ContextInstanceMixin):
         :return: list of updates coming from VK
         """
         try:
-            updates = await self.get_updates(
+            updates: typing.Optional[dict] = await self.get_updates(
                 key=self.key, server=self.server, ts=self.ts
             )
 
-            # Handle errors from vkontakte 
+            # Handle errors from vkontakte
             if updates.get("failed"):
                 logger.debug(f"Longpolling responded with failed: {updates['failed']}")
 
                 if updates["failed"] == 1:
-                    self.ts = updates["ts"]
+                    self.ts: str = updates["ts"]
                 elif updates["failed"] in (2, 3):
                     await self._update_polling()
 
@@ -97,15 +105,17 @@ class BotLongPoll(mixins.ContextInstanceMixin):
             if "ts" not in updates or "updates" not in updates:
                 raise Exception("Vkontakte responded with incorrect response")
 
-            self.ts = updates["ts"]
-            
+            self.ts: str = updates["ts"]
+
             logger.debug(f"Got updates through polling: {updates['updates']}")
-            
+
             return updates["updates"]
 
         except Exception:  # noqa
-            logger.exception("Received exception while polling... Sleeping 10 seconds...")
-            
+            logger.exception(
+                "Received exception while polling... Sleeping 10 seconds..."
+            )
+
             await asyncio.sleep(10)
             await self._update_polling()
 
@@ -117,12 +127,12 @@ class BotLongPoll(mixins.ContextInstanceMixin):
         :return: last update coming from VK
         """
 
-        if not self.runned:
-            await self._prepare_longpoll()
-            self.runned = True
-            logger.info("Polling started!")
+        await self._prepare_longpoll()
+        self.ran = True
+        logger.info("Polling started!")
 
         while True:
             events = await self.listen()
-            if events:
-                yield events[0]
+            while events:
+                event = events.pop()
+                yield event

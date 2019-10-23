@@ -40,7 +40,7 @@ class BackgroundTask:
         pass
 
     async def __run(self) -> None:
-        loop = asyncio.get_running_loop()
+        loop = asyncio.get_event_loop()
         if self.is_async:
             loop.create_task(
                 self._async_or_sync(

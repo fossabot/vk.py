@@ -5,7 +5,11 @@ import asyncio
 import logging
 import typing
 from asyncio import AbstractEventLoop
-from contextlib import asynccontextmanager
+
+try:
+    from contextlib import asynccontextmanager
+except ImportError:
+    from async_generator import asynccontextmanager
 
 from aiohttp import ClientSession
 
@@ -104,7 +108,9 @@ class VK(ContextInstanceMixin):
         :param ignore_errors: signal of errors ignore
         :return:
         """
-        return await self._api_request(method_name=method_name, params=params)
+        return await self._api_request(
+            method_name=method_name, params=params, ignore_errors=ignore_errors
+        )
 
     async def execute_api_request(self, code: str) -> dict:
         """
@@ -143,5 +149,5 @@ class VK(ContextInstanceMixin):
         Close aiohttp client session.
         :return:
         """
-        if isinstance(self.client, ClientSession) and not self.client.closed:
+        if not self.client.closed:
             await self.client.close()
